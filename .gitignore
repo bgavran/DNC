@@ -2,6 +2,8 @@
 config.json
 .idea
 train_summary
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
