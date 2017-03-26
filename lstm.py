@@ -1,15 +1,15 @@
-import tensorflow as tf
 from controller import *
 
 
 class LSTM(Controller):
-    def __init__(self, batch_size, input_size, output_size, memory_size, max_seq_length):
+    def __init__(self, batch_size, input_size, output_size, memory_size, seq_length):
         super().__init__()
         self.input_size = input_size
         self.output_size = output_size
         self.batch_size = batch_size
         self.memory_size = memory_size
-        self.max_seq_length = max_seq_length
+        self.max_seq_length = seq_length
+        self.total_seq_length = 2 * seq_length + 2
         self.lstm_cell = tf.contrib.rnn.BasicLSTMCell(self.memory_size)
 
         # Extra layer of neural network
@@ -18,13 +18,30 @@ class LSTM(Controller):
                                    name="output_weights")
         self.biases = tf.Variable(tf.zeros([self.output_size]), name="output_biases")
 
-    def __call__(self, inputs, sequence_length=None):
-        outputs, states = tf.contrib.rnn.static_rnn(self.lstm_cell, inputs, sequence_length=sequence_length,
-                                                    dtype=tf.float32)
-        # states = tf.transpose(states, [1, 3, 0, 2])
+    def __call__(self, x, y):
+        x_list = tf.split(x, self.max_seq_length, axis=2)
+        x_list = [tf.squeeze(i, 2) for i in x_list]
+
+        lstm_outputs, states = tf.contrib.rnn.static_rnn(self.lstm_cell, x_list, dtype=tf.float32)
+        outputs = [tf.matmul(o, self.weights) + self.biases for o in lstm_outputs]
+        outputs = tf.transpose(outputs, [1, 2, 0])
+        cost = tf.reduce_mean(tf.square(y - outputs))
+
+        # Before returning cost, adding all the tf summaries!
+
         states = tf.reshape(tf.transpose(states, [2, 3, 1, 0]),
                             [self.batch_size, 2 * self.memory_size, self.max_seq_length, 1])
         tf.summary.image("LSTM hidden state (two of them)", states, max_outputs=2 * self.batch_size)
-        outputs = [tf.matmul(o, self.weights) + self.biases for o in outputs]
-        outputs = tf.transpose(outputs, [1, 2, 0])
-        return outputs, states[-1]
+        tf.summary.image("Input", tf.expand_dims(x, axis=3), max_outputs=self.batch_size)
+        tf.summary.image("Output", tf.expand_dims(outputs, axis=3), max_outputs=self.batch_size)
+
+        weights_expanded = tf.expand_dims(tf.expand_dims(self.weights, axis=0), axis=3)
+        tf.summary.image("LSTM output weights", tf.transpose(weights_expanded), max_outputs=self.batch_size)
+
+        inner_weights = [v for v in tf.global_variables() if v.name.startswith("rnn/basic_lstm_cell/weights")][0]
+        inner_weights_expanded = tf.expand_dims(tf.expand_dims(inner_weights, axis=0), axis=3)
+        tf.summary.image("LSTM inner weights", tf.transpose(inner_weights_expanded), max_outputs=self.batch_size)
+
+        tf.summary.scalar('Cost', cost)
+
+        return cost
