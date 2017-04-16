@@ -7,13 +7,19 @@ class Controller:
     Controller: a neural network that optionally uses memory or other controllers to produce output.
     FF network is a controller, a LSTM network is a controller, but DNC is also a controller (which uses another
     controller inside it)
+    This implementation of controller (FF, LSTM) is trying to establish a clear interface between sizes of inputs and 
+    outputs for a controller. This, in theory, allows for easy nesting of controllers.
+    
+    What this implies is a lower parameter count for the output and interface weight matrices, since they operate only 
+    on the outputs of the controller and not outputs of every layer of the controller. This is where this implementation
+    differs from DeepMind's DNC implementation.
     
     """
 
-    def run_session(self, x, y, task, hp, optimizer=tf.train.AdamOptimizer):
+    def run_session(self, x, y, task, hp, optimizer=tf.train.AdamOptimizer()):
         outputs = self(x)
-        cost = tf.reduce_mean(tf.square(y - outputs))
-        optimizer = optimizer().minimize(cost)
+        cost = tf.reduce_mean((y - outputs) ** 2)
+        optimizer = optimizer.minimize(cost)
 
         tf.summary.scalar('Cost', cost)
 

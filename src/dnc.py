@@ -9,10 +9,21 @@ class DNC(Controller):
         
         :param controller: 
         """
-        memory_size = 1
+        memory_size = 10
         self.controller = controller
         self.batch_size = controller.batch_size
-        self.memory = Memory(controller.batch_size, controller.inp_vector_size, controller.out_vector_size, memory_size)
+        self.out_vector_size = self.controller.out_vector_size
+
+        self.interface_vector_size = 7  # for now, should obviously change it later
+        self.memory = Memory(controller.batch_size, self.interface_vector_size, controller.out_vector_size, memory_size)
+
+        self.output_weights = tf.Variable(
+            tf.random_normal([self.controller.out_vector_size, self.out_vector_size], stddev=0.01),
+            name="output_weights")
+
+        self.interface_weights = tf.Variable(
+            tf.random_normal([self.out_vector_size, self.interface_vector_size], stddev=0.01),
+            name="interface_weights")
 
     def __call__(self, x):
         """
@@ -44,7 +55,7 @@ class DNC(Controller):
                                            [self.batch_size, 2 * self.controller.memory_size,
                                             self.controller.total_output_length, 1])
             tf.summary.image("LSTM cell state and 'hidden' state", controller_states,
-                             max_outputs=2 * self.controller.memory_size)
+                             max_outputs=self.batch_size)
 
             weights_expanded = tf.expand_dims(tf.expand_dims(self.controller.weights, axis=0), axis=3)
             tf.summary.image("LSTM output weights", tf.transpose(weights_expanded), max_outputs=self.batch_size)
@@ -78,9 +89,15 @@ class DNC(Controller):
         :param step: current time step
         :return: 
         """
-        with tf.variable_scope("DNC_step") as scope:
+        with tf.variable_scope("DNC_step"):
             controller_output, controller_cell = self.controller.step(x, step)
-            memory_output, memory_state = self.memory(controller_output)
-            controller_output += memory_output
 
-        return controller_output, (controller_cell, memory_output, memory_state)
+            # making sure the dimensions for everything align, using simple matmul for that
+            # multiplying x @ W instead of W @ x (like in the paper) because it needs to be done in batches
+            output_vector = controller_output @ self.output_weights  # shape [batch_size, out_vector_size]
+            interface_vector = controller_output @ self.interface_weights  # shape [batch_size, interf_vector_size]
+
+            memory_output, memory_state = self.memory(interface_vector)
+            output = output_vector + memory_output
+
+        return output, (controller_cell, memory_output, memory_state)

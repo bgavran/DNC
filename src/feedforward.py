@@ -14,8 +14,8 @@ class Feedforward(Controller):
 
     def __call__(self, x):
         raise RuntimeError("This function shouldn't be called, yet.")
-        for i in range(self.out_vector_size):
-            self.step(x[:, :, i], i)
+        # for i in range(self.out_vector_size):
+        #     self.step(x[:, :, i], i)
 
     def step(self, x, step):
         """
