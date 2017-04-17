@@ -13,15 +13,20 @@ class Hp:
     min_seq = 1
     max_seq = int((total_output_length - 2) / 2)
 
+    class Mem:
+        word_size = 8
+        mem_size = 16
+        num_read_heads = 4
+
     steps = 100000
-    path = DataPath("train_summary").path
+    path = ProjectPath("train_summary").log_path
 
 
 FF_controller = Feedforward(Hp.inp_vector_size, Hp.out_vector_size, Hp.total_output_length, Hp.batch_size, 3,
                             [128, 128, Hp.out_vector_size])
 LSTM_controller = LSTM(Hp.batch_size, Hp.inp_vector_size, Hp.out_vector_size, Hp.lstm_memory_size,
                        Hp.total_output_length)
-dnc = DNC(LSTM_controller)
+dnc = DNC(LSTM_controller, Hp.Mem)
 
 x = tf.placeholder(tf.float32, [None, Hp.inp_vector_size, Hp.total_output_length], name="X")
 y = tf.placeholder(tf.float32, [None, Hp.inp_vector_size, Hp.total_output_length], name="Y")

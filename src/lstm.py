@@ -25,36 +25,15 @@ class LSTM(Controller):
         It's not a matter of the implementation of this function, it's just that DNC never processes the inputs for 
         all time steps in its controller.
         
-        This call would usually iterate through the step function but tensorflow already has this implementation.
-        This breaks my idea of how code should be organized in this project but oh well.
-        DNC calls the step function for every time step.
         
         :param x: inputs for all time steps
-        :return: 
+        :return: outputs for all time steps
         """
-        raise RuntimeError("This function shouldn't be called, yet.")
-        x_list = tf.split(x, self.max_seq_length, axis=2)
-        x_list = [tf.squeeze(i, 2) for i in x_list]
-
-        # I changed the tensorflow source code here, it returns states instead of just the last state
-        from core_rnn import static_rnn
-        lstm_outputs, states = static_rnn(self.lstm_cell, x_list, dtype=tf.float32)
-        outputs = [tf.matmul(o, self.weights) + self.biases for o in lstm_outputs]
-
-        # Before returning outputs, adding all the tf summaries!
-
-        # states = tf.reshape(tf.transpose(states, [2, 3, 1, 0]),
-        #                     [self.batch_size, 2 * self.memory_size, self.max_seq_length, 1])
-        # tf.summary.image("LSTM cell state and 'hidden' state", states, max_outputs=2 * self.memory_size)
-        # tf.summary.image("Input", tf.expand_dims(x, axis=3), max_outputs=self.batch_size)
-        # tf.summary.image("Output", tf.expand_dims(outputs, axis=3), max_outputs=self.batch_size)
-        #
-        # weights_expanded = tf.expand_dims(tf.expand_dims(self.weights, axis=0), axis=3)
-        # tf.summary.image("LSTM output weights", tf.transpose(weights_expanded), max_outputs=self.batch_size)
-        #
-        # inner_weights = [var for var in tf.global_variables() if var.name.startswith("rnn/basic_lstm_cell/weights")][0]
-        # inner_weights_expanded = tf.expand_dims(tf.expand_dims(inner_weights, axis=0), axis=3)
-        # tf.summary.image("LSTM inner weights", tf.transpose(inner_weights_expanded), max_outputs=self.batch_size)
+        outputs, states = [], []
+        for i in range(self.out_vector_size):
+            output, state = self.step(x[:, :, i], i)
+            outputs.append(output)
+            states.append(state)
 
         return outputs
 

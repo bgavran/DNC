@@ -13,9 +13,17 @@ class Feedforward(Controller):
         self.out_vector_size = out_vector_size
 
     def __call__(self, x):
-        raise RuntimeError("This function shouldn't be called, yet.")
-        # for i in range(self.out_vector_size):
-        #     self.step(x[:, :, i], i)
+        """
+        This should not be called from DNC!
+        :param x: inputs for all time steps
+        :return: list of outputs for every time step
+        """
+        outputs = []
+        for i in range(self.out_vector_size):
+            output, _, = self.step(x[:, :, i], i)
+            outputs.append(output)
+
+        return outputs
 
     def step(self, x, step):
         """

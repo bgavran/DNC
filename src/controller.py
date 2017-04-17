@@ -14,6 +14,7 @@ class Controller:
     on the outputs of the controller and not outputs of every layer of the controller. This is where this implementation
     differs from DeepMind's DNC implementation.
     
+    
     """
 
     def run_session(self, x, y, task, hp, optimizer=tf.train.AdamOptimizer()):

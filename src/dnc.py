@@ -3,27 +3,23 @@ from memory import *
 
 
 class DNC(Controller):
-    def __init__(self, controller):
+    def __init__(self, controller, mem_hp):
         """
         For now, the output of controller and dnc is of the same shape (shape of output), but it is not always true
         
         :param controller: 
         """
-        memory_size = 10
         self.controller = controller
         self.batch_size = controller.batch_size
         self.out_vector_size = self.controller.out_vector_size
 
-        self.interface_vector_size = 7  # for now, should obviously change it later
-        self.memory = Memory(controller.batch_size, self.interface_vector_size, controller.out_vector_size, memory_size)
+        self.mem_hp = mem_hp
+
+        self.memory = Memory(controller.batch_size, controller.out_vector_size, self.mem_hp)
 
         self.output_weights = tf.Variable(
             tf.random_normal([self.controller.out_vector_size, self.out_vector_size], stddev=0.01),
             name="output_weights")
-
-        self.interface_weights = tf.Variable(
-            tf.random_normal([self.out_vector_size, self.interface_vector_size], stddev=0.01),
-            name="interface_weights")
 
     def __call__(self, x):
         """
@@ -95,9 +91,8 @@ class DNC(Controller):
             # making sure the dimensions for everything align, using simple matmul for that
             # multiplying x @ W instead of W @ x (like in the paper) because it needs to be done in batches
             output_vector = controller_output @ self.output_weights  # shape [batch_size, out_vector_size]
-            interface_vector = controller_output @ self.interface_weights  # shape [batch_size, interf_vector_size]
 
-            memory_output, memory_state = self.memory(interface_vector)
+            memory_output, memory_state = self.memory(controller_output)
             output = output_vector + memory_output
 
         return output, (controller_cell, memory_output, memory_state)
