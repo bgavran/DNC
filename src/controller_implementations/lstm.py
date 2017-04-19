@@ -30,12 +30,22 @@ class LSTM(Controller):
         :return: outputs for all time steps
         """
         outputs, states = [], []
-        for i in range(self.out_vector_size):
+        for i in range(self.total_output_length):
             output, state = self.step(x[:, :, i], i)
             outputs.append(output)
             states.append(state)
+        outputs = tf.transpose(outputs, [1, 2, 0])
+        self.notify(states)
 
         return outputs
+
+    def notify(self, states):
+        states = tf.transpose(states, [2, 3, 1, 0])
+        states = tf.reshape(states, [self.batch_size, 2 * self.memory_size, self.total_output_length, 1])
+        tf.summary.image("LSTM cell state and 'hidden' state", states, max_outputs=Controller.max_outputs)
+
+        weights_expanded = tf.expand_dims(tf.expand_dims(self.weights, axis=0), axis=3)
+        tf.summary.image("LSTM output weights", tf.transpose(weights_expanded), max_outputs=Controller.max_outputs)
 
     def step(self, x, step):
         with tf.variable_scope("LSTM_step") as scope:

@@ -1,5 +1,4 @@
 import tensorflow as tf
-from tasks import *
 
 
 class Controller:
@@ -16,12 +15,18 @@ class Controller:
     
     
     """
+    max_outputs = 4
 
-    def run_session(self, x, y, task, hp, optimizer=tf.train.AdamOptimizer()):
+    def run_session(self, task, hp, optimizer=tf.train.AdamOptimizer()):
+        x = tf.placeholder(tf.float32, task.x_shape, name="X")
+        y = tf.placeholder(tf.float32, task.y_shape, name="Y")
+
         outputs = self(x)
         cost = tf.reduce_mean((y - outputs) ** 2)
         optimizer = optimizer.minimize(cost)
 
+        tf.summary.image("Input", tf.expand_dims(x, axis=3), max_outputs=Controller.max_outputs)
+        tf.summary.image("Output", tf.expand_dims(outputs, axis=3), max_outputs=Controller.max_outputs)
         tf.summary.scalar('Cost', cost)
 
         merged = tf.summary.merge_all()
@@ -32,10 +37,9 @@ class Controller:
             from time import time
             t = time()
             for step in range(hp.steps):
-                data_batch = task.generate_values(hp.batch_size, hp.inp_vector_size, hp.min_seq, hp.max_seq,
-                                                  hp.total_output_length)
+                data_batch = task.generate_values()
                 sess.run(optimizer, feed_dict={x: data_batch[0], y: data_batch[1]})
-                if step % 1000 == 0:
+                if step % 200 == 0:
                     summary = sess.run(merged, feed_dict={x: data_batch[0], y: data_batch[1]})
                     writer.add_summary(summary, step)
                     print("Summary generated. Step", step, " Time == %.2fs" % (time() - t))

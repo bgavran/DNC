@@ -6,6 +6,21 @@ class bAbITask:
 
 
 class CopyTask:
+    def __init__(self, inp_vector_size, out_vector_size, total_output_length, batch_size, min_seq, max_seq):
+        self.inp_vector_size = inp_vector_size
+        self.out_vector_size = out_vector_size
+        self.total_output_length = total_output_length
+        self.batch_size = batch_size
+        self.min_seq = min_seq
+        self.max_seq = max_seq
+
+        self.x_shape = [None, self.inp_vector_size, self.total_output_length]
+        self.y_shape = [None, self.inp_vector_size, self.total_output_length]
+
+    def generate_values(self):
+        return CopyTask.generate_values(self.batch_size, self.inp_vector_size, self.min_seq, self.max_seq,
+                                        self.total_output_length)
+
     @staticmethod
     def generate_values(batch_size, vector_size, min_s, max_s, total_length):
         """
@@ -37,7 +52,7 @@ if __name__ == "__main__":
     b = 3
     v = 5
     total = 10
-    # min_s = 1
-    # max_s = int((total - 2) / 2)
+    min_s = 1
+    max_s = int((total - 2) / 2)
     val = CopyTask.generate_values(b, v, min_s, max_s, total)
     print(val)
