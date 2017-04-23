@@ -1,23 +1,73 @@
 import numpy as np
 
 
+class Task:
+    """
+    
+    """
+
+    def generate_data(self):
+        """
+        
+        :return: 
+        """
+        # TODO define the interaction between the abstract task and the controller!
+        raise NotImplementedError()
+
+
 class bAbITask:
     pass
 
 
 class CopyTask:
-    def __init__(self, inp_vector_size, out_vector_size, total_output_length, batch_size, min_seq, max_seq):
+    epsilon = 1e-2
+
+    def __init__(self, inp_vector_size, out_vector_size, total_output_length, batch_size, min_seq, theoretical_max_seq):
         self.inp_vector_size = inp_vector_size
         self.out_vector_size = out_vector_size
         self.total_output_length = total_output_length
         self.batch_size = batch_size
         self.min_seq = min_seq
-        self.max_seq = max_seq
+        self.theoretical_max_seq = theoretical_max_seq
 
-        self.x_shape = [None, self.inp_vector_size, self.total_output_length]
-        self.y_shape = [None, self.inp_vector_size, self.total_output_length]
+        self.max_seq = self.min_seq
 
-    def generate_values(self):
+        self.x_shape = [self.batch_size, self.inp_vector_size, self.total_output_length]
+        self.y_shape = [self.batch_size, self.inp_vector_size, self.total_output_length]
+
+        # Used for curriculum training
+        self.state = 0
+        self.consecutive_thresh = 10
+
+    def update_training_state(self, cost):
+        if cost <= CopyTask.epsilon:
+            self.state += 1
+        else:
+            self.state = 0
+
+    def check_next_level(self):
+        if self.state < self.consecutive_thresh:
+            return False
+        else:
+            return True
+
+    def next_level(self):
+        self.state = 0
+        if self.max_seq < self.theoretical_max_seq:
+            self.max_seq += 1
+        print("Increased max_seq to", self.max_seq)
+
+    def update_state(self, cost):
+        self.update_training_state(cost)
+        if self.check_next_level():
+            self.next_level()
+
+    def generate_data(self, cost):
+        # Update curriculum training state
+        self.update_state(cost)
+
+        # self.max_seq = self.theoretical_max_seq
+
         return CopyTask.generate_values(self.batch_size, self.inp_vector_size, self.min_seq, self.max_seq,
                                         self.total_output_length)
 
@@ -27,9 +77,10 @@ class CopyTask:
 
         :param batch_size:
         :param vector_size:
-        :param sequence_length:
+        :param min_s:
+        :param max_s:
         :param total_length: total size of the sequence, in case we want to pad it, must be >= 2*max_s + 2
-        :return: np array of size (batch_size x vector_size x total_length)
+        :return: np array of shape [batch_size, vector_size, total_length]
         """
         assert total_length >= 2 * max_s + 2
         shape = (batch_size, vector_size, total_length)
@@ -37,7 +88,7 @@ class CopyTask:
         out_sequence = np.zeros(shape, dtype=np.float32)
 
         for i in range(batch_size):
-            sequence_length = np.random.randint(min_s, max_s)
+            sequence_length = np.random.randint(min_s, max_s + 1)
             ones = np.random.binomial(1, 0.5, (1, vector_size - 1, sequence_length))
 
             inp_sequence[i, :-1, :sequence_length] = ones

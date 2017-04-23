@@ -19,9 +19,10 @@ class Feedforward(Controller):
         :return: list of outputs for every time step
         """
         outputs = []
-        for i in range(self.out_vector_size):
+        for i in range(self.total_output_length):
             output, _, = self.step(x[:, :, i], i)
             outputs.append(output)
+        outputs = tf.transpose(outputs, [1, 2, 0])
 
         return outputs
 
@@ -42,3 +43,11 @@ class Feedforward(Controller):
 
             x = tf.layers.dense(x, self.layer_sizes[-1])
         return x, None
+
+    def notify(self, states):
+        """
+        FF controller doesn't have an internal state
+        :param states: 
+        :return: 
+        """
+        pass
