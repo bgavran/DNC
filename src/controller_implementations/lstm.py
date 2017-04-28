@@ -1,6 +1,5 @@
 from controller import *
 
-
 class LSTM(Controller):
     def __init__(self, batch_size, inp_vector_size, out_vector_size, memory_size, total_output_length):
         self.batch_size = batch_size

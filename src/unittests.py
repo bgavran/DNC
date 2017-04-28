@@ -19,8 +19,8 @@ class DNCTest(tf.test.TestCase):
             tf.global_variables_initializer().run()
             Memory.usage_vector = u
             Memory.memory_size = n
-            calculated_alloc = Memory.calculate_allocation_weighting(Memory)
-            self.assertAllClose(correct_alloc, calculated_alloc.eval())
+            calculated_alloc = Memory.calculate_allocation_weighting(Memory).eval()
+            self.assertAllClose(correct_alloc, calculated_alloc)
 
     def test_content_addressing(self):
         batch_size = 1
@@ -40,11 +40,7 @@ class DNCTest(tf.test.TestCase):
 
         with self.test_session():
             tf.global_variables_initializer().run()
-            out = np.array([[[0.14885],
-                             [0.14885],
-                             [0.14885],
-                             [0.14885],
-                             [0.40461]]])
+
             real_weighting = np.zeros((batch_size, memory_size))
             k = keys[0, 0, :].eval()
             for i in range(memory_size):

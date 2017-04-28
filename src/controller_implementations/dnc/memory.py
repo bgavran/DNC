@@ -3,20 +3,18 @@ import tensorflow as tf
 
 class Memory:
     """
-    Used by the DNC. It's not related to the Controller in any way, just used by it.
+    Used by the DNC. It doesn't inherit Controller, but its functionality has some overlap.
     
     Controller  |  Memory
     -------------------------
-    step()      |  __call__()
+    step()      |  step()
     __call__()  |  None
     
-    Its step() method equivalent is the __call__() method, which implements all the required operations for one time 
-    step.
-    Memory doesn't have the Controller's __call__() equivalent, because it depends on DNC.
-    
+    Memory doesn't have the Controller's __call__() equivalent, because memory depends on DNC.
     
     """
     epsilon = 1e-6
+    max_outputs = 2
 
     def __init__(self, batch_size, out_vector_size, mem_hp):
         self.batch_size = batch_size
@@ -39,11 +37,11 @@ class Memory:
         # TODO Reconsider other initialization schemes? Why should we initialize to 1e-6?
         self.m = tf.fill([self.batch_size, self.memory_size, self.word_size], Memory.epsilon)  # initial memory matrix
         self.read_vectors = tf.fill([self.batch_size, self.num_read_heads, self.word_size], Memory.epsilon)
-        self.write_weighting = tf.fill([self.batch_size, self.memory_size], Memory.epsilon)
+        self.write_weighting = tf.fill([self.batch_size, self.memory_size], Memory.epsilon, name="Write_weighting")
         self.read_weightings = tf.fill([self.batch_size, self.memory_size, self.num_read_heads], Memory.epsilon)
-        self.precedence_weighting = tf.zeros([self.batch_size, self.memory_size])
+        self.precedence_weighting = tf.zeros([self.batch_size, self.memory_size], name="Precedence_weighting")
         self.link_matrix = tf.zeros([self.batch_size, self.memory_size, self.memory_size])
-        self.usage_vector = tf.zeros([self.batch_size, self.memory_size])
+        self.usage_vector = tf.zeros([self.batch_size, self.memory_size], name="Usage_vector")
 
         # Code below is a more-or-less pythonic way to process the individual interface parameters
         r, w = self.num_read_heads, self.word_size
@@ -51,7 +49,7 @@ class Memory:
         names = ["r_read_keys", "r_read_strengths", "write_key", "write_strength", "erase_vector", "write_vector",
                  "r_free_gates", "allocation_gate", "write_gate", "r_read_modes"]
         functions = [tf.identity, Memory.oneplus, tf.identity, Memory.oneplus, tf.nn.sigmoid, tf.identity,
-                     tf.nn.sigmoid, tf.nn.sigmoid, tf.nn.sigmoid, tf.nn.softmax]
+                     tf.nn.sigmoid, tf.nn.sigmoid, tf.nn.sigmoid, self.reshape_and_softmax]
 
         indexes = [[sum(sizes[:i]), sum(sizes[:i + 1])] for i in range(len(sizes))]
         assert len(names) == len(sizes) == len(functions) == len(indexes)
@@ -60,7 +58,7 @@ class Memory:
         self.split_interface = lambda iv: {name: fn(iv[:, i[0]:i[1]]) for name, i, fn in
                                            zip(names, indexes, functions)}
 
-    def __call__(self, controller_output):
+    def step(self, controller_output):
         """
         
         :param controller_output: 
@@ -77,22 +75,21 @@ class Memory:
         # it represents a normalized probability distribution over the memory locations
         write_content_weighting = Memory.content_based_addressing(self.m, interf["write_key"], interf["write_strength"])
 
-        ag = interf["allocation_gate"]
-
         # memory retention is of shape [batch_size, memory_size]
-        tf.Print(interf["r_free_gates"], [interf["r_free_gates"]], message="Free gates")
         memory_retention = tf.reduce_prod(1 - tf.einsum("br,bnr->bnr", interf["r_free_gates"], self.read_weightings), 2)
-        tf.Print(memory_retention, [memory_retention], message="Memory retention")
+
         # calculating the usage vector, which has some sort of short-term memory
         self.usage_vector = (self.usage_vector + self.write_weighting - self.usage_vector * self.write_weighting) * \
                             memory_retention
-        tf.Print(self.usage_vector, [self.usage_vector], message="Usage vector")
-        self.allocation_weighting = self.calculate_allocation_weighting()
+        allocation_weighting = self.calculate_allocation_weighting()
 
         # write weighting, shape [batch_size, memory_size], represents a normalized probability distribution over the
         # memory locations. Its sum is <= 1
-        self.write_weighting = interf["write_gate"] * (ag * self.allocation_weighting
-                                                       + tf.einsum("bi,bnr->bn", (1 - ag), write_content_weighting))
+        self.write_weighting = interf["write_gate"] * (interf["allocation_gate"] * allocation_weighting
+                                                       + tf.einsum("bi,bnr->bn",
+                                                                   (1 - interf["allocation_gate"]),
+                                                                   write_content_weighting))
+
         self.m = self.m * (1 - tf.einsum("bw,bn->bnw", interf["erase_vector"], self.write_weighting)) + \
                  tf.einsum("bw,bn->bnw", interf["write_vector"], self.write_weighting)
 
@@ -101,39 +98,52 @@ class Memory:
         read_content_weighting = Memory.content_based_addressing(self.m, interf["r_read_keys"],
                                                                  interf["r_read_strengths"])
         self.link_matrix = self.update_link_matrix(self.link_matrix, self.precedence_weighting, self.write_weighting)
-        self.precedence_weighting = self.precedence_weighting * (1 - tf.reduce_sum(self.write_weighting)) + \
-                                    self.write_weighting
+        self.precedence_weighting = tf.einsum("bm,b->bm",
+                                              self.precedence_weighting,
+                                              (1 - tf.reduce_sum(self.write_weighting, axis=1))) + self.write_weighting
 
-        # TODO test forwardw and backwardw validity?
         forwardw = tf.einsum("bmn,bmr->bmr", self.link_matrix, self.read_weightings)
         backwardw = tf.einsum("bnm,bmr->bnr", self.link_matrix, self.read_weightings)
 
         self.read_weightings = tf.einsum("brs,bmrs->bmr",
-                                         tf.reshape(interf["r_read_modes"], [-1, self.num_read_heads, 3]),
+                                         interf["r_read_modes"],
                                          tf.stack([backwardw, read_content_weighting, forwardw], axis=3))
-        tf.Print(read_content_weighting, [read_content_weighting], message="Read content weighting")
-        tf.Print(self.read_weightings, [self.read_weightings], message="Read weightings")
 
         self.read_vectors = tf.einsum("bnw,bnr->brw", self.m, self.read_weightings)
 
         memory_output = tf.einsum("rwo,brw->bo", self.output_weights, self.read_vectors)
-        memory_state_tuple = (interf["r_read_modes"],  # 3
-                              interf["write_gate"],  # 1
-                              interf["allocation_gate"],  # 1
-                              tf.squeeze(interf["write_key"]),  # word_size
-                              tf.squeeze(write_content_weighting),  # memory_size
-                              tf.reshape(interf["r_read_keys"],
-                                         [self.batch_size, self.num_read_heads * self.word_size]),  # r * word_size
-                              tf.reshape(self.read_vectors,
-                                         [self.batch_size, self.num_read_heads * self.word_size])  # r * word_size
-                              # tf.reshape(self.m,
-                              #            [self.batch_size, self.memory_size * self.word_size])  # n * word_size
-                              )
 
-        # Adding a visual delimeter of tf.ones in between every memory state element. Hacking with list's + overloading
-        memory_state = tf.concat(sum([[i, tf.ones([self.batch_size, 1])] for i in memory_state_tuple], []), axis=1)
+        memory_state = [
+            tf.identity(memory_retention, name="Memory_retention"),
+            tf.identity(allocation_weighting, name="Allocation_weighting"),
+            tf.identity(interf["r_free_gates"], name="R_free_gates"),
+            tf.reshape(self.link_matrix, [self.batch_size, self.memory_size ** 2], name="Link_matrix"),
+            tf.identity(self.write_weighting, name="Write_weighting"),
+            tf.identity(self.usage_vector, name="Usage_vector"),
+            tf.identity(self.precedence_weighting, name="Precedence_weighting"),
+            tf.reshape(self.read_weightings, [self.batch_size, self.memory_size * self.num_read_heads],
+                       name="Read_weightings"),
+            tf.reshape(interf["r_read_modes"], [self.batch_size, self.num_read_heads * 3], name="R_read_modes"),
+            tf.identity(interf["write_gate"], name="Write_gate"),  # 1
+            tf.identity(interf["allocation_gate"], name="Allocation_gate"),  # 1
+            tf.identity(tf.squeeze(interf["write_key"]), name="Write_key"),  # word_size
+            tf.identity(tf.squeeze(write_content_weighting), name="Write_content_weighting"),
+            tf.reshape(interf["r_read_keys"],
+                       [self.batch_size, self.num_read_heads * self.word_size], name="R_read_keys"),
+            tf.reshape(self.read_vectors,
+                       [self.batch_size, self.num_read_heads * self.word_size], name="Read_vectors"),
+            tf.reshape(self.m,
+                       [self.batch_size, self.memory_size * self.word_size], name="ZMemory")
+        ]
 
         return memory_output, memory_state
+
+    def notify(self, states):
+        states = [list(state) for state in zip(*states)]
+        for var in states:
+            name = var[0].name[:-2]
+            var = tf.expand_dims(tf.transpose(tf.convert_to_tensor(var), [1, 2, 0]), axis=3, name=name)
+            tf.summary.image(var.name, var, max_outputs=Memory.max_outputs)
 
     def calculate_allocation_weighting(self):
         """
@@ -149,8 +159,6 @@ class Memory:
         sorted_usage = 1 - lowest_usage
 
         # lowest_usage is equal to the paper's (1 - usage[sorted[j]])
-        # tf.Print(sorted_usage, [sorted_usage], message="Sorted usage")
-        # tf.Print(lowest_usage, [lowest_usage], message="Lowest usage")
         allocation_scrambled = lowest_usage * tf.cumprod(sorted_usage, axis=1, exclusive=True)
 
         # allocation is not in the correct order. alloation[i] contains the sorted[i] value
@@ -159,6 +167,7 @@ class Memory:
         allocation = tf.stack([tf.gather(mem, ind)
                                for mem, ind in
                                zip(tf.unstack(allocation_scrambled), tf.unstack(indices))])
+
         return allocation
 
     def update_link_matrix(self, link_matrix_old, precedence_weighting_old, write_weighting):
@@ -180,7 +189,9 @@ class Memory:
         w_transp = tf.tile(tf.transpose(expanded, [0, 2, 1]), [1, self.memory_size, 1])
 
         # in einsum, m and n are the same dimension because tensorflow doesn't support duplicated subscripts. Why?
-        return (1 - w - w_transp) * link_matrix_old + tf.einsum("bm,bn->bmn", write_weighting, precedence_weighting_old)
+        lm = (1 - w - w_transp) * link_matrix_old + tf.einsum("bm,bn->bmn", write_weighting, precedence_weighting_old)
+        lm *= (1 - tf.eye(self.memory_size, batch_shape=[self.batch_size]))
+        return tf.identity(lm, name="Link_matrix")
 
     @staticmethod
     def content_based_addressing(memory, keys, strength):
@@ -193,10 +204,18 @@ class Memory:
         """
         keys = tf.nn.l2_normalize(keys, dim=2)
         memory = tf.nn.l2_normalize(memory, dim=2)
-        # Einstein summation convention. Functionality has to be tested
         similarity = tf.einsum("brw,bnw,br->bnr", keys, memory, strength)
-        return tf.nn.softmax(similarity, dim=1)
+        content_weighting = tf.nn.softmax(similarity, dim=1, name="Content_weighting")
+        # tf.Print(content_weighting, [content_weighting],
+        #          summarize=content_weighting.shape[0] * content_weighting.shape[1] * content_weighting.shape[2],
+        #          message="CW")
+
+        return content_weighting
 
     @staticmethod
     def oneplus(x):
         return 1 + tf.nn.softplus(x)
+
+    def reshape_and_softmax(self, r_read_modes):
+        r_read_modes = tf.reshape(r_read_modes, [self.batch_size, self.num_read_heads, 3])
+        return tf.nn.softmax(r_read_modes, dim=2)

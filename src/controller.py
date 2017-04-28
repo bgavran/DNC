@@ -17,48 +17,86 @@ class Controller:
     
     """
     max_outputs = 2
+    clip_value = 10
 
     def run_session(self, task, hp, optimizer=tf.train.AdamOptimizer()):
+        from time import time
+        t = time()
+
         x = tf.placeholder(tf.float32, task.x_shape, name="X")
         y = tf.placeholder(tf.float32, task.y_shape, name="Y")
 
+        seq_length = tf.placeholder(tf.float32, [], name="Sequence_length")
+
         outputs = self(x)
+        print(time() - t)
         assert outputs.shape == y.shape
-        cost = tf.nn.l2_loss(y - outputs)
-        # cost = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=outputs, labels=y))
+        # if output_activation is not None:
+        #     outputs = output_activation(outputs)
+        # cost = tf.reduce_mean(tf.nn.l2_loss(y - outputs))
+
+        cost = tf.reduce_sum(tf.nn.sigmoid_cross_entropy_with_logits(logits=outputs, labels=y))
+        cost /= seq_length * (hp.out_vector_size - 1)
+
+        # optimizer, clipping gradients and summarizing gradient histograms
+        gradients = optimizer.compute_gradients(cost)
+        from tensorflow.python.framework import ops
+        for i, (gradient, variable) in enumerate(gradients):
+            clipped_gradient = tf.clip_by_value(gradient, -Controller.clip_value, Controller.clip_value)
+            gradients[i] = clipped_gradient, variable
+            # if isinstance(gradient, ops.IndexedSlices):
+            #     grad_values = gradient.values
+            # else:
+            #     grad_values = gradient
+            # tf.summary.histogram(variable.name, variable)
+            # tf.summary.histogram(variable.name + "/gradients", grad_values)
+        # optimizer = optimizer.apply_gradients(gradients)
         optimizer = optimizer.minimize(cost)
 
-        tf.summary.image("Input", tf.expand_dims(x, axis=3), max_outputs=Controller.max_outputs)
-        tf.summary.image("Output", tf.expand_dims(outputs, axis=3), max_outputs=Controller.max_outputs)
+        tf.summary.image("0Input", tf.expand_dims(x, axis=3), max_outputs=Controller.max_outputs)
+        tf.summary.image("0Output", tf.nn.sigmoid(tf.expand_dims(outputs, axis=3)), max_outputs=Controller.max_outputs)
         tf.summary.scalar("Cost", cost)
         check = tf.add_check_numerics_ops()
 
         merged = tf.summary.merge_all()
+        from numpy import prod, sum
+        n_vars = sum([prod(var.shape) for var in tf.trainable_variables()])
+        print("This model has ", n_vars, "parameters!")
         with tf.Session() as sess:
+            print(time() - t)
+
+            # from tensorflow.python import debug as tf_debug
+            # sess = tf_debug.LocalCLIDebugWrapperSession(sess)
+            # sess.add_tensor_filter("has_inf_or_nan", tf_debug.has_inf_or_nan)
+
             train_writer = tf.summary.FileWriter(hp.train_path, sess.graph)
             test_writer = tf.summary.FileWriter(hp.test_path, sess.graph)
             tf.global_variables_initializer().run()
+            print(time() - t)
 
-            from time import time
-            t = time()
             cost_value = 9999
-            data_batch = task.generate_data(cost_value)
-            sess.run([check], feed_dict={x: data_batch[0], y: data_batch[1]})
+            # data_batch = task.generate_data(cost_value)
+            # sess.run([check], feed_dict={x: data_batch[0], y: data_batch[1]})
             for step in range(hp.steps):
+                # print(step)
                 # Generates new curriculum training data based on current cost
-                data_batch = task.generate_data(cost_value)
+                data_batch, al = task.generate_data(cost_value)
 
-                sess.run([check], feed_dict={x: data_batch[0], y: data_batch[1]})
-                _, cost_value = sess.run([optimizer, cost], feed_dict={x: data_batch[0], y: data_batch[1]})
+                _, cost_value = sess.run([optimizer, cost],
+                                         feed_dict={x: data_batch[0], y: data_batch[1], seq_length: al})
 
-                if step % 200 == 0:
-                    summary = sess.run(merged, feed_dict={x: data_batch[0], y: data_batch[1]})
+                if step % 100 == 0:
+                    summary = sess.run(merged, feed_dict={x: data_batch[0], y: data_batch[1], seq_length: al})
                     train_writer.add_summary(summary, step)
 
-                    test_data_batch = CopyTask.generate_values(hp.batch_size, hp.out_vector_size, hp.min_seq,
-                                                               hp.theoretical_max_seq, hp.total_output_length)
-                    summary = sess.run(merged, feed_dict={x: test_data_batch[0], y: test_data_batch[1]})
-                    test_writer.add_summary(summary, step)
+                    if step % 1000 == 0:
+                        sess.run([check], feed_dict={x: data_batch[0], y: data_batch[1], seq_length: al})
+                        test_data_batch, al = CopyTask.generate_values(hp.batch_size, hp.out_vector_size,
+                                                                       hp.train_max_seq,
+                                                                       hp.theoretical_max_seq, hp.total_output_length)
+                        summary = sess.run(merged,
+                                           feed_dict={x: test_data_batch[0], y: test_data_batch[1], seq_length: al})
+                        test_writer.add_summary(summary, step)
 
                     print("Summary generated. Step", step,
                           " Train cost == %.9f Time == %.2fs" % (cost_value, time() - t))

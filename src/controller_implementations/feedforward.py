@@ -2,15 +2,13 @@ from controller import *
 
 
 class Feedforward(Controller):
-    def __init__(self, inp_vector_size, out_vector_size, total_output_length, batch_size, n_layers, layer_sizes):
-        assert n_layers == len(layer_sizes)
+    def __init__(self, inp_vector_size, out_vector_size, total_output_length, batch_size, layer_sizes):
         assert layer_sizes[-1] == out_vector_size
         self.inp_vector_size = inp_vector_size
-        self.total_output_length = total_output_length
         self.batch_size = batch_size
-        self.n_layers = n_layers
         self.layer_sizes = layer_sizes
         self.out_vector_size = out_vector_size
+        self.total_output_length = total_output_length
 
     def __call__(self, x):
         """
