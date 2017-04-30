@@ -1,0 +1,3000 @@
+1 The garden is north the bathroom.
+2 The kitchen is north the garden.
+3 What is north the garden?	kitchen	2
+1 The office is east the hallway.
+2 The bathroom is east the office.
+3 What is the office west?	bathroom	2
+1 The bedroom is south the hallway.
+2 The garden is north the hallway.
+3 What is north the bedroom?	hallway	1
+1 The bedroom is east the hallway.
+2 The hallway is east the office.
+3 What is the hallway east?	office	2
+1 The office is south the hallway.
+2 The kitchen is south the office.
+3 What is north the office?	hallway	1
+1 The office is west the hallway.
+2 The hallway is west the kitchen.
+3 What is the hallway west?	kitchen	2
+1 The garden is south the bedroom.
+2 The bedroom is south the office.
+3 What is the office north?	bedroom	2
+1 The office is west the bathroom.
+2 The office is east the hallway.
+3 What is the hallway west?	office	2
+1 The bathroom is south the bedroom.
+2 The bedroom is south the office.
+3 What is the bathroom south?	bedroom	1
+1 The garden is west the hallway.
+2 The bathroom is west the garden.
+3 What is west the garden?	bathroom	2
+1 The garden is west the bathroom.
+2 The hallway is east the bathroom.
+3 What is east the bathroom?	hallway	2
+1 The bedroom is west the kitchen.
+2 The bathroom is east the kitchen.
+3 What is the kitchen west?	bathroom	2
+1 The bedroom is north the garden.
+2 The kitchen is south the garden.
+3 What is the garden south?	bedroom	1
+1 The bedroom is east the office.
+2 The office is east the garden.
+3 What is the office west?	bedroom	1
+1 The garden is east the office.
+2 The office is east the bedroom.
+3 What is the office east?	bedroom	2
+1 The bathroom is south the garden.
+2 The bedroom is north the garden.
+3 What is the bedroom north?	garden	2
+1 The office is south the hallway.
+2 The bedroom is south the office.
+3 What is south the hallway?	office	1
+1 The garden is north the kitchen.
+2 The kitchen is north the office.
+3 What is the kitchen north?	office	2
+1 The garden is south the hallway.
+2 The kitchen is south the garden.
+3 What is south the hallway?	garden	1
+1 The garden is south the bedroom.
+2 The bathroom is south the garden.
+3 What is the garden north?	bathroom	2
+1 The garden is south the bedroom.
+2 The garden is north the bathroom.
+3 What is the garden south?	bedroom	1
+1 The office is east the hallway.
+2 The office is west the bathroom.
+3 What is west the bathroom?	office	2
+1 The bedroom is east the hallway.
+2 The bathroom is west the hallway.
+3 What is east the hallway?	bedroom	1
+1 The bedroom is west the bathroom.
+2 The office is east the bathroom.
+3 What is east the bedroom?	bathroom	1
+1 The bedroom is west the kitchen.
+2 The hallway is east the kitchen.
+3 What is east the kitchen?	hallway	2
+1 The bedroom is east the bathroom.
+2 The bathroom is east the kitchen.
+3 What is west the bathroom?	kitchen	2
+1 The bathroom is west the kitchen.
+2 The office is east the kitchen.
+3 What is the office east?	kitchen	2
+1 The kitchen is north the bedroom.
+2 The bedroom is north the bathroom.
+3 What is the bedroom north?	bathroom	2
+1 The hallway is south the office.
+2 The hallway is north the bedroom.
+3 What is south the hallway?	bedroom	2
+1 The bedroom is north the kitchen.
+2 The kitchen is north the hallway.
+3 What is the kitchen south?	bedroom	1
+1 The bedroom is east the bathroom.
+2 The hallway is west the bathroom.
+3 What is the bathroom west?	bedroom	1
+1 The bathroom is north the office.
+2 The kitchen is south the office.
+3 What is the office south?	bathroom	1
+1 The kitchen is west the garden.
+2 The garden is west the bedroom.
+3 What is west the garden?	kitchen	1
+1 The kitchen is north the bedroom.
+2 The garden is south the bedroom.
+3 What is north the garden?	bedroom	2
+1 The office is east the bedroom.
+2 The hallway is west the bedroom.
+3 What is east the bedroom?	office	1
+1 The garden is south the bedroom.
+2 The kitchen is south the garden.
+3 What is south the bedroom?	garden	1
+1 The office is east the bedroom.
+2 The office is west the garden.
+3 What is the office west?	garden	2
+1 The kitchen is south the hallway.
+2 The office is south the kitchen.
+3 What is the kitchen north?	office	2
+1 The office is south the bedroom.
+2 The garden is south the office.
+3 What is the garden south?	office	2
+1 The kitchen is north the office.
+2 The bathroom is south the office.
+3 What is south the kitchen?	office	1
+1 The kitchen is east the bathroom.
+2 The bathroom is east the bedroom.
+3 What is the bedroom west?	bathroom	2
+1 The kitchen is west the garden.
+2 The hallway is east the garden.
+3 What is the hallway east?	garden	2
+1 The bedroom is north the bathroom.
+2 The bathroom is north the hallway.
+3 What is the bathroom south?	bedroom	1
+1 The hallway is east the garden.
+2 The kitchen is west the garden.
+3 What is west the garden?	kitchen	2
+1 The bedroom is west the bathroom.
+2 The hallway is east the bathroom.
+3 What is west the bathroom?	bedroom	1
+1 The bathroom is east the kitchen.
+2 The kitchen is east the hallway.
+3 What is west the bathroom?	kitchen	1
+1 The hallway is west the office.
+2 The hallway is east the kitchen.
+3 What is east the hallway?	office	1
+1 The bathroom is west the hallway.
+2 The bedroom is east the hallway.
+3 What is east the hallway?	bedroom	2
+1 The hallway is east the office.
+2 The office is east the kitchen.
+3 What is west the hallway?	office	1
+1 The bathroom is east the hallway.
+2 The bathroom is west the kitchen.
+3 What is east the bathroom?	kitchen	2
+1 The office is west the bathroom.
+2 The office is east the kitchen.
+3 What is the office west?	bathroom	1
+1 The garden is north the bedroom.
+2 The office is north the garden.
+3 What is south the garden?	bedroom	1
+1 The garden is south the bathroom.
+2 The bedroom is south the garden.
+3 What is the bathroom north?	garden	1
+1 The kitchen is west the bedroom.
+2 The kitchen is east the office.
+3 What is the kitchen west?	bedroom	1
+1 The bedroom is north the kitchen.
+2 The bedroom is south the bathroom.
+3 What is south the bedroom?	kitchen	1
+1 The office is north the kitchen.
+2 The garden is south the kitchen.
+3 What is north the garden?	kitchen	2
+1 The kitchen is north the office.
+2 The kitchen is south the bathroom.
+3 What is the kitchen south?	bathroom	2
+1 The hallway is west the bedroom.
+2 The bedroom is west the bathroom.
+3 What is the hallway west?	bedroom	1
+1 The bedroom is west the kitchen.
+2 The kitchen is west the garden.
+3 What is the garden east?	kitchen	2
+1 The kitchen is north the garden.
+2 The bedroom is north the kitchen.
+3 What is north the kitchen?	bedroom	2
+1 The bedroom is east the kitchen.
+2 The bathroom is west the kitchen.
+3 What is west the bedroom?	kitchen	1
+1 The garden is south the office.
+2 The office is south the bedroom.
+3 What is the office south?	bedroom	2
+1 The bedroom is west the garden.
+2 The bathroom is west the bedroom.
+3 What is west the bedroom?	bathroom	2
+1 The kitchen is north the garden.
+2 The garden is north the office.
+3 What is south the kitchen?	garden	1
+1 The bedroom is south the hallway.
+2 The bedroom is north the garden.
+3 What is north the garden?	bedroom	2
+1 The garden is west the bedroom.
+2 The kitchen is east the bedroom.
+3 What is the bedroom west?	kitchen	2
+1 The bedroom is north the office.
+2 The bedroom is south the bathroom.
+3 What is north the office?	bedroom	1
+1 The office is west the hallway.
+2 The office is east the kitchen.
+3 What is west the hallway?	office	1
+1 The bathroom is south the kitchen.
+2 The bathroom is north the garden.
+3 What is south the kitchen?	bathroom	1
+1 The hallway is south the bedroom.
+2 The bedroom is south the garden.
+3 What is the garden north?	bedroom	2
+1 The garden is south the office.
+2 The office is south the bedroom.
+3 What is north the office?	bedroom	2
+1 The bedroom is west the bathroom.
+2 The office is west the bedroom.
+3 What is the bedroom west?	bathroom	1
+1 The garden is north the hallway.
+2 The garden is south the bedroom.
+3 What is north the hallway?	garden	1
+1 The hallway is south the bedroom.
+2 The kitchen is south the hallway.
+3 What is south the hallway?	kitchen	2
+1 The bedroom is south the office.
+2 The office is south the garden.
+3 What is the office south?	garden	2
+1 The office is west the garden.
+2 The office is east the bedroom.
+3 What is west the office?	bedroom	2
+1 The bathroom is south the bedroom.
+2 The bathroom is north the office.
+3 What is north the office?	bathroom	2
+1 The hallway is south the bedroom.
+2 The hallway is north the office.
+3 What is north the office?	hallway	2
+1 The office is west the bathroom.
+2 The kitchen is east the bathroom.
+3 What is west the bathroom?	office	1
+1 The bedroom is west the office.
+2 The kitchen is west the bedroom.
+3 What is the bedroom west?	office	1
+1 The office is north the hallway.
+2 The office is south the bedroom.
+3 What is south the bedroom?	office	2
+1 The bathroom is east the garden.
+2 The bedroom is east the bathroom.
+3 What is east the bathroom?	bedroom	2
+1 The garden is north the office.
+2 The garden is south the bathroom.
+3 What is the bathroom north?	garden	2
+1 The bedroom is east the garden.
+2 The hallway is west the garden.
+3 What is the hallway west?	garden	2
+1 The bedroom is east the kitchen.
+2 The bathroom is east the bedroom.
+3 What is west the bathroom?	bedroom	2
+1 The office is west the bedroom.
+2 The bathroom is east the bedroom.
+3 What is the bedroom east?	office	1
+1 The bathroom is north the hallway.
+2 The office is north the bathroom.
+3 What is the hallway south?	bathroom	1
+1 The hallway is west the bathroom.
+2 The hallway is east the bedroom.
+3 What is the bathroom east?	hallway	1
+1 The kitchen is north the hallway.
+2 The hallway is north the bedroom.
+3 What is the hallway north?	bedroom	2
+1 The bedroom is west the garden.
+2 The hallway is east the garden.
+3 What is west the hallway?	garden	2
+1 The hallway is north the bathroom.
+2 The office is north the hallway.
+3 What is south the office?	hallway	2
+1 The hallway is north the office.
+2 The office is north the kitchen.
+3 What is the office north?	kitchen	2
+1 The garden is west the hallway.
+2 The garden is east the office.
+3 What is the hallway east?	garden	1
+1 The office is north the hallway.
+2 The garden is south the hallway.
+3 What is the garden south?	hallway	2
+1 The bedroom is west the office.
+2 The hallway is west the bedroom.
+3 What is the office east?	bedroom	1
+1 The bathroom is east the bedroom.
+2 The kitchen is west the bedroom.
+3 What is west the bedroom?	kitchen	2
+1 The hallway is south the garden.
+2 The garden is south the bathroom.
+3 What is north the hallway?	garden	1
+1 The office is south the kitchen.
+2 The office is north the hallway.
+3 What is south the kitchen?	office	1
+1 The hallway is east the bedroom.
+2 The bathroom is east the hallway.
+3 What is the bedroom west?	hallway	1
+1 The office is north the hallway.
+2 The bedroom is north the office.
+3 What is south the office?	hallway	1
+1 The office is south the bedroom.
+2 The garden is north the bedroom.
+3 What is the bedroom north?	office	1
+1 The garden is west the hallway.
+2 The kitchen is east the hallway.
+3 What is east the hallway?	kitchen	2
+1 The bedroom is east the hallway.
+2 The bathroom is east the bedroom.
+3 What is west the bedroom?	hallway	1
+1 The garden is north the bathroom.
+2 The kitchen is south the bathroom.
+3 What is the bathroom north?	kitchen	2
+1 The hallway is north the garden.
+2 The kitchen is north the hallway.
+3 What is the hallway south?	kitchen	2
+1 The bedroom is west the bathroom.
+2 The kitchen is east the bathroom.
+3 What is the bathroom west?	kitchen	2
+1 The bathroom is north the garden.
+2 The garden is north the office.
+3 What is the office south?	garden	2
+1 The bathroom is west the kitchen.
+2 The bathroom is east the bedroom.
+3 What is the bedroom west?	bathroom	2
+1 The bedroom is west the garden.
+2 The bedroom is east the kitchen.
+3 What is the garden east?	bedroom	1
+1 The office is north the bedroom.
+2 The hallway is south the bedroom.
+3 What is the office north?	bedroom	1
+1 The kitchen is west the bedroom.
+2 The bedroom is west the hallway.
+3 What is west the bedroom?	kitchen	1
+1 The bedroom is east the kitchen.
+2 The bedroom is west the office.
+3 What is the office east?	bedroom	2
+1 The hallway is west the garden.
+2 The hallway is east the office.
+3 What is west the garden?	hallway	1
+1 The bathroom is north the hallway.
+2 The bathroom is south the office.
+3 What is north the bathroom?	office	2
+1 The bathroom is north the hallway.
+2 The bathroom is south the office.
+3 What is the office north?	bathroom	2
+1 The hallway is south the kitchen.
+2 The garden is north the kitchen.
+3 What is the kitchen north?	hallway	1
+1 The garden is north the hallway.
+2 The kitchen is north the garden.
+3 What is the kitchen north?	garden	2
+1 The garden is north the bedroom.
+2 The hallway is north the garden.
+3 What is the garden north?	bedroom	1
+1 The hallway is east the kitchen.
+2 The office is west the kitchen.
+3 What is the kitchen east?	office	2
+1 The kitchen is south the hallway.
+2 The garden is north the hallway.
+3 What is north the kitchen?	hallway	1
+1 The garden is west the kitchen.
+2 The kitchen is west the office.
+3 What is west the kitchen?	garden	1
+1 The garden is east the kitchen.
+2 The kitchen is east the bathroom.
+3 What is east the kitchen?	garden	1
+1 The office is east the garden.
+2 The garden is east the kitchen.
+3 What is the kitchen west?	garden	2
+1 The garden is north the hallway.
+2 The hallway is north the kitchen.
+3 What is the hallway north?	kitchen	2
+1 The office is south the kitchen.
+2 The kitchen is south the hallway.
+3 What is north the office?	kitchen	1
+1 The bedroom is south the garden.
+2 The hallway is south the bedroom.
+3 What is south the garden?	bedroom	1
+1 The bedroom is south the kitchen.
+2 The garden is north the kitchen.
+3 What is north the kitchen?	garden	2
+1 The bedroom is north the bathroom.
+2 The bedroom is south the kitchen.
+3 What is south the bedroom?	bathroom	1
+1 The bedroom is west the bathroom.
+2 The bathroom is west the hallway.
+3 What is the hallway east?	bathroom	2
+1 The bedroom is west the bathroom.
+2 The bedroom is east the kitchen.
+3 What is the bathroom east?	bedroom	1
+1 The bedroom is east the bathroom.
+2 The kitchen is east the bedroom.
+3 What is the bathroom west?	bedroom	1
+1 The hallway is west the office.
+2 The hallway is east the bathroom.
+3 What is west the office?	hallway	1
+1 The garden is north the office.
+2 The bathroom is south the office.
+3 What is north the bathroom?	office	2
+1 The hallway is south the kitchen.
+2 The bathroom is north the kitchen.
+3 What is the bathroom north?	kitchen	2
+1 The kitchen is west the bathroom.
+2 The kitchen is east the garden.
+3 What is the garden west?	kitchen	2
+1 The bathroom is south the bedroom.
+2 The office is south the bathroom.
+3 What is the bathroom south?	bedroom	1
+1 The garden is east the office.
+2 The kitchen is west the office.
+3 What is west the office?	kitchen	2
+1 The bedroom is east the office.
+2 The office is east the kitchen.
+3 What is the kitchen west?	office	2
+1 The bedroom is south the office.
+2 The kitchen is north the office.
+3 What is the kitchen north?	office	2
+1 The bathroom is east the hallway.
+2 The bathroom is west the kitchen.
+3 What is the bathroom west?	kitchen	2
+1 The bedroom is north the kitchen.
+2 The kitchen is north the office.
+3 What is the kitchen north?	office	2
+1 The bathroom is north the bedroom.
+2 The bathroom is south the kitchen.
+3 What is north the bathroom?	kitchen	2
+1 The office is east the hallway.
+2 The kitchen is east the office.
+3 What is the office west?	kitchen	2
+1 The garden is north the bathroom.
+2 The bathroom is north the office.
+3 What is south the garden?	bathroom	1
+1 The bedroom is south the office.
+2 The hallway is north the office.
+3 What is the hallway north?	office	2
+1 The hallway is north the kitchen.
+2 The bedroom is north the hallway.
+3 What is north the kitchen?	hallway	1
+1 The hallway is west the garden.
+2 The kitchen is west the hallway.
+3 What is east the hallway?	garden	1
+1 The kitchen is west the bathroom.
+2 The office is west the kitchen.
+3 What is east the office?	kitchen	2
+1 The bedroom is east the garden.
+2 The bedroom is west the office.
+3 What is east the bedroom?	office	2
+1 The bedroom is north the office.
+2 The bedroom is south the kitchen.
+3 What is south the kitchen?	bedroom	2
+1 The bathroom is east the hallway.
+2 The garden is east the bathroom.
+3 What is west the garden?	bathroom	2
+1 The bathroom is east the kitchen.
+2 The garden is west the kitchen.
+3 What is the kitchen west?	bathroom	1
+1 The kitchen is west the office.
+2 The office is west the bedroom.
+3 What is east the kitchen?	office	1
+1 The garden is west the hallway.
+2 The bedroom is west the garden.
+3 What is the hallway east?	garden	1
+1 The hallway is north the bedroom.
+2 The bedroom is north the garden.
+3 What is the bedroom south?	hallway	1
+1 The bathroom is east the office.
+2 The bedroom is east the bathroom.
+3 What is the bathroom east?	office	1
+1 The bedroom is west the kitchen.
+2 The office is east the kitchen.
+3 What is east the bedroom?	kitchen	1
+1 The bedroom is north the hallway.
+2 The bedroom is south the kitchen.
+3 What is the hallway south?	bedroom	1
+1 The hallway is south the office.
+2 The hallway is north the bedroom.
+3 What is the hallway north?	bedroom	2
+1 The kitchen is north the hallway.
+2 The garden is south the hallway.
+3 What is the hallway north?	garden	2
+1 The bathroom is east the garden.
+2 The garden is east the bedroom.
+3 What is the garden east?	bedroom	2
+1 The bathroom is west the garden.
+2 The bathroom is east the kitchen.
+3 What is the bathroom east?	kitchen	2
+1 The office is north the kitchen.
+2 The kitchen is north the bedroom.
+3 What is the kitchen south?	office	1
+1 The kitchen is south the bathroom.
+2 The office is north the bathroom.
+3 What is the kitchen south?	bathroom	1
+1 The bathroom is east the hallway.
+2 The kitchen is east the bathroom.
+3 What is the bathroom west?	kitchen	2
+1 The garden is west the kitchen.
+2 The bathroom is west the garden.
+3 What is the bathroom west?	garden	2
+1 The bathroom is east the kitchen.
+2 The hallway is east the bathroom.
+3 What is the bathroom west?	hallway	2
+1 The kitchen is north the office.
+2 The office is north the bedroom.
+3 What is the office south?	kitchen	1
+1 The garden is north the bathroom.
+2 The office is north the garden.
+3 What is the office north?	garden	2
+1 The garden is west the hallway.
+2 The garden is east the office.
+3 What is west the garden?	office	2
+1 The kitchen is west the hallway.
+2 The hallway is west the garden.
+3 What is the hallway east?	kitchen	1
+1 The bathroom is north the bedroom.
+2 The kitchen is south the bedroom.
+3 What is the kitchen south?	bedroom	2
+1 The bedroom is west the kitchen.
+2 The bedroom is east the bathroom.
+3 What is east the bathroom?	bedroom	2
+1 The kitchen is west the bedroom.
+2 The bedroom is west the garden.
+3 What is the garden east?	bedroom	2
+1 The kitchen is west the office.
+2 The kitchen is east the garden.
+3 What is east the garden?	kitchen	2
+1 The hallway is south the office.
+2 The bedroom is north the office.
+3 What is south the bedroom?	office	2
+1 The kitchen is west the office.
+2 The kitchen is east the bedroom.
+3 What is the bedroom west?	kitchen	2
+1 The bathroom is east the garden.
+2 The bathroom is west the hallway.
+3 What is the garden west?	bathroom	1
+1 The office is west the bathroom.
+2 The office is east the kitchen.
+3 What is the office east?	kitchen	2
+1 The bedroom is east the bathroom.
+2 The office is west the bathroom.
+3 What is east the bathroom?	bedroom	1
+1 The bedroom is north the hallway.
+2 The hallway is north the garden.
+3 What is the hallway north?	garden	2
+1 The bedroom is west the hallway.
+2 The bedroom is east the bathroom.
+3 What is east the bathroom?	bedroom	2
+1 The office is north the kitchen.
+2 The office is south the hallway.
+3 What is north the office?	hallway	2
+1 The office is north the bathroom.
+2 The bathroom is north the hallway.
+3 What is the bathroom north?	hallway	2
+1 The kitchen is south the bathroom.
+2 The office is south the kitchen.
+3 What is the kitchen north?	office	2
+1 The garden is east the bedroom.
+2 The kitchen is west the bedroom.
+3 What is the bedroom west?	garden	1
+1 The garden is south the hallway.
+2 The hallway is south the bedroom.
+3 What is the hallway south?	bedroom	2
+1 The bedroom is west the kitchen.
+2 The garden is east the kitchen.
+3 What is west the kitchen?	bedroom	1
+1 The garden is west the bedroom.
+2 The garden is east the hallway.
+3 What is west the garden?	hallway	2
+1 The bathroom is south the office.
+2 The bathroom is north the hallway.
+3 What is the hallway south?	bathroom	2
+1 The hallway is south the office.
+2 The office is south the bedroom.
+3 What is south the bedroom?	office	2
+1 The hallway is east the bedroom.
+2 The bedroom is east the bathroom.
+3 What is east the bathroom?	bedroom	2
+1 The bedroom is south the bathroom.
+2 The bathroom is south the office.
+3 What is the bedroom south?	bathroom	1
+1 The bathroom is south the garden.
+2 The garden is south the kitchen.
+3 What is the garden south?	kitchen	2
+1 The garden is south the office.
+2 The kitchen is south the garden.
+3 What is south the garden?	kitchen	2
+1 The kitchen is west the hallway.
+2 The hallway is west the bathroom.
+3 What is east the kitchen?	hallway	1
+1 The hallway is north the bedroom.
+2 The bathroom is south the bedroom.
+3 What is the hallway north?	bedroom	1
+1 The kitchen is west the hallway.
+2 The hallway is west the office.
+3 What is west the hallway?	kitchen	1
+1 The bedroom is west the kitchen.
+2 The office is west the bedroom.
+3 What is the kitchen east?	bedroom	1
+1 The hallway is north the bedroom.
+2 The bedroom is north the office.
+3 What is the bedroom south?	hallway	1
+1 The bathroom is east the bedroom.
+2 The bathroom is west the kitchen.
+3 What is east the bedroom?	bathroom	1
+1 The bedroom is north the hallway.
+2 The bedroom is south the bathroom.
+3 What is the bedroom north?	hallway	1
+1 The bedroom is south the office.
+2 The kitchen is south the bedroom.
+3 What is north the bedroom?	office	1
+1 The bedroom is west the office.
+2 The office is west the hallway.
+3 What is the office west?	hallway	2
+1 The office is east the bathroom.
+2 The garden is east the office.
+3 What is west the office?	bathroom	1
+1 The office is north the bedroom.
+2 The garden is south the bedroom.
+3 What is the bedroom south?	office	1
+1 The kitchen is north the bedroom.
+2 The bedroom is north the garden.
+3 What is the kitchen north?	bedroom	1
+1 The garden is east the hallway.
+2 The hallway is east the kitchen.
+3 What is the hallway west?	garden	1
+1 The office is north the bedroom.
+2 The garden is north the office.
+3 What is south the garden?	office	2
+1 The kitchen is west the hallway.
+2 The kitchen is east the bedroom.
+3 What is the bedroom west?	kitchen	2
+1 The kitchen is east the office.
+2 The office is east the garden.
+3 What is the office west?	kitchen	1
+1 The garden is east the kitchen.
+2 The kitchen is east the bathroom.
+3 What is east the bathroom?	kitchen	2
+1 The office is north the kitchen.
+2 The bathroom is north the office.
+3 What is north the office?	bathroom	2
+1 The kitchen is north the bathroom.
+2 The kitchen is south the hallway.
+3 What is the kitchen north?	bathroom	1
+1 The bedroom is west the garden.
+2 The garden is west the hallway.
+3 What is east the garden?	hallway	2
+1 The kitchen is west the office.
+2 The kitchen is east the garden.
+3 What is the office east?	kitchen	1
+1 The bedroom is east the hallway.
+2 The bedroom is west the garden.
+3 What is west the garden?	bedroom	2
+1 The bedroom is west the office.
+2 The kitchen is east the office.
+3 What is east the office?	kitchen	2
+1 The garden is west the kitchen.
+2 The garden is east the hallway.
+3 What is the garden west?	kitchen	1
+1 The hallway is south the bathroom.
+2 The kitchen is south the hallway.
+3 What is the bathroom north?	hallway	1
+1 The office is north the hallway.
+2 The garden is north the office.
+3 What is south the garden?	office	2
+1 The kitchen is east the bathroom.
+2 The garden is east the kitchen.
+3 What is the kitchen east?	bathroom	1
+1 The office is north the bathroom.
+2 The garden is north the office.
+3 What is the bathroom south?	office	1
+1 The office is north the kitchen.
+2 The garden is south the kitchen.
+3 What is the kitchen south?	office	1
+1 The kitchen is east the garden.
+2 The bedroom is west the garden.
+3 What is the garden west?	kitchen	1
+1 The office is south the bathroom.
+2 The hallway is south the office.
+3 What is the office south?	bathroom	1
+1 The garden is south the bedroom.
+2 The bedroom is south the bathroom.
+3 What is the bathroom north?	bedroom	2
+1 The hallway is south the kitchen.
+2 The kitchen is south the bedroom.
+3 What is the bedroom north?	kitchen	2
+1 The hallway is east the office.
+2 The garden is east the hallway.
+3 What is east the office?	hallway	1
+1 The kitchen is west the bedroom.
+2 The bathroom is west the kitchen.
+3 What is the bedroom east?	kitchen	1
+1 The kitchen is south the hallway.
+2 The kitchen is north the bedroom.
+3 What is north the kitchen?	hallway	1
+1 The office is north the hallway.
+2 The office is south the kitchen.
+3 What is the kitchen north?	office	2
+1 The hallway is west the bathroom.
+2 The hallway is east the garden.
+3 What is the hallway west?	bathroom	1
+1 The hallway is north the bathroom.
+2 The bathroom is north the office.
+3 What is north the office?	bathroom	2
+1 The kitchen is east the office.
+2 The bedroom is east the kitchen.
+3 What is east the office?	kitchen	1
+1 The bedroom is east the garden.
+2 The hallway is west the garden.
+3 What is the garden east?	hallway	2
+1 The garden is west the hallway.
+2 The hallway is west the bedroom.
+3 What is east the garden?	hallway	1
+1 The garden is south the kitchen.
+2 The bathroom is north the kitchen.
+3 What is the bathroom north?	kitchen	2
+1 The kitchen is west the office.
+2 The office is west the hallway.
+3 What is west the hallway?	office	2
+1 The bedroom is east the kitchen.
+2 The kitchen is east the hallway.
+3 What is the bedroom east?	kitchen	1
+1 The kitchen is east the bathroom.
+2 The hallway is east the kitchen.
+3 What is the kitchen east?	bathroom	1
+1 The bedroom is west the office.
+2 The office is west the garden.
+3 What is the garden east?	office	2
+1 The office is east the bedroom.
+2 The bedroom is east the hallway.
+3 What is east the bedroom?	office	1
+1 The bathroom is west the bedroom.
+2 The bathroom is east the hallway.
+3 What is the hallway west?	bathroom	2
+1 The bathroom is south the garden.
+2 The office is south the bathroom.
+3 What is the bathroom south?	garden	1
+1 The office is south the kitchen.
+2 The kitchen is south the bedroom.
+3 What is south the kitchen?	office	1
+1 The hallway is south the kitchen.
+2 The hallway is north the bedroom.
+3 What is the hallway south?	kitchen	1
+1 The bedroom is west the bathroom.
+2 The kitchen is east the bathroom.
+3 What is east the bedroom?	bathroom	1
+1 The kitchen is west the hallway.
+2 The office is west the kitchen.
+3 What is the hallway east?	kitchen	1
+1 The hallway is west the office.
+2 The bedroom is west the hallway.
+3 What is west the office?	hallway	1
+1 The garden is east the bathroom.
+2 The bathroom is east the kitchen.
+3 What is the bathroom west?	garden	1
+1 The kitchen is north the bathroom.
+2 The kitchen is south the bedroom.
+3 What is north the kitchen?	bedroom	2
+1 The garden is east the office.
+2 The office is east the kitchen.
+3 What is east the office?	garden	1
+1 The hallway is north the kitchen.
+2 The bathroom is north the hallway.
+3 What is the hallway south?	bathroom	2
+1 The garden is north the hallway.
+2 The bedroom is north the garden.
+3 What is the garden south?	bedroom	2
+1 The bedroom is north the hallway.
+2 The bathroom is north the bedroom.
+3 What is north the bedroom?	bathroom	2
+1 The bedroom is west the office.
+2 The bathroom is west the bedroom.
+3 What is the office east?	bedroom	1
+1 The bedroom is west the garden.
+2 The garden is west the office.
+3 What is the bedroom west?	garden	1
+1 The hallway is north the kitchen.
+2 The hallway is south the office.
+3 What is south the office?	hallway	2
+1 The bedroom is south the office.
+2 The bedroom is north the kitchen.
+3 What is south the bedroom?	kitchen	2
+1 The garden is north the bathroom.
+2 The bathroom is north the kitchen.
+3 What is south the garden?	bathroom	1
+1 The garden is south the office.
+2 The garden is north the kitchen.
+3 What is south the office?	garden	1
+1 The bathroom is south the kitchen.
+2 The hallway is north the kitchen.
+3 What is the bathroom south?	kitchen	1
+1 The kitchen is south the hallway.
+2 The hallway is south the bathroom.
+3 What is the bathroom north?	hallway	2
+1 The office is north the bathroom.
+2 The office is south the bedroom.
+3 What is north the bathroom?	office	1
+1 The hallway is west the bedroom.
+2 The bedroom is west the office.
+3 What is the bedroom west?	office	2
+1 The kitchen is east the office.
+2 The office is east the hallway.
+3 What is the office west?	kitchen	1
+1 The kitchen is north the bathroom.
+2 The bathroom is north the garden.
+3 What is the kitchen north?	bathroom	1
+1 The office is west the bedroom.
+2 The hallway is east the bedroom.
+3 What is the bedroom east?	office	1
+1 The kitchen is west the garden.
+2 The hallway is east the garden.
+3 What is west the garden?	kitchen	1
+1 The bedroom is east the office.
+2 The bathroom is east the bedroom.
+3 What is east the office?	bedroom	1
+1 The kitchen is east the bedroom.
+2 The bedroom is east the garden.
+3 What is west the kitchen?	bedroom	1
+1 The hallway is north the bedroom.
+2 The garden is south the bedroom.
+3 What is south the bedroom?	garden	2
+1 The bathroom is north the hallway.
+2 The kitchen is north the bathroom.
+3 What is the kitchen north?	bathroom	2
+1 The bathroom is north the office.
+2 The hallway is south the office.
+3 What is north the office?	bathroom	1
+1 The office is west the hallway.
+2 The garden is west the office.
+3 What is west the office?	garden	2
+1 The hallway is west the bathroom.
+2 The bedroom is west the hallway.
+3 What is the hallway west?	bathroom	1
+1 The office is south the bathroom.
+2 The kitchen is south the office.
+3 What is the office north?	kitchen	2
+1 The kitchen is north the garden.
+2 The garden is north the bathroom.
+3 What is the garden south?	kitchen	1
+1 The bathroom is west the hallway.
+2 The hallway is west the office.
+3 What is west the office?	hallway	2
+1 The office is west the bathroom.
+2 The bathroom is west the kitchen.
+3 What is the kitchen east?	bathroom	2
+1 The office is south the bathroom.
+2 The bedroom is north the bathroom.
+3 What is the bathroom north?	office	1
+1 The bathroom is east the kitchen.
+2 The kitchen is east the hallway.
+3 What is the kitchen west?	bathroom	1
+1 The bedroom is west the bathroom.
+2 The office is east the bathroom.
+3 What is the bathroom east?	bedroom	1
+1 The bedroom is west the kitchen.
+2 The bedroom is east the bathroom.
+3 What is west the kitchen?	bedroom	1
+1 The kitchen is south the hallway.
+2 The hallway is south the garden.
+3 What is north the hallway?	garden	2
+1 The kitchen is east the garden.
+2 The kitchen is west the office.
+3 What is west the office?	kitchen	2
+1 The bedroom is east the kitchen.
+2 The bathroom is east the bedroom.
+3 What is the kitchen west?	bedroom	1
+1 The office is north the bedroom.
+2 The bedroom is north the hallway.
+3 What is south the office?	bedroom	1
+1 The kitchen is west the bathroom.
+2 The kitchen is east the hallway.
+3 What is the kitchen east?	hallway	2
+1 The hallway is south the bathroom.
+2 The bathroom is south the garden.
+3 What is north the hallway?	bathroom	1
+1 The office is east the bedroom.
+2 The office is west the garden.
+3 What is west the office?	bedroom	1
+1 The garden is west the hallway.
+2 The kitchen is east the hallway.
+3 What is east the garden?	hallway	1
+1 The bathroom is north the kitchen.
+2 The hallway is north the bathroom.
+3 What is the kitchen south?	bathroom	1
+1 The hallway is west the office.
+2 The garden is east the office.
+3 What is the office east?	hallway	1
+1 The garden is east the hallway.
+2 The bedroom is east the garden.
+3 What is the hallway west?	garden	1
+1 The bathroom is east the bedroom.
+2 The bathroom is west the hallway.
+3 What is east the bedroom?	bathroom	1
+1 The office is south the garden.
+2 The office is north the kitchen.
+3 What is north the kitchen?	office	2
+1 The bathroom is south the garden.
+2 The office is south the bathroom.
+3 What is the bathroom north?	office	2
+1 The office is west the hallway.
+2 The garden is east the hallway.
+3 What is east the office?	hallway	1
+1 The bathroom is north the garden.
+2 The kitchen is north the bathroom.
+3 What is the bathroom south?	kitchen	2
+1 The hallway is north the office.
+2 The hallway is south the bathroom.
+3 What is south the hallway?	office	1
+1 The garden is north the bathroom.
+2 The garden is south the hallway.
+3 What is the garden south?	hallway	2
+1 The bathroom is north the hallway.
+2 The hallway is north the office.
+3 What is the bathroom north?	hallway	1
+1 The hallway is north the garden.
+2 The bathroom is south the garden.
+3 What is the garden south?	hallway	1
+1 The bedroom is south the bathroom.
+2 The bathroom is south the garden.
+3 What is south the garden?	bathroom	2
+1 The garden is north the bathroom.
+2 The office is south the bathroom.
+3 What is the office south?	bathroom	2
+1 The hallway is west the kitchen.
+2 The hallway is east the office.
+3 What is west the kitchen?	hallway	1
+1 The kitchen is south the bathroom.
+2 The kitchen is north the office.
+3 What is the kitchen north?	office	2
+1 The hallway is east the bedroom.
+2 The garden is west the bedroom.
+3 What is the hallway east?	bedroom	1
+1 The bathroom is east the garden.
+2 The office is east the bathroom.
+3 What is the garden west?	bathroom	1
+1 The kitchen is west the bathroom.
+2 The office is east the bathroom.
+3 What is west the bathroom?	kitchen	1
+1 The hallway is south the kitchen.
+2 The office is north the kitchen.
+3 What is north the hallway?	kitchen	1
+1 The hallway is east the office.
+2 The garden is east the hallway.
+3 What is the hallway east?	office	1
+1 The bedroom is east the bathroom.
+2 The bedroom is west the office.
+3 What is the office east?	bedroom	2
+1 The hallway is east the office.
+2 The bathroom is east the hallway.
+3 What is the hallway west?	bathroom	2
+1 The kitchen is north the hallway.
+2 The hallway is north the bedroom.
+3 What is the bedroom south?	hallway	2
+1 The bedroom is north the bathroom.
+2 The garden is south the bathroom.
+3 What is the bathroom north?	garden	2
+1 The kitchen is east the bedroom.
+2 The bedroom is east the office.
+3 What is east the office?	bedroom	2
+1 The kitchen is south the hallway.
+2 The hallway is south the bathroom.
+3 What is south the hallway?	kitchen	1
+1 The hallway is north the garden.
+2 The garden is north the office.
+3 What is the hallway north?	garden	1
+1 The hallway is south the office.
+2 The office is south the kitchen.
+3 What is south the kitchen?	office	2
+1 The garden is east the kitchen.
+2 The hallway is east the garden.
+3 What is the kitchen west?	garden	1
+1 The kitchen is south the hallway.
+2 The office is south the kitchen.
+3 What is the kitchen south?	hallway	1
+1 The bathroom is west the office.
+2 The hallway is west the bathroom.
+3 What is the hallway west?	bathroom	2
+1 The bathroom is south the office.
+2 The garden is north the office.
+3 What is north the office?	garden	2
+1 The kitchen is west the bedroom.
+2 The office is east the bedroom.
+3 What is the kitchen west?	bedroom	1
+1 The kitchen is west the hallway.
+2 The hallway is west the garden.
+3 What is the hallway west?	garden	2
+1 The bathroom is south the office.
+2 The garden is south the bathroom.
+3 What is south the office?	bathroom	1
+1 The hallway is west the kitchen.
+2 The kitchen is west the office.
+3 What is west the office?	kitchen	2
+1 The hallway is north the bathroom.
+2 The garden is south the bathroom.
+3 What is the bathroom north?	garden	2
+1 The garden is north the kitchen.
+2 The hallway is south the kitchen.
+3 What is south the garden?	kitchen	1
+1 The bedroom is west the bathroom.
+2 The bathroom is west the hallway.
+3 What is the bedroom west?	bathroom	1
+1 The hallway is east the office.
+2 The hallway is west the garden.
+3 What is west the hallway?	office	1
+1 The bathroom is north the office.
+2 The hallway is south the office.
+3 What is south the office?	hallway	2
+1 The kitchen is south the garden.
+2 The office is south the kitchen.
+3 What is the garden north?	kitchen	1
+1 The office is east the kitchen.
+2 The office is west the hallway.
+3 What is west the hallway?	office	2
+1 The bedroom is east the bathroom.
+2 The kitchen is west the bathroom.
+3 What is west the bedroom?	bathroom	1
+1 The office is west the bathroom.
+2 The kitchen is west the office.
+3 What is the office east?	kitchen	2
+1 The kitchen is east the garden.
+2 The garden is east the bathroom.
+3 What is the kitchen east?	garden	1
+1 The kitchen is west the bathroom.
+2 The kitchen is east the bedroom.
+3 What is west the bathroom?	kitchen	1
+1 The office is west the bedroom.
+2 The office is east the hallway.
+3 What is east the hallway?	office	2
+1 The office is east the hallway.
+2 The office is west the kitchen.
+3 What is the office west?	kitchen	2
+1 The kitchen is south the garden.
+2 The garden is south the bedroom.
+3 What is north the kitchen?	garden	1
+1 The hallway is south the garden.
+2 The office is north the garden.
+3 What is north the garden?	office	2
+1 The hallway is north the bedroom.
+2 The hallway is south the kitchen.
+3 What is north the bedroom?	hallway	1
+1 The office is south the bathroom.
+2 The bathroom is south the kitchen.
+3 What is the bathroom south?	kitchen	2
+1 The garden is west the hallway.
+2 The garden is east the office.
+3 What is east the garden?	hallway	1
+1 The hallway is south the office.
+2 The garden is south the hallway.
+3 What is the hallway north?	garden	2
+1 The garden is south the bathroom.
+2 The garden is north the office.
+3 What is the garden north?	office	2
+1 The kitchen is north the bedroom.
+2 The bedroom is north the bathroom.
+3 What is the bathroom south?	bedroom	2
+1 The hallway is east the garden.
+2 The hallway is west the kitchen.
+3 What is the kitchen east?	hallway	2
+1 The hallway is north the kitchen.
+2 The bathroom is north the hallway.
+3 What is the hallway north?	kitchen	1
+1 The office is east the kitchen.
+2 The office is west the bathroom.
+3 What is west the bathroom?	office	2
+1 The bathroom is west the kitchen.
+2 The kitchen is west the office.
+3 What is the kitchen east?	bathroom	1
+1 The bathroom is east the office.
+2 The office is east the garden.
+3 What is the bathroom east?	office	1
+1 The bathroom is west the garden.
+2 The bedroom is west the bathroom.
+3 What is east the bedroom?	bathroom	2
+1 The office is west the garden.
+2 The kitchen is west the office.
+3 What is east the kitchen?	office	2
+1 The bedroom is north the bathroom.
+2 The garden is north the bedroom.
+3 What is the bedroom south?	garden	2
+1 The kitchen is east the office.
+2 The kitchen is west the garden.
+3 What is east the office?	kitchen	1
+1 The bathroom is north the bedroom.
+2 The bathroom is south the hallway.
+3 What is north the bathroom?	hallway	2
+1 The bedroom is north the hallway.
+2 The garden is south the hallway.
+3 What is north the garden?	hallway	2
+1 The garden is west the bedroom.
+2 The bedroom is west the hallway.
+3 What is west the bedroom?	garden	1
+1 The bathroom is south the garden.
+2 The garden is south the office.
+3 What is south the office?	garden	2
+1 The office is south the garden.
+2 The bathroom is south the office.
+3 What is south the garden?	office	1
+1 The kitchen is west the bathroom.
+2 The kitchen is east the bedroom.
+3 What is west the kitchen?	bedroom	2
+1 The bathroom is north the hallway.
+2 The hallway is north the office.
+3 What is south the hallway?	office	2
+1 The kitchen is north the office.
+2 The office is north the bathroom.
+3 What is the office north?	bathroom	2
+1 The bathroom is east the hallway.
+2 The kitchen is west the hallway.
+3 What is the kitchen west?	hallway	2
+1 The kitchen is east the garden.
+2 The garden is east the bedroom.
+3 What is east the garden?	kitchen	1
+1 The kitchen is north the bathroom.
+2 The bathroom is north the hallway.
+3 What is north the bathroom?	kitchen	1
+1 The bedroom is south the hallway.
+2 The kitchen is north the hallway.
+3 What is the hallway north?	bedroom	1
+1 The office is west the bedroom.
+2 The bedroom is west the garden.
+3 What is the garden east?	bedroom	2
+1 The bedroom is north the kitchen.
+2 The bedroom is south the office.
+3 What is north the kitchen?	bedroom	1
+1 The bedroom is east the office.
+2 The garden is east the bedroom.
+3 What is west the garden?	bedroom	2
+1 The office is south the kitchen.
+2 The kitchen is south the garden.
+3 What is north the kitchen?	garden	2
+1 The hallway is east the kitchen.
+2 The hallway is west the garden.
+3 What is east the kitchen?	hallway	1
+1 The hallway is west the bathroom.
+2 The bathroom is west the kitchen.
+3 What is east the hallway?	bathroom	1
+1 The garden is south the bathroom.
+2 The bathroom is south the hallway.
+3 What is south the bathroom?	garden	1
+1 The garden is south the office.
+2 The garden is north the hallway.
+3 What is the garden south?	office	1
+1 The bedroom is east the hallway.
+2 The bedroom is west the kitchen.
+3 What is east the hallway?	bedroom	1
+1 The garden is south the hallway.
+2 The office is north the hallway.
+3 What is the hallway north?	garden	1
+1 The bedroom is east the hallway.
+2 The bathroom is west the hallway.
+3 What is the hallway east?	bathroom	2
+1 The kitchen is east the bathroom.
+2 The hallway is west the bathroom.
+3 What is east the hallway?	bathroom	2
+1 The kitchen is east the office.
+2 The office is east the hallway.
+3 What is the kitchen east?	office	1
+1 The bathroom is west the hallway.
+2 The bedroom is east the hallway.
+3 What is the hallway west?	bedroom	2
+1 The garden is east the hallway.
+2 The office is east the garden.
+3 What is the garden west?	office	2
+1 The hallway is west the kitchen.
+2 The garden is east the kitchen.
+3 What is west the garden?	kitchen	2
+1 The bathroom is south the hallway.
+2 The hallway is south the kitchen.
+3 What is south the hallway?	bathroom	1
+1 The hallway is east the bathroom.
+2 The kitchen is west the bathroom.
+3 What is the bathroom east?	kitchen	2
+1 The garden is east the bedroom.
+2 The office is west the bedroom.
+3 What is the bedroom east?	office	2
+1 The hallway is east the bedroom.
+2 The kitchen is west the bedroom.
+3 What is west the hallway?	bedroom	1
+1 The office is north the garden.
+2 The garden is north the hallway.
+3 What is the office north?	garden	1
+1 The kitchen is west the bathroom.
+2 The office is west the kitchen.
+3 What is the kitchen west?	bathroom	1
+1 The kitchen is north the office.
+2 The kitchen is south the bathroom.
+3 What is the office south?	kitchen	1
+1 The kitchen is east the hallway.
+2 The office is west the hallway.
+3 What is west the hallway?	office	2
+1 The office is east the bedroom.
+2 The garden is east the office.
+3 What is the office east?	bedroom	1
+1 The kitchen is south the garden.
+2 The kitchen is north the bathroom.
+3 What is south the kitchen?	bathroom	2
+1 The bedroom is west the bathroom.
+2 The garden is west the bedroom.
+3 What is the bedroom east?	garden	2
+1 The kitchen is north the bedroom.
+2 The bedroom is north the hallway.
+3 What is the kitchen north?	bedroom	1
+1 The garden is east the bedroom.
+2 The bedroom is east the hallway.
+3 What is west the garden?	bedroom	1
+1 The bedroom is west the office.
+2 The garden is west the bedroom.
+3 What is the garden west?	bedroom	2
+1 The office is west the bathroom.
+2 The hallway is west the office.
+3 What is the hallway west?	office	2
+1 The bedroom is south the hallway.
+2 The kitchen is north the hallway.
+3 What is north the bedroom?	hallway	1
+1 The bedroom is west the kitchen.
+2 The hallway is west the bedroom.
+3 What is east the bedroom?	kitchen	1
+1 The bedroom is west the garden.
+2 The bedroom is east the office.
+3 What is east the office?	bedroom	2
+1 The office is west the hallway.
+2 The office is east the kitchen.
+3 What is east the office?	hallway	1
+1 The hallway is north the garden.
+2 The garden is north the bedroom.
+3 What is the garden north?	bedroom	2
+1 The bathroom is east the office.
+2 The office is east the garden.
+3 What is west the office?	garden	2
+1 The bathroom is east the garden.
+2 The garden is east the hallway.
+3 What is east the garden?	bathroom	1
+1 The hallway is west the garden.
+2 The bedroom is east the garden.
+3 What is the bedroom east?	garden	2
+1 The office is south the kitchen.
+2 The bathroom is south the office.
+3 What is north the bathroom?	office	2
+1 The office is south the bedroom.
+2 The bedroom is south the garden.
+3 What is the bedroom north?	office	1
+1 The hallway is south the garden.
+2 The garden is south the office.
+3 What is the garden south?	office	2
+1 The garden is north the hallway.
+2 The office is south the hallway.
+3 What is the hallway south?	garden	1
+1 The garden is west the bathroom.
+2 The bedroom is east the bathroom.
+3 What is the bathroom west?	bedroom	2
+1 The bedroom is west the bathroom.
+2 The bathroom is west the kitchen.
+3 What is west the bathroom?	bedroom	1
+1 The hallway is west the bedroom.
+2 The bedroom is west the kitchen.
+3 What is the hallway west?	bedroom	1
+1 The kitchen is west the hallway.
+2 The garden is west the kitchen.
+3 What is the kitchen east?	garden	2
+1 The hallway is west the kitchen.
+2 The hallway is east the office.
+3 What is west the kitchen?	hallway	1
+1 The kitchen is north the garden.
+2 The bathroom is south the garden.
+3 What is north the garden?	kitchen	1
+1 The office is west the garden.
+2 The office is east the bathroom.
+3 What is east the bathroom?	office	2
+1 The kitchen is east the bathroom.
+2 The kitchen is west the garden.
+3 What is east the kitchen?	garden	2
+1 The bathroom is west the kitchen.
+2 The bathroom is east the garden.
+3 What is west the bathroom?	garden	2
+1 The hallway is west the kitchen.
+2 The garden is west the hallway.
+3 What is west the kitchen?	hallway	1
+1 The office is north the hallway.
+2 The office is south the bathroom.
+3 What is north the hallway?	office	1
+1 The garden is west the kitchen.
+2 The kitchen is west the bathroom.
+3 What is east the kitchen?	bathroom	2
+1 The office is south the garden.
+2 The office is north the bedroom.
+3 What is the office south?	garden	1
+1 The kitchen is north the bedroom.
+2 The garden is south the bedroom.
+3 What is the kitchen north?	bedroom	1
+1 The bedroom is south the garden.
+2 The bathroom is north the garden.
+3 What is the bedroom south?	garden	1
+1 The kitchen is north the hallway.
+2 The garden is north the kitchen.
+3 What is the garden north?	kitchen	2
+1 The kitchen is east the bedroom.
+2 The hallway is east the kitchen.
+3 What is the hallway east?	kitchen	2
+1 The hallway is west the office.
+2 The garden is west the hallway.
+3 What is east the hallway?	office	1
+1 The bedroom is south the office.
+2 The garden is north the office.
+3 What is north the bedroom?	office	1
+1 The office is north the garden.
+2 The kitchen is north the office.
+3 What is the kitchen north?	office	2
+1 The kitchen is south the hallway.
+2 The office is south the kitchen.
+3 What is the office south?	kitchen	2
+1 The garden is north the hallway.
+2 The garden is south the bathroom.
+3 What is north the garden?	bathroom	2
+1 The hallway is west the garden.
+2 The garden is west the bedroom.
+3 What is the bedroom east?	garden	2
+1 The garden is south the bedroom.
+2 The kitchen is north the bedroom.
+3 What is the bedroom north?	garden	1
+1 The hallway is west the office.
+2 The hallway is east the bathroom.
+3 What is west the office?	hallway	1
+1 The bedroom is west the kitchen.
+2 The bedroom is east the hallway.
+3 What is west the kitchen?	bedroom	1
+1 The office is north the bedroom.
+2 The bedroom is north the garden.
+3 What is north the garden?	bedroom	2
+1 The office is south the hallway.
+2 The bathroom is north the hallway.
+3 What is the office south?	hallway	1
+1 The garden is west the bathroom.
+2 The bedroom is west the garden.
+3 What is east the garden?	bathroom	1
+1 The garden is west the bathroom.
+2 The bathroom is west the kitchen.
+3 What is the kitchen east?	bathroom	2
+1 The bathroom is south the garden.
+2 The hallway is south the bathroom.
+3 What is north the bathroom?	garden	1
+1 The bathroom is east the garden.
+2 The kitchen is east the bathroom.
+3 What is the garden west?	bathroom	1
+1 The hallway is west the office.
+2 The office is west the kitchen.
+3 What is east the hallway?	office	1
+1 The bathroom is west the bedroom.
+2 The bedroom is west the kitchen.
+3 What is east the bathroom?	bedroom	1
+1 The garden is east the office.
+2 The garden is west the kitchen.
+3 What is east the garden?	kitchen	2
+1 The garden is east the bathroom.
+2 The kitchen is east the garden.
+3 What is the bathroom west?	garden	1
+1 The hallway is west the office.
+2 The bedroom is east the office.
+3 What is east the hallway?	office	1
+1 The garden is east the office.
+2 The bedroom is west the office.
+3 What is east the office?	garden	1
+1 The garden is east the bedroom.
+2 The kitchen is east the garden.
+3 What is east the bedroom?	garden	1
+1 The garden is north the bathroom.
+2 The office is south the bathroom.
+3 What is north the bathroom?	garden	1
+1 The hallway is west the bathroom.
+2 The bathroom is west the garden.
+3 What is west the garden?	bathroom	2
+1 The bedroom is east the kitchen.
+2 The hallway is east the bedroom.
+3 What is west the bedroom?	kitchen	1
+1 The bedroom is north the kitchen.
+2 The office is north the bedroom.
+3 What is north the bedroom?	office	2
+1 The office is south the bedroom.
+2 The hallway is north the bedroom.
+3 What is the bedroom north?	office	1
+1 The bathroom is east the office.
+2 The hallway is east the bathroom.
+3 What is the hallway east?	bathroom	2
+1 The office is north the bedroom.
+2 The garden is south the bedroom.
+3 What is north the garden?	bedroom	2
+1 The hallway is east the bedroom.
+2 The office is east the hallway.
+3 What is east the hallway?	office	2
+1 The bedroom is west the hallway.
+2 The hallway is west the kitchen.
+3 What is the hallway west?	kitchen	2
+1 The office is west the bathroom.
+2 The office is east the bedroom.
+3 What is the bathroom east?	office	1
+1 The office is west the garden.
+2 The office is east the kitchen.
+3 What is the garden east?	office	1
+1 The garden is east the bedroom.
+2 The garden is west the kitchen.
+3 What is west the garden?	bedroom	1
+1 The bathroom is south the office.
+2 The bathroom is north the hallway.
+3 What is north the bathroom?	office	1
+1 The office is west the kitchen.
+2 The bathroom is east the kitchen.
+3 What is the kitchen east?	office	1
+1 The garden is south the hallway.
+2 The hallway is south the office.
+3 What is north the garden?	hallway	1
+1 The bathroom is south the hallway.
+2 The bedroom is north the hallway.
+3 What is the hallway north?	bathroom	1
+1 The office is south the kitchen.
+2 The bedroom is north the kitchen.
+3 What is the office south?	kitchen	1
+1 The garden is north the kitchen.
+2 The garden is south the office.
+3 What is south the garden?	kitchen	1
+1 The hallway is south the bathroom.
+2 The hallway is north the bedroom.
+3 What is the hallway north?	bedroom	2
+1 The bathroom is west the garden.
+2 The bedroom is east the garden.
+3 What is the garden west?	bedroom	2
+1 The garden is west the hallway.
+2 The bedroom is east the hallway.
+3 What is east the garden?	hallway	1
+1 The hallway is north the office.
+2 The office is north the bedroom.
+3 What is the office north?	bedroom	2
+1 The hallway is south the bathroom.
+2 The office is south the hallway.
+3 What is the office south?	hallway	2
+1 The hallway is south the bedroom.
+2 The hallway is north the bathroom.
+3 What is the bedroom north?	hallway	1
+1 The garden is south the bedroom.
+2 The garden is north the bathroom.
+3 What is the garden south?	bedroom	1
+1 The bathroom is south the bedroom.
+2 The hallway is north the bedroom.
+3 What is north the bedroom?	hallway	2
+1 The bedroom is north the garden.
+2 The hallway is north the bedroom.
+3 What is the hallway north?	bedroom	2
+1 The kitchen is west the garden.
+2 The kitchen is east the bathroom.
+3 What is east the bathroom?	kitchen	2
+1 The bedroom is south the hallway.
+2 The bedroom is north the kitchen.
+3 What is north the kitchen?	bedroom	2
+1 The hallway is south the bathroom.
+2 The bathroom is south the kitchen.
+3 What is south the kitchen?	bathroom	2
+1 The garden is north the hallway.
+2 The garden is south the bedroom.
+3 What is the hallway south?	garden	1
+1 The garden is west the office.
+2 The office is west the kitchen.
+3 What is the garden west?	office	1
+1 The kitchen is east the office.
+2 The bedroom is east the kitchen.
+3 What is the kitchen east?	office	1
+1 The hallway is south the office.
+2 The garden is south the hallway.
+3 What is south the hallway?	garden	2
+1 The bedroom is east the garden.
+2 The garden is east the hallway.
+3 What is the garden west?	bedroom	1
+1 The kitchen is west the garden.
+2 The bathroom is east the garden.
+3 What is east the garden?	bathroom	2
+1 The bedroom is north the office.
+2 The office is north the kitchen.
+3 What is the office south?	bedroom	1
+1 The bedroom is east the garden.
+2 The bedroom is west the bathroom.
+3 What is west the bedroom?	garden	1
+1 The hallway is west the kitchen.
+2 The kitchen is west the bathroom.
+3 What is east the hallway?	kitchen	1
+1 The kitchen is east the garden.
+2 The garden is east the hallway.
+3 What is the garden west?	kitchen	1
+1 The bathroom is north the bedroom.
+2 The bedroom is north the garden.
+3 What is the bedroom south?	bathroom	1
+1 The office is north the garden.
+2 The garden is north the hallway.
+3 What is the garden south?	office	1
+1 The garden is south the office.
+2 The office is south the hallway.
+3 What is north the office?	hallway	2
+1 The garden is west the bedroom.
+2 The garden is east the bathroom.
+3 What is the garden west?	bedroom	1
+1 The garden is north the bathroom.
+2 The garden is south the kitchen.
+3 What is the garden north?	bathroom	1
+1 The garden is west the hallway.
+2 The garden is east the office.
+3 What is east the office?	garden	2
+1 The office is south the bathroom.
+2 The bathroom is south the garden.
+3 What is the bathroom north?	office	1
+1 The hallway is north the garden.
+2 The hallway is south the kitchen.
+3 What is south the kitchen?	hallway	2
+1 The bathroom is east the kitchen.
+2 The garden is east the bathroom.
+3 What is west the garden?	bathroom	2
+1 The hallway is north the kitchen.
+2 The kitchen is north the bathroom.
+3 What is the hallway north?	kitchen	1
+1 The bedroom is east the kitchen.
+2 The hallway is west the kitchen.
+3 What is east the hallway?	kitchen	2
+1 The bathroom is east the hallway.
+2 The office is west the hallway.
+3 What is east the office?	hallway	2
+1 The bathroom is north the office.
+2 The hallway is south the office.
+3 What is south the office?	hallway	2
+1 The garden is east the hallway.
+2 The office is west the hallway.
+3 What is west the garden?	hallway	1
+1 The garden is west the bedroom.
+2 The bedroom is west the office.
+3 What is the garden west?	bedroom	1
+1 The bathroom is west the hallway.
+2 The office is east the hallway.
+3 What is the office east?	hallway	2
+1 The bedroom is south the bathroom.
+2 The bathroom is south the office.
+3 What is north the bedroom?	bathroom	1
+1 The office is east the hallway.
+2 The hallway is east the garden.
+3 What is the hallway west?	office	1
+1 The hallway is south the bedroom.
+2 The bedroom is south the bathroom.
+3 What is the bedroom south?	bathroom	2
+1 The office is south the bathroom.
+2 The kitchen is north the bathroom.
+3 What is north the bathroom?	kitchen	2
+1 The kitchen is south the bathroom.
+2 The garden is north the bathroom.
+3 What is the kitchen south?	bathroom	1
+1 The bedroom is west the bathroom.
+2 The office is west the bedroom.
+3 What is the office west?	bedroom	2
+1 The hallway is east the garden.
+2 The office is east the hallway.
+3 What is west the office?	hallway	2
+1 The garden is north the bedroom.
+2 The garden is south the kitchen.
+3 What is the garden south?	kitchen	2
+1 The bedroom is south the office.
+2 The bathroom is south the bedroom.
+3 What is the bathroom south?	bedroom	2
+1 The office is north the hallway.
+2 The hallway is north the kitchen.
+3 What is the kitchen south?	hallway	2
+1 The garden is north the hallway.
+2 The bathroom is south the hallway.
+3 What is the hallway north?	bathroom	2
+1 The hallway is north the bedroom.
+2 The kitchen is north the hallway.
+3 What is north the bedroom?	hallway	1
+1 The bathroom is east the hallway.
+2 The hallway is east the office.
+3 What is the office west?	hallway	2
+1 The bathroom is east the bedroom.
+2 The hallway is west the bedroom.
+3 What is the bedroom east?	hallway	2
+1 The office is east the hallway.
+2 The kitchen is east the office.
+3 What is west the kitchen?	office	2
+1 The garden is south the kitchen.
+2 The hallway is north the kitchen.
+3 What is the kitchen north?	garden	1
+1 The kitchen is east the office.
+2 The kitchen is west the garden.
+3 What is west the kitchen?	office	1
+1 The bathroom is west the garden.
+2 The hallway is east the garden.
+3 What is west the garden?	bathroom	1
+1 The bedroom is east the kitchen.
+2 The office is east the bedroom.
+3 What is the office east?	bedroom	2
+1 The bathroom is west the office.
+2 The garden is east the office.
+3 What is east the bathroom?	office	1
+1 The bedroom is west the hallway.
+2 The bedroom is east the garden.
+3 What is east the bedroom?	hallway	1
+1 The kitchen is west the garden.
+2 The garden is west the bathroom.
+3 What is east the kitchen?	garden	1
+1 The garden is east the bathroom.
+2 The garden is west the kitchen.
+3 What is the kitchen east?	garden	2
+1 The garden is east the hallway.
+2 The office is east the garden.
+3 What is the garden west?	office	2
+1 The hallway is north the bathroom.
+2 The hallway is south the kitchen.
+3 What is the kitchen north?	hallway	2
+1 The bedroom is east the garden.
+2 The garden is east the hallway.
+3 What is west the bedroom?	garden	1
+1 The office is west the bedroom.
+2 The garden is east the bedroom.
+3 What is east the bedroom?	garden	2
+1 The garden is east the bedroom.
+2 The bathroom is east the garden.
+3 What is the bathroom east?	garden	2
+1 The kitchen is west the garden.
+2 The garden is west the bedroom.
+3 What is west the bedroom?	garden	2
+1 The bathroom is south the garden.
+2 The bathroom is north the hallway.
+3 What is south the garden?	bathroom	1
+1 The bathroom is south the office.
+2 The bathroom is north the hallway.
+3 What is north the hallway?	bathroom	2
+1 The bathroom is east the garden.
+2 The bedroom is west the garden.
+3 What is the bathroom east?	garden	1
+1 The bedroom is west the hallway.
+2 The office is west the bedroom.
+3 What is the hallway east?	bedroom	1
+1 The kitchen is east the hallway.
+2 The kitchen is west the office.
+3 What is the office east?	kitchen	2
+1 The garden is east the bathroom.
+2 The garden is west the hallway.
+3 What is the garden east?	bathroom	1
+1 The garden is north the kitchen.
+2 The kitchen is north the office.
+3 What is north the kitchen?	garden	1
+1 The bedroom is south the office.
+2 The hallway is south the bedroom.
+3 What is the hallway south?	bedroom	2
+1 The hallway is north the bedroom.
+2 The bathroom is south the bedroom.
+3 What is north the bathroom?	bedroom	2
+1 The bedroom is south the bathroom.
+2 The bedroom is north the office.
+3 What is north the bedroom?	bathroom	1
+1 The hallway is north the kitchen.
+2 The kitchen is north the bathroom.
+3 What is south the kitchen?	bathroom	2
+1 The bathroom is north the garden.
+2 The garden is north the kitchen.
+3 What is the garden north?	kitchen	2
+1 The office is west the bedroom.
+2 The office is east the hallway.
+3 What is east the office?	bedroom	1
+1 The bathroom is south the garden.
+2 The hallway is south the bathroom.
+3 What is north the bathroom?	garden	1
+1 The bathroom is south the bedroom.
+2 The hallway is north the bedroom.
+3 What is the bedroom north?	bathroom	1
+1 The office is east the kitchen.
+2 The office is west the bedroom.
+3 What is the office west?	bedroom	2
+1 The office is east the hallway.
+2 The bathroom is west the hallway.
+3 What is east the hallway?	office	1
+1 The kitchen is south the garden.
+2 The kitchen is north the hallway.
+3 What is north the hallway?	kitchen	2
+1 The bedroom is west the garden.
+2 The garden is west the office.
+3 What is the garden east?	bedroom	1
+1 The office is south the bathroom.
+2 The bathroom is south the kitchen.
+3 What is the office south?	bathroom	1
+1 The garden is east the bathroom.
+2 The garden is west the kitchen.
+3 What is east the garden?	kitchen	2
+1 The hallway is north the bedroom.
+2 The bedroom is north the bathroom.
+3 What is the bedroom south?	hallway	1
+1 The bathroom is north the office.
+2 The office is north the kitchen.
+3 What is the office north?	kitchen	2
+1 The office is south the bathroom.
+2 The office is north the hallway.
+3 What is the bathroom north?	office	1
+1 The kitchen is south the garden.
+2 The kitchen is north the office.
+3 What is north the kitchen?	garden	1
+1 The bathroom is east the office.
+2 The office is east the garden.
+3 What is the garden west?	office	2
+1 The bathroom is north the hallway.
+2 The hallway is north the office.
+3 What is the office south?	hallway	2
+1 The kitchen is south the bathroom.
+2 The garden is north the bathroom.
+3 What is north the bathroom?	garden	2
+1 The bathroom is east the kitchen.
+2 The bathroom is west the hallway.
+3 What is east the bathroom?	hallway	2
+1 The kitchen is east the office.
+2 The office is east the bedroom.
+3 What is east the office?	kitchen	1
+1 The hallway is east the office.
+2 The office is east the garden.
+3 What is east the office?	hallway	1
+1 The office is south the bathroom.
+2 The bathroom is south the bedroom.
+3 What is the bathroom south?	bedroom	2
+1 The bedroom is south the kitchen.
+2 The hallway is north the kitchen.
+3 What is south the kitchen?	bedroom	1
+1 The office is north the hallway.
+2 The bedroom is north the office.
+3 What is the hallway south?	office	1
+1 The hallway is north the bedroom.
+2 The hallway is south the garden.
+3 What is the hallway south?	garden	2
+1 The bedroom is south the garden.
+2 The office is north the garden.
+3 What is the office north?	garden	2
+1 The office is south the garden.
+2 The bathroom is south the office.
+3 What is the office north?	bathroom	2
+1 The garden is west the kitchen.
+2 The garden is east the bedroom.
+3 What is the garden east?	bedroom	2
+1 The kitchen is north the bathroom.
+2 The kitchen is south the office.
+3 What is the office north?	kitchen	2
+1 The bedroom is east the hallway.
+2 The bathroom is east the bedroom.
+3 What is the bedroom east?	hallway	1
+1 The bathroom is east the garden.
+2 The bathroom is west the hallway.
+3 What is the bathroom east?	garden	1
+1 The office is north the bedroom.
+2 The garden is south the bedroom.
+3 What is the garden south?	bedroom	2
+1 The bathroom is south the office.
+2 The garden is north the office.
+3 What is north the office?	garden	2
+1 The garden is north the bedroom.
+2 The kitchen is north the garden.
+3 What is south the garden?	bedroom	1
+1 The bathroom is west the hallway.
+2 The office is east the hallway.
+3 What is the office east?	hallway	2
+1 The bathroom is east the bedroom.
+2 The bathroom is west the garden.
+3 What is the bedroom west?	bathroom	1
+1 The bedroom is west the bathroom.
+2 The bedroom is east the garden.
+3 What is the bedroom west?	bathroom	1
+1 The bedroom is east the hallway.
+2 The hallway is east the garden.
+3 What is the bedroom east?	hallway	1
+1 The garden is north the hallway.
+2 The garden is south the office.
+3 What is north the hallway?	garden	1
+1 The office is south the kitchen.
+2 The office is north the bedroom.
+3 What is the office north?	bedroom	2
+1 The garden is south the bedroom.
+2 The bathroom is south the garden.
+3 What is the bathroom south?	garden	2
+1 The hallway is east the garden.
+2 The bedroom is west the garden.
+3 What is the garden west?	hallway	1
+1 The hallway is south the office.
+2 The office is south the bathroom.
+3 What is north the office?	bathroom	2
+1 The kitchen is east the hallway.
+2 The kitchen is west the bedroom.
+3 What is east the hallway?	kitchen	1
+1 The kitchen is north the office.
+2 The office is north the bathroom.
+3 What is the office south?	kitchen	1
+1 The hallway is west the office.
+2 The bathroom is west the hallway.
+3 What is the bathroom west?	hallway	2
+1 The bedroom is west the garden.
+2 The garden is west the office.
+3 What is the garden west?	office	2
+1 The kitchen is south the garden.
+2 The garden is south the bathroom.
+3 What is north the garden?	bathroom	2
+1 The bedroom is west the garden.
+2 The bathroom is east the garden.
+3 What is west the garden?	bedroom	1
+1 The office is east the kitchen.
+2 The bedroom is east the office.
+3 What is the office east?	kitchen	1
+1 The garden is north the office.
+2 The garden is south the bathroom.
+3 What is north the garden?	bathroom	2
+1 The office is south the bathroom.
+2 The kitchen is south the office.
+3 What is the bathroom north?	office	1
+1 The kitchen is south the bedroom.
+2 The bathroom is south the kitchen.
+3 What is the bathroom south?	kitchen	2
+1 The office is east the hallway.
+2 The bedroom is east the office.
+3 What is east the office?	bedroom	2
+1 The bedroom is west the office.
+2 The garden is east the office.
+3 What is west the garden?	office	2
+1 The office is east the bedroom.
+2 The bedroom is east the garden.
+3 What is west the office?	bedroom	1
+1 The kitchen is east the bedroom.
+2 The kitchen is west the garden.
+3 What is west the kitchen?	bedroom	1
+1 The bathroom is east the garden.
+2 The bedroom is west the garden.
+3 What is east the bedroom?	garden	2
+1 The garden is west the bathroom.
+2 The kitchen is west the garden.
+3 What is west the garden?	kitchen	2
+1 The bedroom is north the kitchen.
+2 The garden is north the bedroom.
+3 What is the garden north?	bedroom	2
+1 The office is east the garden.
+2 The garden is east the bathroom.
+3 What is east the garden?	office	1
+1 The garden is west the hallway.
+2 The bathroom is west the garden.
+3 What is east the bathroom?	garden	2
+1 The kitchen is south the garden.
+2 The garden is south the hallway.
+3 What is south the hallway?	garden	2
+1 The hallway is east the garden.
+2 The office is west the garden.
+3 What is west the garden?	office	2
+1 The kitchen is north the garden.
+2 The bedroom is south the garden.
+3 What is the bedroom south?	garden	2
+1 The bedroom is east the garden.
+2 The bedroom is west the kitchen.
+3 What is the bedroom east?	garden	1
+1 The kitchen is north the office.
+2 The kitchen is south the hallway.
+3 What is north the office?	kitchen	1
+1 The office is east the hallway.
+2 The bedroom is east the office.
+3 What is the hallway west?	office	1
+1 The garden is west the bathroom.
+2 The bathroom is west the kitchen.
+3 What is the bathroom west?	kitchen	2
+1 The office is north the bedroom.
+2 The office is south the bathroom.
+3 What is south the bathroom?	office	2
+1 The office is north the bedroom.
+2 The bathroom is south the bedroom.
+3 What is the bedroom south?	office	1
+1 The garden is south the bedroom.
+2 The bedroom is south the office.
+3 What is the garden south?	bedroom	1
+1 The garden is north the bathroom.
+2 The garden is south the kitchen.
+3 What is north the bathroom?	garden	1
+1 The bathroom is west the office.
+2 The garden is east the office.
+3 What is east the bathroom?	office	1
+1 The bedroom is north the bathroom.
+2 The bathroom is north the hallway.
+3 What is north the hallway?	bathroom	2
+1 The kitchen is north the garden.
+2 The garden is north the bedroom.
+3 What is south the garden?	bedroom	2
+1 The hallway is east the office.
+2 The bathroom is east the hallway.
+3 What is the hallway west?	bathroom	2
+1 The kitchen is west the bedroom.
+2 The bedroom is west the garden.
+3 What is the bedroom east?	kitchen	1
+1 The office is east the kitchen.
+2 The hallway is west the kitchen.
+3 What is the hallway west?	kitchen	2
+1 The garden is west the kitchen.
+2 The office is west the garden.
+3 What is the garden west?	kitchen	1
+1 The garden is east the kitchen.
+2 The garden is west the bedroom.
+3 What is the kitchen west?	garden	1
+1 The office is south the garden.
+2 The office is north the bedroom.
+3 What is north the office?	garden	1
+1 The office is east the garden.
+2 The bathroom is east the office.
+3 What is west the office?	garden	1
+1 The bedroom is east the hallway.
+2 The hallway is east the office.
+3 What is the hallway west?	bedroom	1
+1 The office is north the bathroom.
+2 The bathroom is north the bedroom.
+3 What is the office north?	bathroom	1
+1 The bathroom is south the hallway.
+2 The bedroom is south the bathroom.
+3 What is south the bathroom?	bedroom	2
+1 The kitchen is south the hallway.
+2 The kitchen is north the bedroom.
+3 What is the hallway north?	kitchen	1
+1 The bedroom is west the garden.
+2 The office is east the garden.
+3 What is west the office?	garden	2
+1 The hallway is west the office.
+2 The hallway is east the kitchen.
+3 What is east the kitchen?	hallway	2
+1 The bathroom is north the office.
+2 The office is north the bedroom.
+3 What is north the office?	bathroom	1
+1 The bedroom is north the office.
+2 The bathroom is south the office.
+3 What is the bathroom south?	office	2
+1 The bedroom is west the bathroom.
+2 The office is west the bedroom.
+3 What is east the office?	bedroom	2
+1 The kitchen is east the bathroom.
+2 The kitchen is west the hallway.
+3 What is west the hallway?	kitchen	2
+1 The garden is east the office.
+2 The bathroom is east the garden.
+3 What is the bathroom east?	garden	2
+1 The garden is west the kitchen.
+2 The kitchen is west the office.
+3 What is the office east?	kitchen	2
+1 The kitchen is south the hallway.
+2 The bedroom is south the kitchen.
+3 What is the hallway north?	kitchen	1
+1 The bedroom is west the garden.
+2 The bedroom is east the kitchen.
+3 What is west the bedroom?	kitchen	2
+1 The hallway is north the kitchen.
+2 The office is north the hallway.
+3 What is south the hallway?	kitchen	1
+1 The bathroom is north the kitchen.
+2 The kitchen is north the bedroom.
+3 What is south the kitchen?	bedroom	2
+1 The office is south the bathroom.
+2 The hallway is north the bathroom.
+3 What is north the bathroom?	hallway	2
+1 The garden is east the kitchen.
+2 The bedroom is east the garden.
+3 What is the bedroom east?	garden	2
+1 The bedroom is south the garden.
+2 The garden is south the hallway.
+3 What is north the garden?	hallway	2
+1 The bathroom is west the garden.
+2 The hallway is east the garden.
+3 What is the garden east?	bathroom	1
+1 The office is south the bathroom.
+2 The bathroom is south the garden.
+3 What is the office south?	bathroom	1
+1 The garden is south the kitchen.
+2 The kitchen is south the bedroom.
+3 What is the kitchen north?	garden	1
+1 The hallway is east the garden.
+2 The bedroom is east the hallway.
+3 What is the garden west?	hallway	1
+1 The bathroom is east the hallway.
+2 The hallway is east the bedroom.
+3 What is west the bathroom?	hallway	1
+1 The kitchen is east the office.
+2 The bedroom is east the kitchen.
+3 What is east the kitchen?	bedroom	2
+1 The bathroom is south the office.
+2 The bedroom is south the bathroom.
+3 What is the bedroom south?	bathroom	2
+1 The bathroom is west the kitchen.
+2 The bathroom is east the hallway.
+3 What is the bathroom east?	hallway	2
+1 The bedroom is east the bathroom.
+2 The bedroom is west the office.
+3 What is west the office?	bedroom	2
+1 The hallway is west the office.
+2 The bedroom is east the office.
+3 What is the office east?	hallway	1
+1 The hallway is west the office.
+2 The kitchen is west the hallway.
+3 What is the office east?	hallway	1
+1 The bedroom is west the office.
+2 The bedroom is east the bathroom.
+3 What is the office east?	bedroom	1
+1 The hallway is east the garden.
+2 The garden is east the bathroom.
+3 What is the garden east?	bathroom	2
+1 The bedroom is north the bathroom.
+2 The bathroom is north the hallway.
+3 What is the bedroom north?	bathroom	1
+1 The hallway is south the kitchen.
+2 The hallway is north the office.
+3 What is north the hallway?	kitchen	1
+1 The kitchen is west the bathroom.
+2 The bathroom is west the hallway.
+3 What is east the bathroom?	hallway	2
+1 The bedroom is east the garden.
+2 The garden is east the office.
+3 What is the bedroom east?	garden	1
+1 The hallway is south the kitchen.
+2 The kitchen is south the bathroom.
+3 What is the hallway south?	kitchen	1
+1 The kitchen is south the bathroom.
+2 The garden is north the bathroom.
+3 What is the bathroom south?	garden	2
+1 The garden is east the kitchen.
+2 The bathroom is east the garden.
+3 What is the garden east?	kitchen	1
+1 The garden is west the office.
+2 The bedroom is west the garden.
+3 What is the office east?	garden	1
+1 The garden is east the bedroom.
+2 The bathroom is east the garden.
+3 What is west the bathroom?	garden	2
+1 The garden is west the kitchen.
+2 The bathroom is west the garden.
+3 What is the garden west?	kitchen	1
+1 The bathroom is west the garden.
+2 The bedroom is east the garden.
+3 What is the garden east?	bathroom	1
+1 The kitchen is south the garden.
+2 The bedroom is south the kitchen.
+3 What is the kitchen south?	garden	1
+1 The office is north the hallway.
+2 The bedroom is north the office.
+3 What is north the hallway?	office	1
+1 The bedroom is south the kitchen.
+2 The bathroom is south the bedroom.
+3 What is south the bedroom?	bathroom	2
+1 The hallway is north the bathroom.
+2 The hallway is south the bedroom.
+3 What is south the bedroom?	hallway	2
+1 The garden is east the hallway.
+2 The bathroom is west the hallway.
+3 What is the hallway east?	bathroom	2
+1 The garden is east the bathroom.
+2 The bathroom is east the kitchen.
+3 What is the bathroom west?	garden	1
+1 The hallway is north the bedroom.
+2 The bedroom is north the garden.
+3 What is the garden south?	bedroom	2
+1 The kitchen is east the bedroom.
+2 The kitchen is west the garden.
+3 What is the bedroom west?	kitchen	1
+1 The bathroom is north the hallway.
+2 The kitchen is north the bathroom.
+3 What is the bathroom south?	kitchen	2
+1 The bathroom is south the bedroom.
+2 The garden is north the bedroom.
+3 What is north the bathroom?	bedroom	1
+1 The hallway is north the bathroom.
+2 The bathroom is north the kitchen.
+3 What is the hallway north?	bathroom	1
+1 The hallway is east the bedroom.
+2 The bathroom is east the hallway.
+3 What is the bathroom east?	hallway	2
+1 The garden is south the office.
+2 The office is south the bedroom.
+3 What is the garden south?	office	1
+1 The bedroom is east the bathroom.
+2 The bathroom is east the office.
+3 What is west the bedroom?	bathroom	1
+1 The garden is south the bathroom.
+2 The bathroom is south the hallway.
+3 What is the bathroom south?	hallway	2
+1 The garden is west the office.
+2 The garden is east the bedroom.
+3 What is west the garden?	bedroom	2
+1 The bedroom is south the garden.
+2 The bedroom is north the bathroom.
+3 What is north the bedroom?	garden	1
+1 The garden is north the bathroom.
+2 The hallway is north the garden.
+3 What is south the hallway?	garden	2
+1 The office is north the kitchen.
+2 The kitchen is north the garden.
+3 What is the kitchen north?	garden	2
+1 The bathroom is north the office.
+2 The kitchen is north the bathroom.
+3 What is south the bathroom?	office	1
+1 The kitchen is north the hallway.
+2 The hallway is north the office.
+3 What is south the kitchen?	hallway	1
+1 The office is west the garden.
+2 The bathroom is west the office.
+3 What is west the office?	bathroom	2
+1 The kitchen is south the hallway.
+2 The bathroom is north the hallway.
+3 What is north the kitchen?	hallway	1
+1 The hallway is north the office.
+2 The bedroom is south the office.
+3 What is north the office?	hallway	1
+1 The office is east the kitchen.
+2 The bathroom is west the kitchen.
+3 What is east the kitchen?	office	1
+1 The bedroom is south the hallway.
+2 The bedroom is north the kitchen.
+3 What is the hallway north?	bedroom	1
+1 The bathroom is west the bedroom.
+2 The bathroom is east the hallway.
+3 What is the hallway west?	bathroom	2
+1 The garden is south the bedroom.
+2 The garden is north the office.
+3 What is north the office?	garden	2
+1 The kitchen is south the office.
+2 The hallway is south the kitchen.
+3 What is the office north?	kitchen	1
+1 The bathroom is west the garden.
+2 The garden is west the hallway.
+3 What is the hallway east?	garden	2
+1 The bedroom is south the office.
+2 The office is south the kitchen.
+3 What is south the office?	bedroom	1
+1 The office is west the bathroom.
+2 The bathroom is west the garden.
+3 What is east the bathroom?	garden	2
+1 The office is west the kitchen.
+2 The kitchen is west the garden.
+3 What is the kitchen west?	garden	2
+1 The bedroom is west the garden.
+2 The kitchen is west the bedroom.
+3 What is west the garden?	bedroom	1
+1 The bathroom is south the office.
+2 The bathroom is north the bedroom.
+3 What is the bathroom south?	office	1
+1 The garden is west the hallway.
+2 The garden is east the bathroom.
+3 What is the garden west?	hallway	1
+1 The kitchen is south the office.
+2 The garden is north the office.
+3 What is north the kitchen?	office	1
+1 The office is south the kitchen.
+2 The kitchen is south the garden.
+3 What is the kitchen north?	office	1
+1 The hallway is south the kitchen.
+2 The office is north the kitchen.
+3 What is south the kitchen?	hallway	1
+1 The bathroom is south the bedroom.
+2 The kitchen is south the bathroom.
+3 What is south the bedroom?	bathroom	1
+1 The bathroom is south the hallway.
+2 The bathroom is north the bedroom.
+3 What is north the bathroom?	hallway	1
+1 The office is west the bathroom.
+2 The garden is west the office.
+3 What is the bathroom east?	office	1
+1 The bathroom is west the office.
+2 The bathroom is east the kitchen.
+3 What is the bathroom east?	kitchen	2
+1 The bathroom is west the office.
+2 The garden is west the bathroom.
+3 What is the bathroom west?	office	1
+1 The hallway is north the garden.
+2 The bathroom is south the garden.
+3 What is the bathroom south?	garden	2
+1 The kitchen is west the hallway.
+2 The hallway is west the garden.
+3 What is west the garden?	hallway	2
+1 The bathroom is north the office.
+2 The hallway is north the bathroom.
+3 What is south the bathroom?	office	1
+1 The office is west the bedroom.
+2 The garden is east the bedroom.
+3 What is the office west?	bedroom	1
+1 The kitchen is west the bathroom.
+2 The bathroom is west the garden.
+3 What is east the bathroom?	garden	2
+1 The bedroom is east the kitchen.
+2 The hallway is east the bedroom.
+3 What is the kitchen west?	bedroom	1
+1 The garden is south the bedroom.
+2 The hallway is south the garden.
+3 What is north the garden?	bedroom	1
+1 The bathroom is west the kitchen.
+2 The hallway is west the bathroom.
+3 What is east the bathroom?	kitchen	1
+1 The bathroom is south the hallway.
+2 The hallway is south the bedroom.
+3 What is north the bathroom?	hallway	1
+1 The bathroom is north the office.
+2 The office is north the garden.
+3 What is the bathroom north?	office	1
+1 The bathroom is north the garden.
+2 The garden is north the kitchen.
+3 What is north the garden?	bathroom	1
+1 The office is south the bathroom.
+2 The bathroom is south the kitchen.
+3 What is the bathroom north?	office	1
+1 The garden is west the hallway.
+2 The bedroom is east the hallway.
+3 What is west the hallway?	garden	1
+1 The bedroom is east the garden.
+2 The bedroom is west the kitchen.
+3 What is west the bedroom?	garden	1
+1 The bedroom is south the office.
+2 The office is south the hallway.
+3 What is the hallway north?	office	2
+1 The bedroom is west the bathroom.
+2 The bedroom is east the office.
+3 What is the bathroom east?	bedroom	1
+1 The bathroom is south the kitchen.
+2 The kitchen is south the hallway.
+3 What is south the kitchen?	bathroom	1
+1 The bathroom is east the hallway.
+2 The bedroom is east the bathroom.
+3 What is west the bathroom?	hallway	1
+1 The bedroom is north the kitchen.
+2 The bedroom is south the office.
+3 What is the kitchen south?	bedroom	1
+1 The garden is west the bathroom.
+2 The garden is east the office.
+3 What is the garden west?	bathroom	1
+1 The office is west the garden.
+2 The office is east the hallway.
+3 What is the office west?	garden	1
+1 The office is west the bedroom.
+2 The kitchen is east the bedroom.
+3 What is east the bedroom?	kitchen	2
+1 The garden is north the hallway.
+2 The office is north the garden.
+3 What is the hallway south?	garden	1
+1 The hallway is east the bathroom.
+2 The hallway is west the office.
+3 What is east the hallway?	office	2
+1 The office is west the bedroom.
+2 The bedroom is west the garden.
+3 What is the garden east?	bedroom	2
+1 The bathroom is south the bedroom.
+2 The garden is north the bedroom.
+3 What is the bedroom north?	bathroom	1
+1 The kitchen is east the bathroom.
+2 The bathroom is east the bedroom.
+3 What is the kitchen east?	bathroom	1
+1 The bedroom is east the bathroom.
+2 The bedroom is west the office.
+3 What is west the office?	bedroom	2
+1 The kitchen is north the hallway.
+2 The bedroom is north the kitchen.
+3 What is the bedroom north?	kitchen	2
+1 The office is west the bedroom.
+2 The office is east the bathroom.
+3 What is west the bedroom?	office	1
+1 The bathroom is south the hallway.
+2 The kitchen is north the hallway.
+3 What is the bathroom south?	hallway	1
+1 The bathroom is north the office.
+2 The bedroom is south the office.
+3 What is the office north?	bedroom	2
+1 The garden is east the bathroom.
+2 The office is west the bathroom.
+3 What is east the bathroom?	garden	1
+1 The bathroom is east the bedroom.
+2 The bathroom is west the kitchen.
+3 What is the bathroom east?	bedroom	1
+1 The office is east the bedroom.
+2 The garden is east the office.
+3 What is the office west?	garden	2
+1 The garden is east the kitchen.
+2 The bedroom is east the garden.
+3 What is the garden east?	kitchen	1
+1 The hallway is east the kitchen.
+2 The hallway is west the bedroom.
+3 What is east the kitchen?	hallway	1
+1 The garden is east the office.
+2 The office is east the bedroom.
+3 What is east the bedroom?	office	2
+1 The bedroom is west the office.
+2 The office is west the hallway.
+3 What is west the office?	bedroom	1
+1 The bathroom is north the kitchen.
+2 The office is south the kitchen.
+3 What is north the kitchen?	bathroom	1
+1 The office is west the hallway.
+2 The hallway is west the bathroom.
+3 What is west the bathroom?	hallway	2
+1 The office is north the garden.
+2 The bathroom is north the office.
+3 What is the garden south?	office	1
+1 The garden is west the kitchen.
+2 The garden is east the bathroom.
+3 What is east the garden?	kitchen	1
+1 The bathroom is south the bedroom.
+2 The bedroom is south the hallway.
+3 What is the bedroom north?	bathroom	1
+1 The office is east the bedroom.
+2 The kitchen is east the office.
+3 What is west the kitchen?	office	2
+1 The bedroom is north the bathroom.
+2 The office is south the bathroom.
+3 What is the office south?	bathroom	2
+1 The office is north the garden.
+2 The office is south the kitchen.
+3 What is south the office?	garden	1
+1 The bathroom is north the bedroom.
+2 The office is north the bathroom.
+3 What is the bathroom north?	bedroom	1
+1 The bedroom is south the hallway.
+2 The bedroom is north the garden.
+3 What is the garden south?	bedroom	2
+1 The bathroom is south the hallway.
+2 The hallway is south the office.
+3 What is south the office?	hallway	2
+1 The bathroom is north the hallway.
+2 The garden is south the hallway.
+3 What is the hallway south?	bathroom	1
+1 The office is east the kitchen.
+2 The garden is west the kitchen.
+3 What is the garden west?	kitchen	2
+1 The hallway is west the bedroom.
+2 The kitchen is east the bedroom.
+3 What is west the bedroom?	hallway	1
+1 The kitchen is east the garden.
+2 The kitchen is west the bathroom.
+3 What is west the kitchen?	garden	1
+1 The office is south the bedroom.
+2 The kitchen is south the office.
+3 What is north the office?	bedroom	1
+1 The office is east the kitchen.
+2 The office is west the bathroom.
+3 What is east the kitchen?	office	1
+1 The hallway is north the bathroom.
+2 The bathroom is north the kitchen.
+3 What is the kitchen south?	bathroom	2
+1 The hallway is west the bedroom.
+2 The hallway is east the garden.
+3 What is west the bedroom?	hallway	1
+1 The office is south the kitchen.
+2 The office is north the bedroom.
+3 What is south the office?	bedroom	2
+1 The office is east the hallway.
+2 The office is west the garden.
+3 What is the hallway west?	office	1
+1 The office is north the bedroom.
+2 The bathroom is north the office.
+3 What is the office south?	bathroom	2
+1 The garden is south the hallway.
+2 The garden is north the bedroom.
+3 What is the garden south?	hallway	1
+1 The garden is south the kitchen.
+2 The garden is north the bedroom.
+3 What is north the bedroom?	garden	2
+1 The hallway is north the bathroom.
+2 The garden is south the bathroom.
+3 What is north the garden?	bathroom	2
+1 The office is south the kitchen.
+2 The kitchen is south the hallway.
+3 What is the kitchen south?	hallway	2
+1 The bedroom is north the kitchen.
+2 The hallway is north the bedroom.
+3 What is south the bedroom?	kitchen	1
+1 The bathroom is east the office.
+2 The kitchen is east the bathroom.
+3 What is east the bathroom?	kitchen	2
+1 The garden is west the kitchen.
+2 The garden is east the office.
+3 What is west the garden?	office	2
+1 The garden is north the kitchen.
+2 The garden is south the bathroom.
+3 What is the garden north?	kitchen	1
+1 The office is west the kitchen.
+2 The bedroom is east the kitchen.
+3 What is east the kitchen?	bedroom	2
+1 The kitchen is east the office.
+2 The office is east the bathroom.
+3 What is west the office?	bathroom	2
+1 The bathroom is north the office.
+2 The bedroom is north the bathroom.
+3 What is the bedroom north?	bathroom	2
+1 The bathroom is west the bedroom.
+2 The bathroom is east the hallway.
+3 What is west the bathroom?	hallway	2
+1 The kitchen is west the garden.
+2 The hallway is west the kitchen.
+3 What is west the garden?	kitchen	1
+1 The hallway is east the office.
+2 The office is east the kitchen.
+3 What is the hallway east?	office	1
+1 The office is south the hallway.
+2 The hallway is south the bathroom.
+3 What is the hallway south?	bathroom	2
+1 The bedroom is south the hallway.
+2 The bedroom is north the office.
+3 What is the bedroom north?	office	2
+1 The kitchen is north the office.
+2 The bedroom is north the kitchen.
+3 What is the kitchen south?	bedroom	2
+1 The hallway is east the office.
+2 The office is east the bedroom.
+3 What is east the office?	hallway	1
+1 The garden is south the bathroom.
+2 The garden is north the hallway.
+3 What is the garden south?	bathroom	1
+1 The hallway is south the office.
+2 The office is south the bedroom.
+3 What is south the office?	hallway	1
+1 The kitchen is west the bathroom.
+2 The office is east the bathroom.
+3 What is west the bathroom?	kitchen	1
+1 The garden is west the hallway.
+2 The hallway is west the bedroom.
+3 What is the hallway east?	garden	1
+1 The office is south the garden.
+2 The bathroom is south the office.
+3 What is the office north?	bathroom	2
+1 The garden is west the bathroom.
+2 The hallway is west the garden.
+3 What is east the garden?	bathroom	1
+1 The bathroom is west the hallway.
+2 The bedroom is east the hallway.
+3 What is the bathroom west?	hallway	1
+1 The hallway is south the bathroom.
+2 The hallway is north the bedroom.
+3 What is the hallway north?	bedroom	2
+1 The office is south the bathroom.
+2 The office is north the hallway.
+3 What is the office south?	bathroom	1
+1 The bedroom is east the kitchen.
+2 The hallway is east the bedroom.
+3 What is the bedroom west?	hallway	2
+1 The bathroom is east the office.
+2 The bedroom is east the bathroom.
+3 What is west the bathroom?	office	1
+1 The kitchen is north the bedroom.
+2 The office is south the bedroom.
+3 What is the office south?	bedroom	2
+1 The bedroom is south the garden.
+2 The hallway is north the garden.
+3 What is the hallway north?	garden	2
+1 The garden is north the hallway.
+2 The kitchen is north the garden.
+3 What is north the garden?	kitchen	2
+1 The kitchen is west the bathroom.
+2 The bathroom is west the hallway.
+3 What is the bathroom east?	kitchen	1
+1 The bedroom is north the hallway.
+2 The bedroom is south the bathroom.
+3 What is south the bathroom?	bedroom	2
+1 The kitchen is north the garden.
+2 The office is south the garden.
+3 What is the office south?	garden	2
+1 The bathroom is south the garden.
+2 The bedroom is north the garden.
+3 What is south the bedroom?	garden	2
+1 The hallway is north the garden.
+2 The hallway is south the office.
+3 What is the garden south?	hallway	1
+1 The office is east the kitchen.
+2 The kitchen is east the bedroom.
+3 What is west the office?	kitchen	1
+1 The kitchen is north the hallway.
+2 The hallway is north the office.
+3 What is the hallway north?	office	2
+1 The bedroom is west the kitchen.
+2 The hallway is east the kitchen.
+3 What is east the kitchen?	hallway	2
+1 The kitchen is south the hallway.
+2 The hallway is south the bathroom.
+3 What is south the bathroom?	hallway	2
+1 The kitchen is south the office.
+2 The garden is north the office.
+3 What is north the office?	garden	2
+1 The bathroom is north the bedroom.
+2 The bathroom is south the garden.
+3 What is the garden north?	bathroom	2
+1 The hallway is south the garden.
+2 The bedroom is north the garden.
+3 What is the garden north?	hallway	1
+1 The kitchen is east the bedroom.
+2 The kitchen is west the garden.
+3 What is east the kitchen?	garden	2
+1 The bedroom is east the bathroom.
+2 The bathroom is east the hallway.
+3 What is east the bathroom?	bedroom	1
+1 The office is west the kitchen.
+2 The bedroom is west the office.
+3 What is east the bedroom?	office	2
+1 The bedroom is south the office.
+2 The office is south the hallway.
+3 What is south the hallway?	office	2
+1 The office is south the bathroom.
+2 The office is north the hallway.
+3 What is north the hallway?	office	2
+1 The hallway is east the office.
+2 The bedroom is west the office.
+3 What is the bedroom west?	office	2
+1 The bedroom is south the garden.
+2 The bedroom is north the office.
+3 What is south the bedroom?	office	2
+1 The bedroom is east the hallway.
+2 The garden is west the hallway.
+3 What is the garden west?	hallway	2
+1 The bedroom is south the hallway.
+2 The garden is north the hallway.
+3 What is the hallway north?	bedroom	1
+1 The hallway is north the garden.
+2 The bedroom is south the garden.
+3 What is north the garden?	hallway	1
+1 The bathroom is south the office.
+2 The office is south the hallway.
+3 What is north the office?	hallway	2
+1 The bathroom is south the garden.
+2 The office is north the garden.
+3 What is north the bathroom?	garden	1
+1 The hallway is north the kitchen.
+2 The kitchen is north the office.
+3 What is the kitchen north?	office	2
+1 The kitchen is west the hallway.
+2 The office is west the kitchen.
+3 What is the kitchen east?	office	2
+1 The bathroom is south the hallway.
+2 The bathroom is north the bedroom.
+3 What is the bathroom south?	hallway	1
+1 The bedroom is north the garden.
+2 The bedroom is south the kitchen.
+3 What is the bedroom north?	garden	1
+1 The office is south the kitchen.
+2 The bathroom is north the kitchen.
+3 What is north the kitchen?	bathroom	2
+1 The bathroom is south the hallway.
+2 The hallway is south the kitchen.
+3 What is south the hallway?	bathroom	1
+1 The kitchen is north the bedroom.
+2 The bathroom is north the kitchen.
+3 What is north the kitchen?	bathroom	2
+1 The hallway is north the bedroom.
+2 The hallway is south the office.
+3 What is south the office?	hallway	2
+1 The bathroom is east the garden.
+2 The office is west the garden.
+3 What is east the office?	garden	2
+1 The kitchen is south the garden.
+2 The garden is south the hallway.
+3 What is the garden south?	hallway	2
+1 The bathroom is west the office.
+2 The kitchen is west the bathroom.
+3 What is west the bathroom?	kitchen	2
+1 The garden is north the office.
+2 The hallway is north the garden.
+3 What is the garden north?	office	1
+1 The bedroom is west the office.
+2 The office is west the kitchen.
+3 What is the office east?	bedroom	1
+1 The garden is east the bathroom.
+2 The hallway is east the garden.
+3 What is the garden east?	bathroom	1
+1 The hallway is west the garden.
+2 The bathroom is east the garden.
+3 What is west the garden?	hallway	1
+1 The kitchen is north the hallway.
+2 The office is north the kitchen.
+3 What is south the kitchen?	hallway	1
+1 The office is south the hallway.
+2 The bathroom is north the hallway.
+3 What is south the hallway?	office	1
+1 The hallway is south the kitchen.
+2 The office is north the kitchen.
+3 What is north the kitchen?	office	2
+1 The office is north the bathroom.
+2 The office is south the kitchen.
+3 What is north the bathroom?	office	1
+1 The kitchen is south the bedroom.
+2 The kitchen is north the hallway.
+3 What is the kitchen south?	bedroom	1
+1 The office is west the bathroom.
+2 The garden is east the bathroom.
+3 What is west the garden?	bathroom	2
+1 The garden is west the bedroom.
+2 The garden is east the bathroom.
+3 What is west the bedroom?	garden	1
+1 The bedroom is north the office.
+2 The bathroom is south the office.
+3 What is the office south?	bedroom	1
+1 The bedroom is west the garden.
+2 The kitchen is west the bedroom.
+3 What is east the kitchen?	bedroom	2
+1 The hallway is north the garden.
+2 The hallway is south the office.
+3 What is south the office?	hallway	2
+1 The hallway is east the bedroom.
+2 The hallway is west the kitchen.
+3 What is east the bedroom?	hallway	1
+1 The hallway is east the kitchen.
+2 The hallway is west the bedroom.
+3 What is the kitchen west?	hallway	1
+1 The kitchen is north the bathroom.
+2 The kitchen is south the hallway.
+3 What is south the hallway?	kitchen	2
+1 The bathroom is west the garden.
+2 The garden is west the hallway.
+3 What is east the garden?	hallway	2
+1 The office is north the garden.
+2 The garden is north the bedroom.
+3 What is the office north?	garden	1
+1 The kitchen is north the garden.
+2 The bathroom is south the garden.
+3 What is south the kitchen?	garden	1
+1 The bedroom is east the garden.
+2 The hallway is west the garden.
+3 What is west the bedroom?	garden	1
+1 The kitchen is east the hallway.
+2 The garden is west the hallway.
+3 What is west the kitchen?	hallway	1
+1 The garden is west the bedroom.
+2 The garden is east the hallway.
+3 What is west the bedroom?	garden	1
+1 The bathroom is east the hallway.
+2 The hallway is east the kitchen.
+3 What is the bathroom east?	hallway	1
+1 The garden is west the bedroom.
+2 The bathroom is east the bedroom.
+3 What is west the bedroom?	garden	1
+1 The bathroom is north the kitchen.
+2 The kitchen is north the garden.
+3 What is the kitchen south?	bathroom	1
+1 The bathroom is south the hallway.
+2 The bathroom is north the office.
+3 What is south the bathroom?	office	2
+1 The hallway is east the kitchen.
+2 The hallway is west the garden.
+3 What is the hallway west?	garden	2
+1 The bedroom is north the office.
+2 The office is north the hallway.
+3 What is the bedroom north?	office	1
+1 The office is south the garden.
+2 The bathroom is south the office.
+3 What is the office south?	garden	1
+1 The garden is north the kitchen.
+2 The bedroom is south the kitchen.
+3 What is the kitchen south?	garden	1
+1 The bathroom is west the bedroom.
+2 The kitchen is east the bedroom.
+3 What is the bedroom east?	bathroom	1
+1 The hallway is south the bedroom.
+2 The bedroom is south the kitchen.
+3 What is the bedroom south?	kitchen	2
+1 The garden is west the bedroom.
+2 The kitchen is east the bedroom.
+3 What is east the bedroom?	kitchen	2
+1 The garden is south the hallway.
+2 The kitchen is north the hallway.
+3 What is the kitchen north?	hallway	2
+1 The bedroom is east the hallway.
+2 The hallway is east the kitchen.
+3 What is the kitchen west?	hallway	2
+1 The kitchen is west the office.
+2 The office is west the bathroom.
+3 What is east the office?	bathroom	2
+1 The bathroom is west the garden.
+2 The garden is west the hallway.
+3 What is the bathroom west?	garden	1
+1 The kitchen is north the garden.
+2 The kitchen is south the bedroom.
+3 What is north the garden?	kitchen	1
+1 The garden is north the hallway.
+2 The hallway is north the kitchen.
+3 What is the garden north?	hallway	1
+1 The bathroom is east the kitchen.
+2 The kitchen is east the garden.
+3 What is west the kitchen?	garden	2
+1 The bedroom is south the garden.
+2 The garden is south the kitchen.
+3 What is the garden south?	kitchen	2
+1 The office is west the bathroom.
+2 The bedroom is east the bathroom.
+3 What is west the bedroom?	bathroom	2
+1 The bedroom is east the bathroom.
+2 The bedroom is west the office.
+3 What is the bathroom west?	bedroom	1
+1 The hallway is east the garden.
+2 The garden is east the kitchen.
+3 What is east the garden?	hallway	1
+1 The bedroom is west the garden.
+2 The garden is west the bathroom.
+3 What is the garden west?	bathroom	2
+1 The bathroom is north the hallway.
+2 The bathroom is south the bedroom.
+3 What is north the hallway?	bathroom	1
+1 The garden is west the bedroom.
+2 The garden is east the bathroom.
+3 What is east the garden?	bedroom	1
+1 The bathroom is north the hallway.
+2 The hallway is north the office.
+3 What is south the hallway?	office	2
+1 The bathroom is east the office.
+2 The office is east the kitchen.
+3 What is the bathroom east?	office	1
+1 The office is south the bathroom.
+2 The bathroom is south the bedroom.
+3 What is north the office?	bathroom	1
+1 The office is north the bathroom.
+2 The hallway is north the office.
+3 What is the office north?	bathroom	1
+1 The kitchen is west the office.
+2 The bedroom is east the office.
+3 What is west the office?	kitchen	1
+1 The office is south the bathroom.
+2 The bathroom is south the garden.
+3 What is south the bathroom?	office	1
+1 The kitchen is east the office.
+2 The kitchen is west the bathroom.
+3 What is the office west?	kitchen	1
+1 The bedroom is east the kitchen.
+2 The bathroom is east the bedroom.
+3 What is the bathroom east?	bedroom	2
+1 The garden is north the bathroom.
+2 The office is south the bathroom.
+3 What is the garden north?	bathroom	1
+1 The hallway is south the kitchen.
+2 The kitchen is south the bedroom.
+3 What is south the kitchen?	hallway	1
+1 The kitchen is south the garden.
+2 The hallway is south the kitchen.
+3 What is south the kitchen?	hallway	2
+1 The bathroom is east the bedroom.
+2 The kitchen is east the bathroom.
+3 What is the bedroom west?	bathroom	1
+1 The bedroom is south the garden.
+2 The bathroom is south the bedroom.
+3 What is south the bedroom?	bathroom	2
+1 The bathroom is north the hallway.
+2 The office is north the bathroom.
+3 What is the bathroom south?	office	2
+1 The hallway is north the garden.
+2 The hallway is south the kitchen.
+3 What is the garden south?	hallway	1
+1 The garden is north the bathroom.
+2 The garden is south the hallway.
+3 What is north the garden?	hallway	2
+1 The garden is south the bedroom.
+2 The garden is north the bathroom.
+3 What is the bedroom north?	garden	1
+1 The office is south the garden.
+2 The bathroom is north the garden.
+3 What is the garden south?	bathroom	2
+1 The garden is south the bathroom.
+2 The hallway is north the bathroom.
+3 What is south the hallway?	bathroom	2
+1 The bathroom is east the hallway.
+2 The hallway is east the garden.
+3 What is east the hallway?	bathroom	1
+1 The kitchen is south the office.
+2 The office is south the bathroom.
+3 What is south the office?	kitchen	1
+1 The kitchen is north the office.
+2 The kitchen is south the hallway.
+3 What is the kitchen north?	office	1
+1 The bathroom is south the bedroom.
+2 The garden is south the bathroom.
+3 What is the bathroom north?	garden	2
+1 The kitchen is east the office.
+2 The office is east the garden.
+3 What is east the office?	kitchen	1
+1 The garden is west the hallway.
+2 The hallway is west the bedroom.
+3 What is west the bedroom?	hallway	2
+1 The bedroom is east the garden.
+2 The bedroom is west the bathroom.
+3 What is west the bedroom?	garden	1
+1 The bathroom is east the hallway.
+2 The bathroom is west the office.
+3 What is west the office?	bathroom	2
+1 The hallway is west the bedroom.
+2 The hallway is east the garden.
+3 What is east the hallway?	bedroom	1
+1 The office is north the bedroom.
+2 The office is south the hallway.
+3 What is north the bedroom?	office	1
+1 The hallway is south the office.
+2 The bathroom is north the office.
+3 What is south the office?	hallway	1
+1 The garden is east the hallway.
+2 The kitchen is west the hallway.
+3 What is west the hallway?	kitchen	2
+1 The hallway is west the kitchen.
+2 The office is east the kitchen.
+3 What is the kitchen west?	office	2
+1 The office is north the kitchen.
+2 The hallway is south the kitchen.
+3 What is the hallway south?	kitchen	2
+1 The office is south the bathroom.
+2 The office is north the bedroom.
+3 What is the bedroom south?	office	2
+1 The hallway is east the office.
+2 The office is east the bedroom.
+3 What is east the bedroom?	office	2
+1 The hallway is north the bedroom.
+2 The garden is north the hallway.
+3 What is the hallway south?	garden	2
+1 The hallway is east the kitchen.
+2 The office is west the kitchen.
+3 What is the hallway east?	kitchen	1
+1 The hallway is east the kitchen.
+2 The kitchen is east the bedroom.
+3 What is west the hallway?	kitchen	1
+1 The hallway is north the bathroom.
+2 The bathroom is north the office.
+3 What is north the bathroom?	hallway	1
+1 The hallway is east the bathroom.
+2 The garden is west the bathroom.
+3 What is east the bathroom?	hallway	1
+1 The bedroom is east the garden.
+2 The bedroom is west the hallway.
+3 What is the bedroom west?	hallway	2
+1 The bedroom is north the office.
+2 The office is north the hallway.
+3 What is the hallway south?	office	2
+1 The bathroom is north the garden.
+2 The garden is north the office.
+3 What is the garden south?	bathroom	1
+1 The office is south the kitchen.
+2 The office is north the bedroom.
+3 What is south the office?	bedroom	2
+1 The hallway is west the kitchen.
+2 The hallway is east the bedroom.
+3 What is the hallway east?	bedroom	2
+1 The hallway is east the office.
+2 The kitchen is west the office.
+3 What is west the hallway?	office	1
+1 The bathroom is east the office.
+2 The hallway is east the bathroom.
+3 What is the bathroom west?	hallway	2
+1 The garden is east the bedroom.
+2 The bathroom is east the garden.
+3 What is the bedroom west?	garden	1
+1 The garden is west the office.
+2 The kitchen is east the office.
+3 What is east the garden?	office	1
+1 The bedroom is west the office.
+2 The bathroom is east the office.
+3 What is west the office?	bedroom	1
+1 The hallway is west the bathroom.
+2 The garden is west the hallway.
+3 What is the bathroom east?	hallway	1
+1 The kitchen is east the bathroom.
+2 The garden is east the kitchen.
+3 What is the bathroom west?	kitchen	1
+1 The garden is north the bedroom.
+2 The hallway is south the bedroom.
+3 What is the bedroom south?	garden	1
+1 The garden is west the kitchen.
+2 The kitchen is west the office.
+3 What is the kitchen east?	garden	1
+1 The bathroom is south the hallway.
+2 The bathroom is north the kitchen.
+3 What is the hallway north?	bathroom	1
+1 The bathroom is north the office.
+2 The bathroom is south the garden.
+3 What is the office south?	bathroom	1
+1 The bedroom is north the kitchen.
+2 The bedroom is south the garden.
+3 What is the bedroom north?	kitchen	1
+1 The bedroom is east the garden.
+2 The bedroom is west the hallway.
+3 What is west the hallway?	bedroom	2
+1 The hallway is east the kitchen.
+2 The bedroom is east the hallway.
+3 What is west the bedroom?	hallway	2
+1 The garden is south the kitchen.
+2 The kitchen is south the hallway.
+3 What is south the kitchen?	garden	1
+1 The bedroom is north the office.
+2 The kitchen is north the bedroom.
+3 What is north the bedroom?	kitchen	2
+1 The kitchen is south the garden.
+2 The garden is south the bathroom.
+3 What is the garden north?	kitchen	1
+1 The garden is east the hallway.
+2 The bedroom is west the hallway.
+3 What is the hallway east?	bedroom	2
+1 The office is south the garden.
+2 The office is north the bathroom.
+3 What is north the office?	garden	1
+1 The bedroom is south the hallway.
+2 The bedroom is north the office.
+3 What is the hallway north?	bedroom	1
+1 The kitchen is west the hallway.
+2 The office is west the kitchen.
+3 What is west the kitchen?	office	2
+1 The hallway is west the garden.
+2 The garden is west the bathroom.
+3 What is the garden west?	bathroom	2
+1 The bathroom is north the kitchen.
+2 The kitchen is north the bedroom.
+3 What is the kitchen north?	bedroom	2
+1 The bedroom is west the office.
+2 The kitchen is west the bedroom.
+3 What is east the bedroom?	office	1
+1 The garden is south the bathroom.
+2 The office is south the garden.
+3 What is the garden south?	bathroom	1
+1 The garden is west the office.
+2 The office is west the bathroom.
+3 What is east the garden?	office	1
+1 The hallway is east the office.
+2 The bathroom is west the office.
+3 What is west the office?	bathroom	2
+1 The office is east the hallway.
+2 The kitchen is west the hallway.
+3 What is the hallway west?	office	1
+1 The kitchen is north the bathroom.
+2 The kitchen is south the garden.
+3 What is south the kitchen?	bathroom	1
+1 The kitchen is south the garden.
+2 The bedroom is north the garden.
+3 What is the bedroom north?	garden	2
+1 The hallway is south the bathroom.
+2 The kitchen is north the bathroom.
+3 What is the kitchen north?	bathroom	2
+1 The hallway is west the kitchen.
+2 The hallway is east the garden.
+3 What is the kitchen east?	hallway	1
+1 The bedroom is west the kitchen.
+2 The kitchen is west the garden.
+3 What is east the kitchen?	garden	2
+1 The bedroom is north the hallway.
+2 The garden is south the hallway.
+3 What is south the hallway?	garden	2
+1 The bathroom is west the hallway.
+2 The hallway is west the kitchen.
+3 What is the kitchen east?	hallway	2
+1 The kitchen is north the hallway.
+2 The office is north the kitchen.
+3 What is north the hallway?	kitchen	1
+1 The garden is west the bathroom.
+2 The bathroom is west the kitchen.
+3 What is east the garden?	bathroom	1
+1 The office is west the kitchen.
+2 The bathroom is east the kitchen.
+3 What is west the kitchen?	office	1
+1 The kitchen is south the garden.
+2 The kitchen is north the bedroom.
+3 What is the garden north?	kitchen	1
+1 The office is east the bedroom.
+2 The garden is west the bedroom.
+3 What is the bedroom east?	garden	2
+1 The hallway is east the office.
+2 The bathroom is west the office.
+3 What is the office west?	hallway	1
+1 The kitchen is east the office.
+2 The office is east the hallway.
+3 What is east the office?	kitchen	1
+1 The office is south the bedroom.
+2 The garden is north the bedroom.
+3 What is south the bedroom?	office	1
+1 The kitchen is north the bathroom.
+2 The bedroom is south the bathroom.
+3 What is north the bathroom?	kitchen	1
+1 The office is west the garden.
+2 The hallway is west the office.
+3 What is west the office?	hallway	2
+1 The kitchen is north the office.
+2 The bedroom is south the office.
+3 What is south the kitchen?	office	1
+1 The bedroom is south the garden.
+2 The garden is south the office.
+3 What is north the garden?	office	2
+1 The office is east the kitchen.
+2 The office is west the bathroom.
+3 What is west the bathroom?	office	2
+1 The garden is north the bedroom.
+2 The office is north the garden.
+3 What is the garden south?	office	2
+1 The bathroom is south the garden.
+2 The garden is south the office.
+3 What is south the garden?	bathroom	1
+1 The office is south the kitchen.
+2 The bathroom is north the kitchen.
+3 What is the kitchen north?	office	1
+1 The hallway is west the garden.
+2 The hallway is east the office.
+3 What is the garden east?	hallway	1
+1 The bathroom is west the garden.
+2 The bathroom is east the bedroom.
+3 What is west the bathroom?	bedroom	2
+1 The office is east the hallway.
+2 The bathroom is east the office.
+3 What is east the hallway?	office	1
+1 The garden is east the office.
+2 The bedroom is west the office.
+3 What is the bedroom west?	office	2
+1 The office is south the bedroom.
+2 The kitchen is north the bedroom.
+3 What is south the kitchen?	bedroom	2
+1 The garden is south the office.
+2 The office is south the kitchen.
+3 What is the kitchen north?	office	2
+1 The office is north the bedroom.
+2 The bedroom is north the garden.
+3 What is the bedroom north?	garden	2
+1 The bathroom is north the bedroom.
+2 The hallway is north the bathroom.
+3 What is the bedroom south?	bathroom	1
+1 The bathroom is south the hallway.
+2 The kitchen is north the hallway.
+3 What is north the hallway?	kitchen	2

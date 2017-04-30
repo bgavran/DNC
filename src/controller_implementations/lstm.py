@@ -1,5 +1,6 @@
 from controller import *
 
+
 class LSTM(Controller):
     def __init__(self, batch_size, inp_vector_size, out_vector_size, memory_size, total_output_length):
         self.batch_size = batch_size
@@ -18,7 +19,7 @@ class LSTM(Controller):
                                    name="output_weights")
         self.biases = tf.Variable(tf.zeros([self.out_vector_size]), name="output_biases")
 
-    def __call__(self, x):
+    def __call__(self, x, sequence_length):
         """
         This call should not be used in DNC; it processes all inputs for all time steps!
         It's not a matter of the implementation of this function, it's just that DNC never processes the inputs for 
@@ -28,23 +29,19 @@ class LSTM(Controller):
         :param x: inputs for all time steps
         :return: outputs for all time steps
         """
-        outputs, states = [], []
-        for i in range(self.total_output_length):
-            output, state = self.step(x[:, :, i], i)
-            outputs.append(output)
-            states.append(state)
-        outputs = tf.transpose(outputs, [1, 2, 0])
-        self.notify(states)
+        # x shape is [max_time, batch_size, vector_size]
+        x = tf.transpose(x, [0, 2, 1])
+        sequence_length = tf.stack([sequence_length for _ in range(self.batch_size)])
+        outputs, states = tf.nn.dynamic_rnn(self.lstm_cell, x, dtype=tf.float32, sequence_length=sequence_length)
 
-        return outputs
+        # have to do the einsum this way and transpose later because of the way tf broadcasts biases
+        outputs = tf.einsum("btm,mo->bto", outputs, self.weights) + self.biases
+        outputs = tf.transpose(outputs, [0, 2, 1])
+
+        return outputs, states
 
     def notify(self, states):
-        states = tf.transpose(states, [2, 3, 1, 0])
-        states = tf.reshape(states, [self.batch_size, 2 * self.memory_size, self.total_output_length, 1])
-        tf.summary.image("LSTM cell state and 'hidden' state", states, max_outputs=Controller.max_outputs)
-
-        weights_expanded = tf.expand_dims(tf.expand_dims(self.weights, axis=0), axis=3)
-        tf.summary.image("LSTM output weights", tf.transpose(weights_expanded), max_outputs=Controller.max_outputs)
+        pass
 
     def step(self, x, step):
         with tf.variable_scope("LSTM_step") as scope:
