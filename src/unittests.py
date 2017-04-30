@@ -17,9 +17,8 @@ class DNCTest(tf.test.TestCase):
 
         with self.test_session():
             tf.global_variables_initializer().run()
-            Memory.usage_vector = u
             Memory.memory_size = n
-            calculated_alloc = Memory.calculate_allocation_weighting(Memory).eval()
+            calculated_alloc = Memory.calculate_allocation_weighting(Memory, u).eval()
             self.assertAllClose(correct_alloc, calculated_alloc)
 
     def test_content_addressing(self):
@@ -56,7 +55,7 @@ class DNCTest(tf.test.TestCase):
         norm = np.linalg.norm
         return np.dot(a, b) / (norm(a) * norm(b) + 1e-6)
 
-    def test_write_weighting(self):
+    def test_write_weighting_less_equal(self):
         class Hp:
             batch_size = 2
             inp_vector_size = 2
@@ -72,8 +71,7 @@ class DNCTest(tf.test.TestCase):
                 mem_size = 16
                 num_read_heads = 4
 
-        ff = Feedforward(Hp.inp_vector_size, Hp.out_vector_size, Hp.total_output_length, Hp.batch_size, 3,
-                         [128, 128, Hp.out_vector_size])
+        ff = Feedforward(Hp.inp_vector_size, Hp.out_vector_size, Hp.batch_size, [128, 128, Hp.out_vector_size])
         dnc = DNC(ff, Hp.Mem)
         x = tf.ones([Hp.batch_size, Hp.inp_vector_size])
         output, _ = dnc.step(x, 0)

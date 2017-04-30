@@ -35,7 +35,7 @@ class Feedforward(Controller):
             for layer_size in self.layer_sizes[:-1]:
                 x = tf.layers.dense(x, layer_size, activation=tf.nn.relu)
 
-            x = tf.layers.dense(x, self.layer_sizes[-1])
+            x = tf.layers.dense(x, self.layer_sizes[-1], activation=tf.nn.relu)
         return x, tf.constant(0)
 
     def notify(self, states):

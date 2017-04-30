@@ -20,9 +20,6 @@ class Controller:
     clip_value = 10
 
     def run_session(self, task, hp, project_path, optimizer=tf.train.AdamOptimizer()):
-        from time import time
-        t = time()
-
         x = tf.placeholder(tf.float32, task.x_shape, name="X")
         y = tf.placeholder(tf.float32, task.y_shape, name="Y")
 
@@ -65,7 +62,9 @@ class Controller:
             train_writer = tf.summary.FileWriter(project_path.train_path, sess.graph)
             test_writer = tf.summary.FileWriter(project_path.test_path, sess.graph)
             tf.global_variables_initializer().run()
-            print("Starting...", time() - t)
+
+            from time import time
+            t = time()
 
             cost_value = 9999
             for step in range(hp.steps):
@@ -79,18 +78,16 @@ class Controller:
                     summary = sess.run(merged, feed_dict={x: data_batch[0], y: data_batch[1], sequence_length: seqlen})
                     train_writer.add_summary(summary, step)
 
-                    if step % 1000 == 0 and cost_value < 0.01:
+                    if step % 1000 == 0 and cost_value < 0.05:
                         test_data_batch, seqlen = CopyTask.generate_n_copies(hp.batch_size, hp.out_vector_size,
-                                                                             hp.min_seq,
-                                                                             hp.train_max_seq, hp.total_output_length,
-                                                                             10)
-                        summary = sess.run(merged,
-                                           feed_dict={x: test_data_batch[0], y: test_data_batch[1],
-                                                      sequence_length: seqlen})
+                                                                             hp.train_max_seq,
+                                                                             20, 1)
+                        summary = sess.run(merged, feed_dict={x: test_data_batch[0], y: test_data_batch[1],
+                                                              sequence_length: seqlen})
                         test_writer.add_summary(summary, step)
 
                     print("Summary generated. Step", step,
-                          " Train cost == %.9f Time == %.2fs, Consecutive %d" % (cost_value, time() - t, task.state))
+                          " Train cost == %.9f Time == %.2fs" % (cost_value, time() - t))
                     t = time()
 
     def notify(self, states):

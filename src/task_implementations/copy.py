@@ -51,7 +51,7 @@ class CopyTask(Task):
 
     def generate_data(self, cost):
         # Update curriculum training state
-        self.update_state(cost)
+        # self.update_state(cost)
 
         self.max_seq_curriculum = self.train_max_seq
 

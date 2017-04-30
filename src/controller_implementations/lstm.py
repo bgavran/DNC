@@ -2,12 +2,11 @@ from controller import *
 
 
 class LSTM(Controller):
-    def __init__(self, batch_size, inp_vector_size, out_vector_size, memory_size, total_output_length):
+    def __init__(self, batch_size, inp_vector_size, out_vector_size, memory_size):
         self.batch_size = batch_size
         self.inp_vector_size = inp_vector_size
         self.out_vector_size = out_vector_size
         self.memory_size = memory_size
-        self.total_output_length = total_output_length
 
         self.lstm_cell = tf.contrib.rnn.BasicLSTMCell(self.memory_size)
 

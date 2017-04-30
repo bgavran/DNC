@@ -76,17 +76,16 @@ class Memory:
         interf["write_key"] = tf.expand_dims(interf["write_key"], dim=1)
         interf["r_read_keys"] = tf.reshape(interf["r_read_keys"], [-1, self.num_read_heads, self.word_size])
 
-        # calculating write content weighting with memory from previous time step, shape [batch_size, memory_size, 1]
-        # it represents a normalized probability distribution over the memory locations
-        write_content_weighting = Memory.content_based_addressing(m, interf["write_key"], interf["write_strength"])
-
         # memory retention is of shape [batch_size, memory_size]
         memory_retention = tf.reduce_prod(1 - tf.einsum("br,bnr->bnr", interf["r_free_gates"], read_weightings), 2)
 
         # calculating the usage vector, which has some sort of short-term memory
-        usage_vector = (usage_vector + write_weighting - usage_vector * write_weighting) * \
-                       memory_retention
+        usage_vector = (usage_vector + write_weighting - usage_vector * write_weighting) * memory_retention
         allocation_weighting = self.calculate_allocation_weighting(usage_vector)
+
+        # calculating write content weighting with memory from previous time step, shape [batch_size, memory_size, 1]
+        # it represents a normalized probability distribution over the memory locations
+        write_content_weighting = Memory.content_based_addressing(m, interf["write_key"], interf["write_strength"])
 
         # write weighting, shape [batch_size, memory_size], represents a normalized probability distribution over the
         # memory locations. Its sum is <= 1
@@ -95,20 +94,21 @@ class Memory:
                                                               (1 - interf["allocation_gate"]),
                                                               write_content_weighting))
 
-        m = m * (1 - tf.einsum("bw,bn->bnw", interf["erase_vector"], write_weighting)) + \
-            tf.einsum("bw,bn->bnw", interf["write_vector"], write_weighting)
+        m = m * (1 - tf.einsum("bn,bw->bnw", write_weighting, interf["erase_vector"])) + \
+            tf.einsum("bn,bw->bnw", write_weighting, interf["write_vector"])
+
+        link_matrix = self.update_link_matrix(link_matrix, precedence_weighting, write_weighting)
+        precedence_weighting = tf.einsum("b,bm->bm",
+                                         (1 - tf.reduce_sum(write_weighting, axis=1)),
+                                         precedence_weighting) + write_weighting
+
+        forwardw = tf.einsum("bmn,bnr->bmr", link_matrix, read_weightings)
+        backwardw = tf.einsum("bnm,bnr->bmr", link_matrix, read_weightings)
 
         # calculating rcw with updated memory, shape [batch_size, memory_size, num_read_heads]
         # it represents a normalized probability distribution over the memory locations, for each read head
         read_content_weighting = Memory.content_based_addressing(m, interf["r_read_keys"],
                                                                  interf["r_read_strengths"])
-        link_matrix = self.update_link_matrix(link_matrix, precedence_weighting, write_weighting)
-        precedence_weighting = tf.einsum("bm,b->bm",
-                                         precedence_weighting,
-                                         (1 - tf.reduce_sum(write_weighting, axis=1))) + write_weighting
-
-        forwardw = tf.einsum("bmn,bmr->bmr", link_matrix, read_weightings)
-        backwardw = tf.einsum("bnm,bmr->bnr", link_matrix, read_weightings)
 
         read_weightings = tf.einsum("brs,bmrs->bmr",
                                     interf["r_read_modes"],
@@ -132,7 +132,7 @@ class Memory:
         :return: allocation tensor of shape [batch_size, memory_size]
         """
         # numerical stability
-        usage_vector = Memory.epsilon + (1 - Memory.epsilon) * usage_vector
+        # usage_vector = Memory.epsilon + (1 - Memory.epsilon) * usage_vector
 
         # We're sorting the "1 - self.usage_vector" because top_k returns highest values and we need the lowest
         lowest_usage, inverse_indices = tf.nn.top_k(1 - usage_vector, k=self.memory_size)
@@ -170,7 +170,7 @@ class Memory:
 
         # in einsum, m and n are the same dimension because tensorflow doesn't support duplicated subscripts. Why?
         lm = (1 - w - w_transp) * link_matrix_old + tf.einsum("bm,bn->bmn", write_weighting, precedence_weighting_old)
-        lm *= (1 - tf.eye(self.memory_size, batch_shape=[self.batch_size]))
+        lm *= (1 - tf.eye(self.memory_size, batch_shape=[self.batch_size]))  # making sure self links are off
         return tf.identity(lm, name="Link_matrix")
 
     @staticmethod
