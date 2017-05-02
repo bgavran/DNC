@@ -2,13 +2,17 @@ from controller import *
 
 
 class LSTM(Controller):
-    def __init__(self, batch_size, inp_vector_size, out_vector_size, memory_size):
+    def __init__(self, batch_size, inp_vector_size, memory_size, n_layers, out_vector_size=None):
         self.batch_size = batch_size
         self.inp_vector_size = inp_vector_size
-        self.out_vector_size = out_vector_size
         self.memory_size = memory_size
+        self.out_vector_size = self.memory_size
+        self.n_layers = n_layers
+        if out_vector_size is not None:
+            self.out_vector_size = out_vector_size
 
-        self.lstm_cell = tf.contrib.rnn.BasicLSTMCell(self.memory_size)
+        one_cell = tf.contrib.rnn.BasicLSTMCell
+        self.lstm_cell = tf.contrib.rnn.MultiRNNCell([one_cell(self.memory_size) for _ in range(self.n_layers)])
 
         self.state = self.lstm_cell.zero_state(self.batch_size, dtype=tf.float32)
 
@@ -44,15 +48,12 @@ class LSTM(Controller):
 
     def step(self, x, step):
         with tf.variable_scope("LSTM_step") as scope:
-            # Below is a leaky abstraction from tensorflow. Reusing of the variables needs to be set explicitly
-            if step > 0:
-                scope.reuse_variables()
-
             hidden, self.state = self.lstm_cell(x, self.state)
+
             # Here we have an extra affine transformation after the standard LSTM cell
             # Because we need to have the shapes of the y and the output match
             # DNC solves this, but if we're testing against baseline LSTM, we need to have this extra layer.
             # But probably it wouldn't hurt to have it in DNC as well?
-            output = tf.matmul(hidden, self.weights) + self.biases
+            # output = tf.matmul(hidden, self.weights) + self.biases
 
-        return output, self.state
+        return hidden, self.state

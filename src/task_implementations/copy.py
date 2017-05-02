@@ -1,4 +1,5 @@
 import numpy as np
+import tensorflow as tf
 from tasks import Task
 
 
@@ -16,6 +17,7 @@ class CopyTask(Task):
 
         self.x_shape = [self.batch_size, self.vector_size, None]
         self.y_shape = [self.batch_size, self.vector_size, None]
+        self.mask = [self.batch_size, self.vector_size, None]
 
         # Used for curriculum training
         self.state = 0
@@ -49,14 +51,27 @@ class CopyTask(Task):
         if self.check_lesson_learned():
             self.next_lesson()
 
-    def generate_data(self, cost):
-        # Update curriculum training state
-        # self.update_state(cost)
+    def cost(self, x, y, mask=None):
+        sigmoid_cross_entropy = tf.nn.sigmoid_cross_entropy_with_logits(logits=x, labels=y)
+        # mse = tf.squared_difference(x, y)
+        return tf.reduce_mean(sigmoid_cross_entropy)
 
-        self.max_seq_curriculum = self.train_max_seq
+    def generate_data(self, cost, train=True):
+        if train:
+            # Update curriculum training state
+            # self.update_state(cost)
 
-        return CopyTask.generate_n_copies(self.batch_size, self.vector_size, self.min_seq, self.max_seq_curriculum,
-                                          self.n_copies)
+            self.max_seq_curriculum = self.train_max_seq
+            data_batch = CopyTask.generate_n_copies(self.batch_size, self.vector_size, self.min_seq,
+                                                    self.max_seq_curriculum,
+                                                    self.n_copies)
+        else:
+            data_batch = CopyTask.generate_n_copies(1, self.vector_size, self.train_max_seq, self.train_max_seq + 10,
+                                                    self.n_copies)
+        return data_batch
+
+    def display_output(self, prediction, data_batch, mask):
+        pass
 
     @staticmethod
     def generate_n_copies(batch_size, inp_vector_size, min_seq, max_seq, n_copies):
@@ -65,7 +80,7 @@ class CopyTask(Task):
             for _ in range(n_copies)]
         output = np.concatenate([i[0] for i in copies_list], axis=3)
         total_length = np.sum([i[1] for i in copies_list])
-        return output, total_length
+        return output, total_length, np.ones((batch_size, inp_vector_size, total_length))
 
     @staticmethod
     def generate_copy_pair(batch_size, vector_size, min_s, max_s):

@@ -11,4 +11,11 @@ class Task:
         """
         raise NotImplementedError()
 
-
+    def cost(self, x, y, mask=None):
+        """
+        
+        :param x: 
+        :param y: 
+        :return: 
+        """
+        raise NotImplementedError()

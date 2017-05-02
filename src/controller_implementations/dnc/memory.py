@@ -16,8 +16,9 @@ class Memory:
     epsilon = 1e-6
     max_outputs = 2
 
-    def __init__(self, batch_size, out_vector_size, mem_hp):
+    def __init__(self, batch_size, controller_output_size, out_vector_size, mem_hp):
         self.batch_size = batch_size
+        self.controller_output_size = controller_output_size
         self.out_vector_size = out_vector_size
 
         self.memory_size = mem_hp.mem_size
@@ -28,11 +29,11 @@ class Memory:
                                      5 * self.num_read_heads + 3 * self.word_size + 3
 
         self.interface_weights = tf.Variable(
-            tf.random_normal([self.out_vector_size, self.interface_vector_size], stddev=0.01),
+            tf.random_normal([self.controller_output_size, self.interface_vector_size], stddev=0.1),
             name="interface_weights")
         self.output_weights = tf.Variable(
-            tf.random_normal([self.num_read_heads, self.word_size, self.out_vector_size], stddev=0.01),
-            name="output_weights")
+            tf.random_normal([self.num_read_heads, self.word_size, self.out_vector_size], stddev=0.1),
+            name="output_weights_memory")
 
         # Code below is a more-or-less pythonic way to process the individual interface parameters
         r, w = self.num_read_heads, self.word_size
@@ -50,13 +51,13 @@ class Memory:
                                            zip(names, indexes, functions)}
 
     def init_memory(self):
-        m = tf.fill([self.batch_size, self.memory_size, self.word_size], Memory.epsilon)  # initial memory matrix
-        read_vectors = tf.fill([self.batch_size, self.num_read_heads, self.word_size], Memory.epsilon)
-        write_weighting = tf.fill([self.batch_size, self.memory_size], Memory.epsilon, name="Write_weighting")
         read_weightings = tf.fill([self.batch_size, self.memory_size, self.num_read_heads], Memory.epsilon)
+        write_weighting = tf.fill([self.batch_size, self.memory_size], Memory.epsilon, name="Write_weighting")
         precedence_weighting = tf.zeros([self.batch_size, self.memory_size], name="Precedence_weighting")
-        link_matrix = tf.zeros([self.batch_size, self.memory_size, self.memory_size])
+        m = tf.fill([self.batch_size, self.memory_size, self.word_size], Memory.epsilon)  # initial memory matrix
         usage_vector = tf.zeros([self.batch_size, self.memory_size], name="Usage_vector")
+        link_matrix = tf.zeros([self.batch_size, self.memory_size, self.memory_size])
+        read_vectors = tf.fill([self.batch_size, self.num_read_heads, self.word_size], Memory.epsilon)
 
         return [read_weightings, write_weighting, usage_vector, precedence_weighting, m, link_matrix, read_vectors]
 
@@ -110,9 +111,10 @@ class Memory:
         read_content_weighting = Memory.content_based_addressing(m, interf["r_read_keys"],
                                                                  interf["r_read_strengths"])
 
-        read_weightings = tf.einsum("brs,bmrs->bmr",
-                                    interf["r_read_modes"],
-                                    tf.stack([backwardw, read_content_weighting, forwardw], axis=3))
+        read_weightings = Memory.calculate_read_weightings(interf["r_read_modes"],
+                                                           backwardw,
+                                                           read_content_weighting,
+                                                           forwardw)
 
         read_vectors = tf.einsum("bnw,bnr->brw", m, read_weightings)
 
@@ -120,10 +122,14 @@ class Memory:
 
         extra_images = [interf["r_read_modes"], interf["write_gate"], interf["allocation_gate"],
                         interf["write_strength"], interf["r_read_strengths"], interf["erase_vector"],
-                        interf["write_vector"]]
+                        interf["write_vector"], forwardw, backwardw]
 
         l = [read_weightings, write_weighting, usage_vector, precedence_weighting, m, link_matrix, read_vectors]
         return memory_output, l, extra_images
+
+    @staticmethod
+    def calculate_read_weightings(r_read_modes, backwardw, read_content_weighting, forwardw):
+        return tf.einsum("brs,bmrs->bmr", r_read_modes, tf.stack([backwardw, read_content_weighting, forwardw], axis=3))
 
     def calculate_allocation_weighting(self, usage_vector):
         """

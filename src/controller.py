@@ -24,26 +24,27 @@ class Controller:
         y = tf.placeholder(tf.float32, task.y_shape, name="Y")
 
         sequence_length = tf.placeholder(tf.int32, [], name="Sequence_length")
+        mask = tf.placeholder(tf.float32, task.mask, name="Output_mask")
 
         outputs, summaries = self(x, sequence_length)
         assert outputs.shape[:2] == y.shape[:2]
 
-        cost = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=outputs, labels=y))
+        cost = task.cost(outputs, y, mask)
 
         # optimizer, clipping gradients and summarizing gradient histograms
-        gradients = optimizer.compute_gradients(cost)
-        from tensorflow.python.framework import ops
-        for i, (gradient, variable) in enumerate(gradients):
-            clipped_gradient = tf.clip_by_value(gradient, -Controller.clip_value, Controller.clip_value)
-            gradients[i] = clipped_gradient, variable
-            if isinstance(gradient, ops.IndexedSlices):
-                grad_values = gradient.values
-            else:
-                grad_values = gradient
-            tf.summary.histogram(variable.name, variable)
-            tf.summary.histogram(variable.name + "/gradients", grad_values)
-        optimizer = optimizer.apply_gradients(gradients)
-        # optimizer = optimizer.minimize(cost)
+        # gradients = optimizer.compute_gradients(cost)
+        # from tensorflow.python.framework import ops
+        # for i, (gradient, variable) in enumerate(gradients):
+        #     clipped_gradient = tf.clip_by_value(gradient, -Controller.clip_value, Controller.clip_value)
+        #     gradients[i] = clipped_gradient, variable
+        #     if isinstance(gradient, ops.IndexedSlices):
+        #         grad_values = gradient.values
+        #     else:
+        #         grad_values = gradient
+        #     tf.summary.histogram(variable.name, variable)
+        #     tf.summary.histogram(variable.name + "/gradients", grad_values)
+        # optimizer = optimizer.apply_gradients(gradients)
+        optimizer = optimizer.minimize(cost)
 
         tf.summary.image("0Input", tf.expand_dims(x, axis=3), max_outputs=Controller.max_outputs)
         tf.summary.image("0Output", tf.nn.sigmoid(tf.expand_dims(outputs, axis=3)), max_outputs=Controller.max_outputs)
@@ -69,21 +70,22 @@ class Controller:
             cost_value = 9999
             for step in range(hp.steps):
                 # Generates new curriculum training data based on current cost
-                data_batch, seqlen = task.generate_data(cost_value)
+                data_batch, seqlen, m = task.generate_data(cost_value)
 
                 _, cost_value = sess.run([optimizer, cost],
-                                         feed_dict={x: data_batch[0], y: data_batch[1], sequence_length: seqlen})
+                                         feed_dict={x: data_batch[0], y: data_batch[1], sequence_length: seqlen,
+                                                    mask: m})
 
-                if step % 200 == 0:
-                    summary = sess.run(merged, feed_dict={x: data_batch[0], y: data_batch[1], sequence_length: seqlen})
+                if step % 100 == 0:
+                    summary = sess.run(merged, feed_dict={x: data_batch[0], y: data_batch[1], sequence_length: seqlen,
+                                                          mask: m})
                     train_writer.add_summary(summary, step)
-
-                    if step % 1000 == 0 and cost_value < 0.05:
-                        test_data_batch, seqlen = CopyTask.generate_n_copies(hp.batch_size, hp.out_vector_size,
-                                                                             hp.train_max_seq,
-                                                                             20, 1)
-                        summary = sess.run(merged, feed_dict={x: test_data_batch[0], y: test_data_batch[1],
-                                                              sequence_length: seqlen})
+                    if step % 100 == 0:
+                        test_data_batch, seqlen, m = task.generate_data(cost=cost, train=False)
+                        summary, pred = sess.run([merged, outputs],
+                                                 feed_dict={x: test_data_batch[0], y: test_data_batch[1],
+                                                            sequence_length: seqlen, mask: m})
+                        task.display_output(pred, test_data_batch, m)
                         test_writer.add_summary(summary, step)
 
                     print("Summary generated. Step", step,
