@@ -49,9 +49,6 @@ class bAbITask(Task):
         self.x_test = np.array(flatten(list(self.x_test_stories.values())))
         self.y_test = np.array(flatten(list(self.y_test_stories.values())))
 
-        # self.x_test_onehot = [[np.eye(self.vector_size)[ind] for ind in story] for story in flatten(self.x_test)]
-        # self.y_test_onehot = [[np.eye(self.vector_size)[ind] for ind in story] for story in flatten(self.y_test)]
-
         assert len(self.x_train) == len(self.y_train)
 
         self.x_shape = [self.batch_size, self.vector_size, None]
