@@ -6,8 +6,6 @@ from task_implementations.copy import *
 from task_implementations.bAbI.bAbI import *
 from utils import project_path
 
-babitask = bAbITask(os.path.join("tasks_1-20_v1-2", "en-10k"), 1)
-
 
 class Hp:
     """
@@ -16,8 +14,8 @@ class Hp:
     batch_size = 1
 
     n_blocks = 10
-    inp_vector_size = babitask.vector_size
     # inp_vector_size = n_blocks + 1
+    inp_vector_size = 159
     out_vector_size = inp_vector_size
 
     min_seq = 1
@@ -30,17 +28,19 @@ class Hp:
     n_layers = 1
 
     class Mem:
-        word_size = 32
+        word_size = 64
         mem_size = 256
         num_read_heads = 4
 
 
 # copytask = CopyTask(Hp.inp_vector_size, Hp.batch_size, Hp.min_seq,
 #                     Hp.train_max_seq, Hp.n_copies)
+babitask = bAbITask(os.path.join("tasks_1-20_v1-2", "en-10k"), 1)
 
 # ff = Feedforward(Hp.inp_vector_size, Hp.batch_size, [128, 256])
 lstm = LSTM(Hp.batch_size, Hp.inp_vector_size, Hp.lstm_memory_size, Hp.n_layers)
 dnc = DNC(lstm, Hp.out_vector_size, Hp.Mem)
 
 optimizer = tf.train.RMSPropOptimizer(learning_rate=1e-4, momentum=0.9)
-dnc.run_session(babitask, Hp, project_path, optimizer=optimizer)
+# restore_path = os.path.join(project_path.log_dir, "error_75", "train", "model.chpt")
+dnc.run_session(babitask, Hp, project_path, optimizer=optimizer)  # , restore_path=restore_path)

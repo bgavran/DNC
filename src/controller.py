@@ -19,7 +19,7 @@ class Controller:
     max_outputs = 2
     clip_value = 10
 
-    def run_session(self, task, hp, project_path, optimizer=tf.train.AdamOptimizer()):
+    def run_session(self, task, hp, project_path, restore_path=None, optimizer=tf.train.AdamOptimizer()):
         x = tf.placeholder(tf.float32, task.x_shape, name="X")
         y = tf.placeholder(tf.float32, task.y_shape, name="Y")
 
@@ -58,11 +58,16 @@ class Controller:
         n_vars = sum([prod(var.shape) for var in tf.trainable_variables()])
         print("This model has", n_vars, "parameters!")
 
-        with tf.Session() as sess:
+        saver = tf.train.Saver()
 
+        with tf.Session() as sess:
+            if restore_path is not None:
+                saver.restore(sess, restore_path)
+                print("Restored model", restore_path, "!!!!!!!!!!!!!")
+            else:
+                tf.global_variables_initializer().run()
             train_writer = tf.summary.FileWriter(project_path.train_path, sess.graph)
             test_writer = tf.summary.FileWriter(project_path.test_path, sess.graph)
-            tf.global_variables_initializer().run()
 
             from time import time
             t = time()
@@ -77,20 +82,25 @@ class Controller:
                                                     mask: m})
 
                 if step % 100 == 0:
-                    summary = sess.run(merged, feed_dict={x: data_batch[0], y: data_batch[1], sequence_length: seqlen,
+                    summary = sess.run(merged, feed_dict={x: data_batch[0], y: data_batch[1],
+                                                          sequence_length: seqlen,
                                                           mask: m})
                     train_writer.add_summary(summary, step)
-                    if step % 100 == 0:
-                        test_data_batch, seqlen, m = task.generate_data(cost=cost, train=False)
-                        summary, pred = sess.run([merged, outputs],
-                                                 feed_dict={x: test_data_batch[0], y: test_data_batch[1],
-                                                            sequence_length: seqlen, mask: m})
-                        task.display_output(pred, test_data_batch, m)
-                        test_writer.add_summary(summary, step)
+                    test_data_batch, seqlen, m = task.generate_data(cost=cost, train=False)
+                    summary, pred = sess.run([merged, outputs],
+                                             feed_dict={x: test_data_batch[0], y: test_data_batch[1],
+                                                        sequence_length: seqlen, mask: m})
+                    test_writer.add_summary(summary, step)
+                    task.display_output(pred, test_data_batch, m)
+                    # task.test(sess, outputs, [x, y, sequence_length, mask])
 
                     print("Summary generated. Step", step,
                           " Train cost == %.9f Time == %.2fs" % (cost_value, time() - t))
                     t = time()
+
+                    if step % 1000 == 0:
+                        saver.save(sess, project_path.model_path)
+                        print("Model saved!")
 
     def notify(self, states):
         """

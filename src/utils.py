@@ -13,6 +13,7 @@ class ProjectPath:
         self.log_path = os.path.join(ProjectPath.base, self.log_dir, self.timestamp)
         self.train_path = os.path.join(self.log_path, "train")
         self.test_path = os.path.join(self.log_path, "test")
+        self.model_path = os.path.join(self.train_path, "model.chpt")
 
 
 project_path = ProjectPath("log")
