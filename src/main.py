@@ -13,13 +13,13 @@ class Hp:
     """
     batch_size = 1
 
-    n_blocks = 10
+    n_blocks = 8
     # inp_vector_size = n_blocks + 1
     inp_vector_size = 159
     out_vector_size = inp_vector_size
 
-    min_seq = 1
-    train_max_seq = 10
+    min_seq = 5
+    train_max_seq = 8
     n_copies = 1
 
     steps = 1000000
@@ -33,14 +33,15 @@ class Hp:
         num_read_heads = 4
 
 
-# copytask = CopyTask(Hp.inp_vector_size, Hp.batch_size, Hp.min_seq,
-#                     Hp.train_max_seq, Hp.n_copies)
-babitask = bAbITask(os.path.join("tasks_1-20_v1-2", "en-10k"), 1)
+# task = CopyTask(Hp.inp_vector_size, Hp.batch_size, Hp.min_seq, Hp.train_max_seq, Hp.n_copies)
+task = bAbITask(os.path.join("tasks_1-20_v1-2", "en-10k"), Hp.batch_size)
+print("Loaded task")
 
-# ff = Feedforward(Hp.inp_vector_size, Hp.batch_size, [128, 256])
-lstm = LSTM(Hp.batch_size, Hp.inp_vector_size, Hp.lstm_memory_size, Hp.n_layers)
-dnc = DNC(lstm, Hp.out_vector_size, Hp.Mem)
+# controller = Feedforward(Hp.inp_vector_size, Hp.batch_size, [128, 256])
+controller = LSTM(Hp.batch_size, Hp.inp_vector_size, Hp.lstm_memory_size, Hp.n_layers)
+dnc = DNC(controller, Hp.out_vector_size, Hp.Mem, initial_stddev=0.1)
 
+print("Loaded controller")
 optimizer = tf.train.RMSPropOptimizer(learning_rate=1e-4, momentum=0.9)
-# restore_path = os.path.join(project_path.log_dir, "error_75", "train", "model.chpt")
-dnc.run_session(babitask, Hp, project_path, optimizer=optimizer)  # , restore_path=restore_path)
+# restore_path = os.path.join(project_path.log_dir, "May_09__19:05", "train", "model.chpt")
+dnc.run_session(task, Hp, project_path, optimizer=optimizer)  # , restore_path=restore_path)

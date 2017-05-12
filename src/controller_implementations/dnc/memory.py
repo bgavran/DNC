@@ -16,7 +16,7 @@ class Memory:
     epsilon = 1e-6
     max_outputs = 2
 
-    def __init__(self, batch_size, controller_output_size, out_vector_size, mem_hp):
+    def __init__(self, batch_size, controller_output_size, out_vector_size, mem_hp, initial_stddev=0.1):
         self.batch_size = batch_size
         self.controller_output_size = controller_output_size
         self.out_vector_size = out_vector_size
@@ -28,11 +28,13 @@ class Memory:
         self.interface_vector_size = (self.word_size * self.num_read_heads) + \
                                      5 * self.num_read_heads + 3 * self.word_size + 3
 
+        # initializer = tf.contrib.layers.xavier_initializer()
+        initializer = tf.random_normal
         self.interface_weights = tf.Variable(
-            tf.random_normal([self.controller_output_size, self.interface_vector_size], stddev=0.1),
+            initializer([self.controller_output_size, self.interface_vector_size], stddev=initial_stddev),
             name="interface_weights")
         self.output_weights = tf.Variable(
-            tf.random_normal([self.num_read_heads, self.word_size, self.out_vector_size], stddev=0.1),
+            initializer([self.num_read_heads, self.word_size, self.out_vector_size], stddev=initial_stddev),
             name="output_weights_memory")
 
         # Code below is a more-or-less pythonic way to process the individual interface parameters
@@ -202,3 +204,17 @@ class Memory:
     def reshape_and_softmax(self, r_read_modes):
         r_read_modes = tf.reshape(r_read_modes, [self.batch_size, self.num_read_heads, 3])
         return tf.nn.softmax(r_read_modes, dim=2)
+
+        # def split_interface_optimized(self, interface_vector):
+        #     interf = dict()
+        #     interf[self.names[0]] = self.functions[0](interface_vector[:, self.indexes[0][0]:self.indexes[0][1]])
+        #     interf[self.names[1]] = self.functions[1](interface_vector[:, self.indexes[1][0]:self.indexes[1][1]])
+        #     interf[self.names[2]] = self.functions[2](interface_vector[:, self.indexes[2][0]:self.indexes[2][1]])
+        #     interf[self.names[3]] = self.functions[3](interface_vector[:, self.indexes[3][0]:self.indexes[3][1]])
+        #     interf[self.names[4]] = self.functions[4](interface_vector[:, self.indexes[4][0]:self.indexes[4][1]])
+        #     interf[self.names[5]] = self.functions[5](interface_vector[:, self.indexes[5][0]:self.indexes[5][1]])
+        #     interf[self.names[6]] = self.functions[6](interface_vector[:, self.indexes[6][0]:self.indexes[6][1]])
+        #     interf[self.names[7]] = self.functions[7](interface_vector[:, self.indexes[7][0]:self.indexes[7][1]])
+        #     interf[self.names[8]] = self.functions[8](interface_vector[:, self.indexes[8][0]:self.indexes[8][1]])
+        #     interf[self.names[9]] = self.functions[9](interface_vector[:, self.indexes[9][0]:self.indexes[9][1]])
+        #     return interf

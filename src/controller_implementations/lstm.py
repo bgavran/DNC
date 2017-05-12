@@ -11,16 +11,20 @@ class LSTM(Controller):
         if out_vector_size is not None:
             self.out_vector_size = out_vector_size
 
+            # Extra layer of neural network
+            # The output is a vector of dimension memory_size, but we want it to be output_size
+            # so we multiply it by some W
+            # initializer = tf.contrib.layers.xavier_initializer()
+            initializer = tf.random_normal
+            self.weights = tf.Variable(initializer([self.memory_size, self.out_vector_size], stddev=0.1),
+                                       name="output_weights")
+            self.biases = tf.Variable(tf.zeros([1, self.out_vector_size, 1]), name="output_biases")
+
         one_cell = tf.contrib.rnn.BasicLSTMCell
+        # self.lstm_cell = one_cell(self.memory_size)
         self.lstm_cell = tf.contrib.rnn.MultiRNNCell([one_cell(self.memory_size) for _ in range(self.n_layers)])
 
-        self.state = self.lstm_cell.zero_state(self.batch_size, dtype=tf.float32)
-
-        # Extra layer of neural network
-        # The output is a vector of dimension memory_size, but we want it to be output_size, so we multiply it by some W
-        self.weights = tf.Variable(tf.random_normal([self.memory_size, self.out_vector_size], stddev=0.1),
-                                   name="output_weights")
-        self.biases = tf.Variable(tf.zeros([self.out_vector_size]), name="output_biases")
+        self.initial_state = self.lstm_cell.zero_state(self.batch_size, dtype=tf.float32)
 
     def __call__(self, x, sequence_length):
         """
@@ -29,31 +33,28 @@ class LSTM(Controller):
         all time steps in its controller.
         
         
-        :param x: inputs for all time steps
+        :param x: inputs for all time steps, shape [batch_size, vector_size, time_steps]
         :return: outputs for all time steps
         """
-        # x shape is [max_time, batch_size, vector_size]
         x = tf.transpose(x, [0, 2, 1])
         sequence_length = tf.stack([sequence_length for _ in range(self.batch_size)])
+        # input should be of shape [batch_size, max_time, ...]
         outputs, states = tf.nn.dynamic_rnn(self.lstm_cell, x, dtype=tf.float32, sequence_length=sequence_length)
+        # output is of shape [batch_size, max_time, output_size]
 
         # have to do the einsum this way and transpose later because of the way tf broadcasts biases
-        outputs = tf.einsum("btm,mo->bto", outputs, self.weights) + self.biases
-        outputs = tf.transpose(outputs, [0, 2, 1])
+        outputs = tf.einsum("btm,mo->bot", outputs, self.weights) + self.biases
 
+        # TODO this returns just the final state and not all of them?
         return outputs, states
 
-    def notify(self, states):
+    def step(self, x, state, step):
+        with tf.variable_scope("LSTM_step"):
+            hidden, new_state = self.lstm_cell(x, state)
+
+        return hidden, new_state
+
+    def notify(self, summaries):
         pass
-
-    def step(self, x, step):
-        with tf.variable_scope("LSTM_step") as scope:
-            hidden, self.state = self.lstm_cell(x, self.state)
-
-            # Here we have an extra affine transformation after the standard LSTM cell
-            # Because we need to have the shapes of the y and the output match
-            # DNC solves this, but if we're testing against baseline LSTM, we need to have this extra layer.
-            # But probably it wouldn't hurt to have it in DNC as well?
-            # output = tf.matmul(hidden, self.weights) + self.biases
-
-        return hidden, self.state
+        # summ = tf.reshape(tf.transpose(summaries, [2, 1, 3, 0]), [self.batch_size, 2 * self.memory_size, -1, 1])
+        # tf.summary.image("LSTM_state", summ, max_outputs=Controller.max_outputs)

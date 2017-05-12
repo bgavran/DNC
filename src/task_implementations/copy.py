@@ -66,11 +66,15 @@ class CopyTask(Task):
                                                     self.max_seq_curriculum,
                                                     self.n_copies)
         else:
-            data_batch = CopyTask.generate_n_copies(1, self.vector_size, self.train_max_seq, self.train_max_seq + 10,
+            data_batch = CopyTask.generate_n_copies(self.batch_size, self.vector_size, self.train_max_seq,
+                                                    2 * self.train_max_seq,
                                                     self.n_copies)
         return data_batch
 
     def display_output(self, prediction, data_batch, mask):
+        pass
+
+    def test(self, sess, output, pl):
         pass
 
     @staticmethod

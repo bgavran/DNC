@@ -8,7 +8,8 @@ class Feedforward(Controller):
         self.layer_sizes = layer_sizes
         self.out_vector_size = self.layer_sizes[-1]
 
-        self.state = tf.constant(0)
+        self.initial_state = tf.constant(0)
+        self.initializer = tf.contrib.layers.xavier_initializer()
 
     def __call__(self, x, sequence_length):
         """
@@ -24,7 +25,7 @@ class Feedforward(Controller):
 
         return outputs
 
-    def step(self, x, step):
+    def step(self, x, state, step):
         """
         Returns the output vector for just one time step
         
@@ -35,10 +36,11 @@ class Feedforward(Controller):
         """
         with tf.variable_scope("FF_step") as scope:
             for layer_size in self.layer_sizes[:-1]:
-                x = tf.layers.dense(x, layer_size, activation=tf.nn.relu)
+                x = tf.layers.dense(x, layer_size, activation=tf.nn.relu)  # , kernel_initializer=self.initializer)
 
-            x = tf.layers.dense(x, self.layer_sizes[-1], activation=tf.nn.relu)
-        return x, self.state
+            x = tf.layers.dense(x, self.layer_sizes[-1],
+                                activation=tf.nn.relu)  # , kernel_initializer=self.initializer)
+        return x, state
 
     def notify(self, states):
         """

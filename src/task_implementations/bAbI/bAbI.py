@@ -33,27 +33,29 @@ class bAbITask(Task):
         self.word_to_ind, all_input_stories, all_output_stories = pickle.load(open(self.processed_dir, "rb"))
         self.ind_to_word = {ind: word for word, ind in self.word_to_ind.items()}
 
-        self.train_list = [k for k, v in all_input_stories.items() if k[-9:] == "train.txt"]
-        self.test_list = [k for k, v in all_input_stories.items() if k[-8:] == "test.txt"]
+        from natsort import natsorted
+        self.train_list = natsorted([k for k, v in all_input_stories.items() if k[-9:] == "train.txt"])
+        self.test_list = natsorted([k for k, v in all_input_stories.items() if k[-8:] == "test.txt"])
 
         def flatten(forest):
             return [leaf for tree in forest for leaf in tree]
 
         self.vector_size = len(self.word_to_ind)
+        self.n_tasks = 20
 
-        self.x_train = np.array(flatten([v for k, v in all_input_stories.items() if k in self.train_list]))
-        self.y_train = np.array(flatten([v for k, v in all_output_stories.items() if k in self.train_list]))
+        self.x_train_stories = {k: v for k, v in all_input_stories.items() if k in self.train_list}
+        self.y_train_stories = {k: v for k, v in all_output_stories.items() if k in self.train_list}
 
         self.x_test_stories = {k: v for k, v in all_input_stories.items() if k in self.test_list}
         self.y_test_stories = {k: v for k, v in all_output_stories.items() if k in self.test_list}
-        self.x_test = np.array(flatten(list(self.x_test_stories.values())))
-        self.y_test = np.array(flatten(list(self.y_test_stories.values())))
 
-        assert len(self.x_train) == len(self.y_train)
+        assert len(self.x_train_stories.keys()) == len(self.y_train_stories.keys())
 
         self.x_shape = [self.batch_size, self.vector_size, None]
         self.y_shape = [self.batch_size, self.vector_size, None]
         self.mask = [self.batch_size, None]
+
+        self.mean_test_errors = []
 
     def display_output(self, prediction, data_batch, mask):
         text = self.indices_to_words([np.argmax(i) for i in data_batch[0][0].T])
@@ -99,14 +101,19 @@ class bAbITask(Task):
         return np.transpose([np.eye(n_elements)[indices] for indices in x], [0, 2, 1])
 
     def generate_data(self, cost=None, train=True):
+        task_ind = np.random.randint(0, self.n_tasks)
+        # task_ind = 3
         if train:
-            ind = np.random.randint(0, len(self.x_train), self.batch_size)
-            x = bAbITask.to_onehot(self.x_train[ind], len(self.word_to_ind))
-            y = bAbITask.to_onehot(self.y_train[ind], len(self.word_to_ind))
+            task = self.train_list[task_ind]
+            x_task_stories = self.x_train_stories[task]
+            y_task_stories = self.y_train_stories[task]
         else:
-            ind = np.random.randint(0, len(self.x_test), self.batch_size)
-            x = bAbITask.to_onehot(self.x_test[ind], len(self.word_to_ind))
-            y = bAbITask.to_onehot(self.y_test[ind], len(self.word_to_ind))
+            task = self.test_list[task_ind]
+            x_task_stories = self.x_test_stories[task]
+            y_task_stories = self.y_test_stories[task]
+        story_ind = np.random.randint(0, len(x_task_stories))
+        x = bAbITask.to_onehot([x_task_stories[story_ind]], len(self.word_to_ind))
+        y = bAbITask.to_onehot([y_task_stories[story_ind]], len(self.word_to_ind))
 
         return [x, y], x.shape[2], x[:, 0, :]
 
@@ -118,8 +125,11 @@ class bAbITask(Task):
         num_tasks = len(self.x_test_stories)
         task_errors = []
         for i, (inp, output) in enumerate(zip(self.x_test_stories.items(), self.y_test_stories.items())):
+            # if inp[0] != self.test_list[3]:
+            #     continue
             total_correct = 0
-            for inp_story, out_story in zip(inp[1], output[1]):
+            num_stories = len(inp[1])
+            for inp_story, out_story in zip(inp[1][:num_stories], output[1][:num_stories]):
                 x = bAbITask.to_onehot(np.expand_dims(inp_story, axis=0), self.vector_size)
                 y = bAbITask.to_onehot(np.expand_dims(out_story, axis=0), self.vector_size)
                 seqlen = x.shape[2]
@@ -129,19 +139,22 @@ class bAbITask(Task):
                 correct_list = bAbITask.tensor_to_indices(y, m)
                 total_correct += np.array_equal(outputs_list, correct_list)
             task_name = inp[0].split("/")[-1]
-            num_stories = len(inp[1])
             task_error = 1 - total_correct / num_stories
-            print(i, task_name, " Total_correct:", total_correct, "    task error:", task_error)
-            num_passed_tasks += task_error > 0.05
+            print(i, task_name, " Total_correct:", total_correct, " total stories:", num_stories, " task error:",
+                  task_error)
+            num_passed_tasks += task_error <= 0.05
             task_errors.append(task_error)
         mean_error = np.mean(task_errors)
-        print("TOTAL PASSED TASKS:", num_passed_tasks, " MEAN ERROR", mean_error)
+        print("TOTAL PASSED TASKS:", num_passed_tasks, "TOTAL TASKS:", num_tasks, " MEAN ERROR", mean_error)
+        self.mean_test_errors.append(mean_error)
+        print("ALL ERRORS: ", self.mean_test_errors)
         print("Time == ", time() - t)
 
     def cost(self, x, y, mask=None):
         softmax_cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits=x, labels=y, dim=1)
-
-        return tf.reduce_mean(softmax_cross_entropy * mask)
+        masked = softmax_cross_entropy * mask
+        tf.summary.image("0Masked_SCE", tf.reshape(masked, [1, 1, -1, 1]))
+        return tf.reduce_mean(masked)
 
     def preprocess_files(self):
         word_to_ind, all_input_stories, all_output_stories = {bAbITask.output_symbol: 0}, dict(), dict()

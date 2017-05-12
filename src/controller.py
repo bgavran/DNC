@@ -1,5 +1,6 @@
 import tensorflow as tf
 from task_implementations.copy import *
+from tensorflow.python.client import timeline
 
 
 class Controller:
@@ -16,7 +17,7 @@ class Controller:
     
     
     """
-    max_outputs = 2
+    max_outputs = 1
     clip_value = 10
 
     def run_session(self, task, hp, project_path, restore_path=None, optimizer=tf.train.AdamOptimizer()):
@@ -29,26 +30,31 @@ class Controller:
         outputs, summaries = self(x, sequence_length)
         assert outputs.shape[:2] == y.shape[:2]
 
-        cost = task.cost(outputs, y, mask)
-
-        # optimizer, clipping gradients and summarizing gradient histograms
-        # gradients = optimizer.compute_gradients(cost)
-        # from tensorflow.python.framework import ops
-        # for i, (gradient, variable) in enumerate(gradients):
-        #     clipped_gradient = tf.clip_by_value(gradient, -Controller.clip_value, Controller.clip_value)
-        #     gradients[i] = clipped_gradient, variable
-        #     if isinstance(gradient, ops.IndexedSlices):
-        #         grad_values = gradient.values
-        #     else:
-        #         grad_values = gradient
-        #     tf.summary.histogram(variable.name, variable)
-        #     tf.summary.histogram(variable.name + "/gradients", grad_values)
-        # optimizer = optimizer.apply_gradients(gradients)
-        optimizer = optimizer.minimize(cost)
+        # summary_outputs = tf.nn.sigmoid(outputs)
+        summary_outputs = tf.nn.softmax(outputs, dim=1)
+        # summary_outputs_masked = tf.einsum("bht,bt->bht", summary_outputs, mask)
 
         tf.summary.image("0Input", tf.expand_dims(x, axis=3), max_outputs=Controller.max_outputs)
-        tf.summary.image("0Output", tf.nn.sigmoid(tf.expand_dims(outputs, axis=3)), max_outputs=Controller.max_outputs)
+        tf.summary.image("0Output", tf.expand_dims(summary_outputs, axis=3), max_outputs=Controller.max_outputs)
+        # tf.summary.image("0OutputMasked", tf.expand_dims(summary_outputs_masked, axis=3),
+        #                  max_outputs=Controller.max_outputs)
+
+        cost = task.cost(outputs, y, mask)
         tf.summary.scalar("Cost", cost)
+
+        # optimizer, clipping gradients and summarizing gradient histograms
+        gradients = optimizer.compute_gradients(cost)
+        from tensorflow.python.framework import ops
+        for i, (gradient, variable) in enumerate(gradients):
+            clipped_gradient = tf.clip_by_value(gradient, -Controller.clip_value, Controller.clip_value)
+            gradients[i] = clipped_gradient, variable
+            if isinstance(gradient, ops.IndexedSlices):
+                grad_values = gradient.values
+            else:
+                grad_values = gradient
+            tf.summary.histogram(variable.name, variable)
+            tf.summary.histogram(variable.name + "/gradients", grad_values)
+        optimizer = optimizer.apply_gradients(gradients)
 
         self.notify(summaries)
 
@@ -73,13 +79,11 @@ class Controller:
             t = time()
 
             cost_value = 9999
+            print("Starting...")
             for step in range(hp.steps):
                 # Generates new curriculum training data based on current cost
                 data_batch, seqlen, m = task.generate_data(cost_value)
-
-                _, cost_value = sess.run([optimizer, cost],
-                                         feed_dict={x: data_batch[0], y: data_batch[1], sequence_length: seqlen,
-                                                    mask: m})
+                sess.run(optimizer, feed_dict={x: data_batch[0], y: data_batch[1], sequence_length: seqlen, mask: m})
 
                 if step % 100 == 0:
                     summary = sess.run(merged, feed_dict={x: data_batch[0], y: data_batch[1],
@@ -87,18 +91,19 @@ class Controller:
                                                           mask: m})
                     train_writer.add_summary(summary, step)
                     test_data_batch, seqlen, m = task.generate_data(cost=cost, train=False)
-                    summary, pred = sess.run([merged, outputs],
-                                             feed_dict={x: test_data_batch[0], y: test_data_batch[1],
-                                                        sequence_length: seqlen, mask: m})
+                    summary, pred, cost_value = sess.run([merged, outputs, cost],
+                                                         feed_dict={x: test_data_batch[0], y: test_data_batch[1],
+                                                                    sequence_length: seqlen, mask: m})
                     test_writer.add_summary(summary, step)
                     task.display_output(pred, test_data_batch, m)
-                    # task.test(sess, outputs, [x, y, sequence_length, mask])
+                    # input()
 
                     print("Summary generated. Step", step,
-                          " Train cost == %.9f Time == %.2fs" % (cost_value, time() - t))
+                          " Test cost == %.9f Time == %.2fs" % (cost_value, time() - t))
                     t = time()
 
-                    if step % 1000 == 0:
+                    if step % 10000 == 0 and step > 0:
+                        task.test(sess, outputs, [x, y, sequence_length, mask])
                         saver.save(sess, project_path.model_path)
                         print("Model saved!")
 
@@ -128,7 +133,7 @@ class Controller:
         """
         raise NotImplementedError()
 
-    def step(self, x, step):
+    def step(self, x, state, step):
         """
         Returns the output vector for just one time step
         
