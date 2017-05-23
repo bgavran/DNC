@@ -21,7 +21,6 @@ class LSTM(Controller):
             self.biases = tf.Variable(tf.zeros([1, self.out_vector_size, 1]), name="output_biases")
 
         one_cell = tf.contrib.rnn.BasicLSTMCell
-        # self.lstm_cell = one_cell(self.memory_size)
         self.lstm_cell = tf.contrib.rnn.MultiRNNCell([one_cell(self.memory_size) for _ in range(self.n_layers)])
 
         self.initial_state = self.lstm_cell.zero_state(self.batch_size, dtype=tf.float32)

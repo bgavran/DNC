@@ -9,11 +9,9 @@ class Feedforward(Controller):
         self.out_vector_size = self.layer_sizes[-1]
 
         self.initial_state = tf.constant(0)
-        self.initializer = tf.contrib.layers.xavier_initializer()
 
     def __call__(self, x, sequence_length):
         """
-        This should not be called from DNC!
         :param x: inputs for all time steps
         :return: list of outputs for every time step
         """
@@ -29,17 +27,16 @@ class Feedforward(Controller):
         """
         Returns the output vector for just one time step
         
-        :param x: one vector representing input for one time step
+        :param x: vector representing input for one time step
         :param step: current time step
         :return: output of feedforward network and tf.constant(0), because it doesn't have a state, (required by 
                 tf.while_loop)
         """
-        with tf.variable_scope("FF_step") as scope:
+        with tf.variable_scope("FF_step"):
             for layer_size in self.layer_sizes[:-1]:
-                x = tf.layers.dense(x, layer_size, activation=tf.nn.relu)  # , kernel_initializer=self.initializer)
+                x = tf.layers.dense(x, layer_size, activation=tf.nn.relu)
 
-            x = tf.layers.dense(x, self.layer_sizes[-1],
-                                activation=tf.nn.relu)  # , kernel_initializer=self.initializer)
+            x = tf.layers.dense(x, self.layer_sizes[-1], activation=tf.nn.relu)
         return x, state
 
     def notify(self, states):

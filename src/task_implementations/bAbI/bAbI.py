@@ -98,11 +98,17 @@ class bAbITask(Task):
 
     @staticmethod
     def to_onehot(x, n_elements):
+        """
+        
+        :param x: 
+        :param n_elements: 
+        :return: 
+        """
         return np.transpose([np.eye(n_elements)[indices] for indices in x], [0, 2, 1])
 
     def generate_data(self, cost=None, train=True):
-        task_ind = np.random.randint(0, self.n_tasks)
-        # task_ind = 3
+        # task_ind = np.random.randint(0, self.n_tasks)
+        task_ind = 0
         if train:
             task = self.train_list[task_ind]
             x_task_stories = self.x_train_stories[task]
@@ -124,10 +130,11 @@ class bAbITask(Task):
         num_passed_tasks = 0
         num_tasks = len(self.x_test_stories)
         task_errors = []
-        for i, (inp, output) in enumerate(zip(self.x_test_stories.items(), self.y_test_stories.items())):
-            # if inp[0] != self.test_list[3]:
-            #     continue
-            total_correct = 0
+        for ind, (inp, output) in enumerate(zip(self.x_test_stories.items(), self.y_test_stories.items())):
+            if inp[0] != self.test_list[0]:
+                continue
+            correct_questions = 0
+            total_questions = 0
             num_stories = len(inp[1])
             for inp_story, out_story in zip(inp[1][:num_stories], output[1][:num_stories]):
                 x = bAbITask.to_onehot(np.expand_dims(inp_story, axis=0), self.vector_size)
@@ -135,13 +142,36 @@ class bAbITask(Task):
                 seqlen = x.shape[2]
                 m = x[:, 0, :]
                 outputs = sess.run(outputs_tf, feed_dict={pl[0]: x, pl[1]: y, pl[2]: seqlen, pl[3]: m})
+
                 outputs_list = bAbITask.tensor_to_indices(outputs, m)
                 correct_list = bAbITask.tensor_to_indices(y, m)
-                total_correct += np.array_equal(outputs_list, correct_list)
+
+                """
+                Each story (one whole sequence) has several questions and each of those questions might have several
+                words as an answer.
+                So a list of answer indices like [23, 56, 52, 45, 68] might only correspond to three questions.
+                In the code below we loop through the answers, check if the question indices in the story are adjacent
+                and count the adjacent words as one question only.
+                Sanity check is that total number of questions turns out to be 1000 in all tasks :)
+                """
+                answers = (out_story * m)[0]
+                locations = np.argwhere(answers > 0)[:, 0]
+                i = 0
+                while i < len(locations):
+                    all_words_correct = True
+                    j = 0
+                    while i + j < len(locations) and locations[i] + j == locations[i + j]:
+                        if outputs_list[i + j] != correct_list[i + j]:
+                            all_words_correct = False
+                        j += 1
+                    total_questions += 1
+                    correct_questions += all_words_correct
+                    i += j
+
             task_name = inp[0].split("/")[-1]
-            task_error = 1 - total_correct / num_stories
-            print(i, task_name, " Total_correct:", total_correct, " total stories:", num_stories, " task error:",
-                  task_error)
+            task_error = 1 - correct_questions / total_questions
+            print(ind, task_name, " Total_correct:", correct_questions, " total questions:", total_questions,
+                  " task error:", task_error)
             num_passed_tasks += task_error <= 0.05
             task_errors.append(task_error)
         mean_error = np.mean(task_errors)
@@ -151,6 +181,13 @@ class bAbITask(Task):
         print("Time == ", time() - t)
 
     def cost(self, x, y, mask=None):
+        """
+        
+        :param x: tensor of shape [batch_size, vector_size, time_steps]
+        :param y: tensor of shape [batch_size, vector_size, time_steps]
+        :param mask: 
+        :return: 
+        """
         softmax_cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits=x, labels=y, dim=1)
         masked = softmax_cross_entropy * mask
         tf.summary.image("0Masked_SCE", tf.reshape(masked, [1, 1, -1, 1]))

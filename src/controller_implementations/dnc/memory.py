@@ -16,7 +16,17 @@ class Memory:
     epsilon = 1e-6
     max_outputs = 2
 
-    def __init__(self, batch_size, controller_output_size, out_vector_size, mem_hp, initial_stddev=0.1):
+    def __init__(self, batch_size, controller_output_size, out_vector_size, mem_hp, initializer=tf.random_normal,
+                 initial_stddev=0.1):
+        """
+        
+        :param batch_size: 
+        :param controller_output_size: size of the controller output vector. Used for calculating the shape of the 
+               interface weight matrix
+        :param out_vector_size: size of the output of memory, after being passed through the output weight matrix
+        :param mem_hp: hyperparameters for memory, object with attributes word_size, mem_size, num_read_heads 
+        :param initial_stddev: 
+        """
         self.batch_size = batch_size
         self.controller_output_size = controller_output_size
         self.out_vector_size = out_vector_size
@@ -28,8 +38,6 @@ class Memory:
         self.interface_vector_size = (self.word_size * self.num_read_heads) + \
                                      5 * self.num_read_heads + 3 * self.word_size + 3
 
-        # initializer = tf.contrib.layers.xavier_initializer()
-        initializer = tf.random_normal
         self.interface_weights = tf.Variable(
             initializer([self.controller_output_size, self.interface_vector_size], stddev=initial_stddev),
             name="interface_weights")
@@ -53,6 +61,11 @@ class Memory:
                                            zip(names, indexes, functions)}
 
     def init_memory(self):
+        """
+        Returns the memory state for step 0. Used in DNC for the argument to tf.while_loop
+        
+        :return: 
+        """
         read_weightings = tf.fill([self.batch_size, self.memory_size, self.num_read_heads], Memory.epsilon)
         write_weighting = tf.fill([self.batch_size, self.memory_size], Memory.epsilon, name="Write_weighting")
         precedence_weighting = tf.zeros([self.batch_size, self.memory_size], name="Precedence_weighting")
@@ -65,10 +78,14 @@ class Memory:
 
     def step(self, controller_output, memory_state):
         """
+        One step of memory. Performs all the read and write operations and returns some useful tensors for visualization
         
-        :param controller_output: 
-        :return: 
+        :param controller_output: used to create the interface vector which parametrizes memory operations
+        :param memory_state: list of a bunch of useful memory tensors from previous step which are necessary for 
+            the calculation of next step
+        :return: output of the memory, all the updated memory states and a bunch of of other tensors for visualization
         """
+
         read_weightings, write_weighting, usage_vector, precedence_weighting, m, link_matrix, read_vectors = \
             memory_state
 
@@ -122,12 +139,19 @@ class Memory:
 
         memory_output = tf.einsum("rwo,brw->bo", self.output_weights, read_vectors)
 
-        extra_images = [interf["r_read_modes"], interf["write_gate"], interf["allocation_gate"],
-                        interf["write_strength"], interf["r_read_strengths"], interf["erase_vector"],
-                        interf["write_vector"], forwardw, backwardw]
+        extra_visualization_info = [interf["r_read_modes"], interf["write_gate"], interf["allocation_gate"],
+                                    interf["write_strength"], interf["r_read_strengths"], interf["erase_vector"],
+                                    interf["write_vector"], forwardw, backwardw, interf["r_free_gates"],
+                                    interf["r_read_keys"]]
 
-        l = [read_weightings, write_weighting, usage_vector, precedence_weighting, m, link_matrix, read_vectors]
-        return memory_output, l, extra_images
+        memory_state = [read_weightings,
+                        write_weighting,
+                        usage_vector,
+                        precedence_weighting,
+                        m,
+                        link_matrix,
+                        read_vectors]
+        return memory_output, memory_state, extra_visualization_info
 
     @staticmethod
     def calculate_read_weightings(r_read_modes, backwardw, read_content_weighting, forwardw):
@@ -135,13 +159,10 @@ class Memory:
 
     def calculate_allocation_weighting(self, usage_vector):
         """
-        Calculating allocation weighting, extracted to a method because it's complicated to perform in Memory.step()
-        
+
+        :param: usage vector: tensor of shape [batch_size, memory_size]
         :return: allocation tensor of shape [batch_size, memory_size]
         """
-        # numerical stability
-        # usage_vector = Memory.epsilon + (1 - Memory.epsilon) * usage_vector
-
         # We're sorting the "1 - self.usage_vector" because top_k returns highest values and we need the lowest
         lowest_usage, inverse_indices = tf.nn.top_k(1 - usage_vector, k=self.memory_size)
         sorted_usage = 1 - lowest_usage
@@ -204,17 +225,3 @@ class Memory:
     def reshape_and_softmax(self, r_read_modes):
         r_read_modes = tf.reshape(r_read_modes, [self.batch_size, self.num_read_heads, 3])
         return tf.nn.softmax(r_read_modes, dim=2)
-
-        # def split_interface_optimized(self, interface_vector):
-        #     interf = dict()
-        #     interf[self.names[0]] = self.functions[0](interface_vector[:, self.indexes[0][0]:self.indexes[0][1]])
-        #     interf[self.names[1]] = self.functions[1](interface_vector[:, self.indexes[1][0]:self.indexes[1][1]])
-        #     interf[self.names[2]] = self.functions[2](interface_vector[:, self.indexes[2][0]:self.indexes[2][1]])
-        #     interf[self.names[3]] = self.functions[3](interface_vector[:, self.indexes[3][0]:self.indexes[3][1]])
-        #     interf[self.names[4]] = self.functions[4](interface_vector[:, self.indexes[4][0]:self.indexes[4][1]])
-        #     interf[self.names[5]] = self.functions[5](interface_vector[:, self.indexes[5][0]:self.indexes[5][1]])
-        #     interf[self.names[6]] = self.functions[6](interface_vector[:, self.indexes[6][0]:self.indexes[6][1]])
-        #     interf[self.names[7]] = self.functions[7](interface_vector[:, self.indexes[7][0]:self.indexes[7][1]])
-        #     interf[self.names[8]] = self.functions[8](interface_vector[:, self.indexes[8][0]:self.indexes[8][1]])
-        #     interf[self.names[9]] = self.functions[9](interface_vector[:, self.indexes[9][0]:self.indexes[9][1]])
-        #     return interf

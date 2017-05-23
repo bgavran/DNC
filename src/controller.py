@@ -1,5 +1,5 @@
 import tensorflow as tf
-from task_implementations.copy import *
+from task_implementations.copy_task import *
 from tensorflow.python.client import timeline
 
 
@@ -8,13 +8,8 @@ class Controller:
     Controller: a neural network that optionally uses memory or other controllers to produce output.
     FF network is a controller, a LSTM network is a controller, but DNC is also a controller (which uses another
     controller inside it)
-    This implementation of controller (FF, LSTM) is trying to establish a clear interface between sizes of inputs and 
-    outputs for a controller. This, in theory, allows for easy nesting of controllers.
-    
-    What this implies is a lower parameter count for the output and interface weight matrices, since they operate only 
-    on the outputs of the controller and not outputs of every layer of the controller. This is where this implementation
-    differs from DeepMind's DNC implementation.
-    
+    The only problem is that this is theory, and the way tf.while_loop is implemented prevents easy nesting of 
+    controllers :/
     
     """
     max_outputs = 1
@@ -34,8 +29,10 @@ class Controller:
         summary_outputs = tf.nn.softmax(outputs, dim=1)
         # summary_outputs_masked = tf.einsum("bht,bt->bht", summary_outputs, mask)
 
-        tf.summary.image("0Input", tf.expand_dims(x, axis=3), max_outputs=Controller.max_outputs)
-        tf.summary.image("0Output", tf.expand_dims(summary_outputs, axis=3), max_outputs=Controller.max_outputs)
+        tf.summary.image("0_Input", tf.expand_dims(x, axis=3), max_outputs=Controller.max_outputs)
+        tf.summary.image("0_Network_output", tf.expand_dims(summary_outputs, axis=3),
+                         max_outputs=Controller.max_outputs)
+        tf.summary.image("0_Y", tf.expand_dims(y * mask, axis=3), max_outputs=Controller.max_outputs)
         # tf.summary.image("0OutputMasked", tf.expand_dims(summary_outputs_masked, axis=3),
         #                  max_outputs=Controller.max_outputs)
 
@@ -48,13 +45,11 @@ class Controller:
         for i, (gradient, variable) in enumerate(gradients):
             clipped_gradient = tf.clip_by_value(gradient, -Controller.clip_value, Controller.clip_value)
             gradients[i] = clipped_gradient, variable
-            if isinstance(gradient, ops.IndexedSlices):
-                grad_values = gradient.values
-            else:
-                grad_values = gradient
             tf.summary.histogram(variable.name, variable)
-            tf.summary.histogram(variable.name + "/gradients", grad_values)
+            tf.summary.histogram(variable.name + "/gradients",
+                                 gradient.values if isinstance(gradient, ops.IndexedSlices) else gradient)
         optimizer = optimizer.apply_gradients(gradients)
+        # optimizer = optimizer.minimize(cost)
 
         self.notify(summaries)
 
@@ -75,6 +70,10 @@ class Controller:
             train_writer = tf.summary.FileWriter(project_path.train_path, sess.graph)
             test_writer = tf.summary.FileWriter(project_path.test_path, sess.graph)
 
+            # from tensorflow.python import debug as tf_debug
+            # sess = tf_debug.LocalCLIDebugWrapperSession(sess)
+            # sess.add_tensor_filter("has_inf_or_nan", tf_debug.has_inf_or_nan)
+
             from time import time
             t = time()
 
@@ -83,7 +82,9 @@ class Controller:
             for step in range(hp.steps):
                 # Generates new curriculum training data based on current cost
                 data_batch, seqlen, m = task.generate_data(cost_value)
-                sess.run(optimizer, feed_dict={x: data_batch[0], y: data_batch[1], sequence_length: seqlen, mask: m})
+                _, cost_value = sess.run([optimizer, cost],
+                                         feed_dict={x: data_batch[0], y: data_batch[1], sequence_length: seqlen,
+                                                    mask: m})
 
                 if step % 100 == 0:
                     summary = sess.run(merged, feed_dict={x: data_batch[0], y: data_batch[1],
@@ -102,17 +103,17 @@ class Controller:
                           " Test cost == %.9f Time == %.2fs" % (cost_value, time() - t))
                     t = time()
 
-                    if step % 10000 == 0 and step > 0:
+                    if step % 1000 == 0:  # and step > 0:
                         task.test(sess, outputs, [x, y, sequence_length, mask])
                         saver.save(sess, project_path.model_path)
                         print("Model saved!")
 
-    def notify(self, states):
+    def notify(self, summaries):
         """
         Method which implements all the tf summary operations. If the instance uses another controller inside it, 
         like DNC, then it's responsible for calling the controller's notify method
         
-        :param states: list of states for all time steps. Each state is specific to the actual controller
+        :param summaries: 
         :return: 
         """
         raise NotImplementedError()
@@ -125,19 +126,20 @@ class Controller:
         for step in steps:
             output, state = self.step(data[step])
         self.notify(all_states)
-        return all_outputs
         
         
         :param x: inputs for all time steps of shape [batch_size, input_size, sequence_length]
-        :return: list of outputs for every time step of the network
+        :return: list of two tensors [all_outputs, all_summaries]
         """
         raise NotImplementedError()
 
     def step(self, x, state, step):
         """
-        Returns the output vector for just one time step
+        Returns the output vector for just one time step.
+        But I'm not sure anymore how much does all of this work since because of the way tf.while_loop is implemented...
         
         :param x: one vector representing input for one time step
+        :param state: state of the controller
         :param step: current time step
         :return: output of the controller and its current state
         """

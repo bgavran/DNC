@@ -21,7 +21,7 @@ class CopyTask(Task):
 
         # Used for curriculum training
         self.state = 0
-        self.consecutive_thresh = 10
+        self.consecutive_thresh = 100
 
     def update_training_state(self, cost):
         if cost <= CopyTask.epsilon:
@@ -59,7 +59,7 @@ class CopyTask(Task):
     def generate_data(self, cost, train=True):
         if train:
             # Update curriculum training state
-            # self.update_state(cost)
+            self.update_state(cost)
 
             self.max_seq_curriculum = self.train_max_seq
             data_batch = CopyTask.generate_n_copies(self.batch_size, self.vector_size, self.min_seq,
@@ -67,7 +67,7 @@ class CopyTask(Task):
                                                     self.n_copies)
         else:
             data_batch = CopyTask.generate_n_copies(self.batch_size, self.vector_size, self.train_max_seq,
-                                                    2 * self.train_max_seq,
+                                                    self.train_max_seq,
                                                     self.n_copies)
         return data_batch
 
@@ -115,10 +115,11 @@ class CopyTask(Task):
 
 
 if __name__ == "__main__":
-    b = 2
+    b = 5
     v = 3
     total = 10
     min_s = 1
     max_s = int((total - 2) / 2)
-    val = CopyTask.generate_copy_pair(b, v, min_s, max_s, total)
+    n_copies = 1
+    val = CopyTask.generate_n_copies(b, v, min_s, max_s, n_copies)
     print(val)
