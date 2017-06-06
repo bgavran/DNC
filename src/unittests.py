@@ -30,7 +30,6 @@ class DNCTest(tf.test.TestCase):
         forward_sum = np.expand_dims(r_read_modes_correct[:, :, 2], axis=1) * forwardw
         wcw_correct = backward_sum + content_sum + forward_sum
         with self.test_session():
-            tf.reset_default_graph()
             tf.global_variables_initializer().run()
             r_read_modes_tf = tf.constant(r_read_modes)
             backwardw = tf.constant(backwardw)
@@ -71,9 +70,9 @@ class DNCTest(tf.test.TestCase):
             Memory.batch_size = b
             Memory.memory_size = n
             new_link_matrix = Memory.update_link_matrix(Memory,
-                                                        tf.constant(link_matrix_old),
-                                                        tf.constant(precedence_weighting),
-                                                        tf.constant(write_weighting))
+                                                        tf.constant(link_matrix_old, dtype=tf.float32),
+                                                        tf.constant(precedence_weighting, dtype=tf.float32),
+                                                        tf.constant(write_weighting, dtype=tf.float32))
             self.assertAllClose(link_matrix_correct, new_link_matrix.eval())
 
     def test_allocation_weighting(self):
