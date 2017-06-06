@@ -8,7 +8,8 @@ class Feedforward(Controller):
         self.layer_sizes = layer_sizes
         self.out_vector_size = self.layer_sizes[-1]
 
-        self.initial_state = tf.constant(0)
+    def initial_state(self, batch_size):
+        return tf.constant(0)
 
     def __call__(self, x, sequence_length):
         """

@@ -19,20 +19,22 @@ class Controller:
         x = tf.placeholder(tf.float32, task.x_shape, name="X")
         y = tf.placeholder(tf.float32, task.y_shape, name="Y")
 
-        sequence_length = tf.placeholder(tf.int32, [], name="Sequence_length")
+        sequence_lengths = tf.placeholder(tf.int32, [None], name="Sequence_length")
         mask = tf.placeholder(tf.float32, task.mask, name="Output_mask")
 
-        outputs, summaries = self(x, sequence_length)
-        assert outputs.shape[:2] == y.shape[:2]
+        outputs, summaries = self(x, sequence_lengths)
+        assert tf.shape(outputs).shape == tf.shape(y).shape
 
-        # summary_outputs = tf.nn.sigmoid(outputs)
-        summary_outputs = tf.nn.softmax(outputs, dim=1)
+        summary_outputs = tf.nn.sigmoid(outputs)
+        # summary_outputs = tf.nn.softmax(outputs, dim=1)
         # summary_outputs_masked = tf.einsum("bht,bt->bht", summary_outputs, mask)
 
-        tf.summary.image("0_Input", tf.expand_dims(x, axis=3), max_outputs=Controller.max_outputs)
-        tf.summary.image("0_Network_output", tf.expand_dims(summary_outputs, axis=3),
+        tf.summary.image("0_Input", tf.expand_dims(tf.transpose(x, [0, 2, 1]), axis=3),
                          max_outputs=Controller.max_outputs)
-        tf.summary.image("0_Y", tf.expand_dims(y * mask, axis=3), max_outputs=Controller.max_outputs)
+        tf.summary.image("0_Network_output", tf.expand_dims(tf.transpose(summary_outputs, [0, 2, 1]), axis=3),
+                         max_outputs=Controller.max_outputs)
+        tf.summary.image("0_Y", tf.expand_dims(tf.transpose(y * mask, [0, 2, 1]), axis=3),
+                         max_outputs=Controller.max_outputs)
         # tf.summary.image("0OutputMasked", tf.expand_dims(summary_outputs_masked, axis=3),
         #                  max_outputs=Controller.max_outputs)
 
@@ -49,7 +51,6 @@ class Controller:
             tf.summary.histogram(variable.name + "/gradients",
                                  gradient.values if isinstance(gradient, ops.IndexedSlices) else gradient)
         optimizer = optimizer.apply_gradients(gradients)
-        # optimizer = optimizer.minimize(cost)
 
         self.notify(summaries)
 
@@ -70,10 +71,6 @@ class Controller:
             train_writer = tf.summary.FileWriter(project_path.train_path, sess.graph)
             test_writer = tf.summary.FileWriter(project_path.test_path, sess.graph)
 
-            # from tensorflow.python import debug as tf_debug
-            # sess = tf_debug.LocalCLIDebugWrapperSession(sess)
-            # sess.add_tensor_filter("has_inf_or_nan", tf_debug.has_inf_or_nan)
-
             from time import time
             t = time()
 
@@ -81,30 +78,28 @@ class Controller:
             print("Starting...")
             for step in range(hp.steps):
                 # Generates new curriculum training data based on current cost
-                data_batch, seqlen, m = task.generate_data(cost_value)
+                data_batch, seqlen, m = task.generate_data(cost_value, batch_size=hp.batch_size)
                 _, cost_value = sess.run([optimizer, cost],
-                                         feed_dict={x: data_batch[0], y: data_batch[1], sequence_length: seqlen,
+                                         feed_dict={x: data_batch[0], y: data_batch[1], sequence_lengths: seqlen,
                                                     mask: m})
-
                 if step % 100 == 0:
                     summary = sess.run(merged, feed_dict={x: data_batch[0], y: data_batch[1],
-                                                          sequence_length: seqlen,
+                                                          sequence_lengths: seqlen,
                                                           mask: m})
                     train_writer.add_summary(summary, step)
-                    test_data_batch, seqlen, m = task.generate_data(cost=cost, train=False)
+                    test_data_batch, seqlen, m = task.generate_data(cost=cost, train=False, batch_size=hp.batch_size)
                     summary, pred, cost_value = sess.run([merged, outputs, cost],
                                                          feed_dict={x: test_data_batch[0], y: test_data_batch[1],
-                                                                    sequence_length: seqlen, mask: m})
+                                                                    sequence_lengths: seqlen, mask: m})
                     test_writer.add_summary(summary, step)
                     task.display_output(pred, test_data_batch, m)
-                    # input()
 
                     print("Summary generated. Step", step,
                           " Test cost == %.9f Time == %.2fs" % (cost_value, time() - t))
                     t = time()
 
-                    if step % 1000 == 0:  # and step > 0:
-                        task.test(sess, outputs, [x, y, sequence_length, mask])
+                    if step % 2000 == 0:  # and step > 0:
+                        task.test(sess, outputs, [x, y, sequence_lengths, mask])
                         saver.save(sess, project_path.model_path)
                         print("Model saved!")
 

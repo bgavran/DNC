@@ -3,22 +3,22 @@ from controller_implementations.dnc.memory import *
 
 
 class DNC(Controller):
-    def __init__(self, controller, out_vector_size, mem_hp, initializer=tf.random_normal, initial_stddev=0.1):
+    def __init__(self, batch_size, controller, out_vector_size, mem_hp, initializer=tf.random_normal,
+                 initial_stddev=0.1):
         """
         
         :param controller: FF or LSTM controller 
         :param out_vector_size: length of the output vector
         :param mem_hp: memory hyperparameters. Not used at all here, just passed on to memory
-        :param initial_stddev: 
         """
+        self.batch_size = batch_size
         self.controller = controller
-        self.batch_size = controller.batch_size
         self.out_vector_size = out_vector_size
         self.controller_output_size = self.controller.out_vector_size
 
         self.mem_hp = mem_hp
 
-        self.memory = Memory(controller.batch_size, self.controller_output_size, self.out_vector_size, self.mem_hp,
+        self.memory = Memory(self.controller_output_size, self.out_vector_size, self.mem_hp,
                              initializer=initializer, initial_stddev=initial_stddev)
 
         self.output_weights = tf.Variable(
@@ -35,15 +35,20 @@ class DNC(Controller):
         :param sequence_length: total length of the whole sequence
         :return: output of the same shape as x and summaries which are to be passed to notify() method
         """
+        # dynamic shapes
+        # batch_size = self.batch_size
+        batch_size = tf.shape(x)[0]
+        seq_len = tf.shape(x)[1]
+
         with tf.variable_scope("DNC"):
-            condition = lambda step, *_: step < sequence_length
+            condition = lambda step, *_: step < seq_len
 
-            initial_state = [self.controller.initial_state, self.memory.init_memory()]
-            output_initial = tf.zeros((self.batch_size, self.out_vector_size))
+            initial_state = [self.controller.initial_state(batch_size), self.memory.init_memory(batch_size)]
+            output_initial = tf.zeros((batch_size, self.out_vector_size))
 
-            all_outputs = tf.TensorArray(tf.float32, sequence_length)
+            all_outputs = tf.TensorArray(tf.float32, seq_len)
             # TODO remove the magic number
-            all_summaries = [tf.TensorArray(tf.float32, sequence_length)
+            all_summaries = [tf.TensorArray(tf.float32, seq_len)
                              for _ in range(len(initial_state[1]) + 13)]
 
             step, x, output, state, all_outputs, all_summaries = tf.while_loop(condition,
@@ -55,7 +60,7 @@ class DNC(Controller):
                                                                                           all_outputs,
                                                                                           all_summaries],
                                                                                swap_memory=True)
-        all_outputs = tf.transpose(all_outputs.stack(), [1, 2, 0])
+        all_outputs = tf.transpose(all_outputs.stack(), [1, 0, 2])
         all_summaries = [summary.stack() for summary in all_summaries]
         return all_outputs, all_summaries
 
@@ -63,17 +68,17 @@ class DNC(Controller):
         """
         
         :param step: integer representing current time step
-        :param x: tensor of shape [batch_size, inp_vector_size, n_steps]. Represents all input data for all time steps
         :param output: tensor of shape [batch_size, out_vector_size]. Represents output for *just one* time step
         :param state: list containing [controller_state, memory_state]
         :param all_outputs: tensorarray containing all the outputs. Used for computing gradients
         :param all_summaries: all summaries that will be forwarded to the notify() method
         :return: the updated arguments of this method
         """
-        x_step = x[:, :, step]
+        batch_size = tf.shape(x)[0]
+        x_step = x[:, step, :]
         # concatenating and flattening previous time step' read vectors with x to obtain the input vector
         read_vectors_flat = tf.reshape(state[1][6],
-                                       [self.batch_size, self.memory.num_read_heads * self.memory.word_size])
+                                       [batch_size, self.memory.num_read_heads * self.memory.word_size])
         controller_input = tf.concat([x_step, read_vectors_flat], axis=1)
         controller_state, memory_state = state
 
@@ -81,7 +86,7 @@ class DNC(Controller):
         memory_output, memory_state, extra_images = self.memory.step(controller_output, memory_state)
 
         # making sure the dimensions for everything align, using simple matmul for that
-        output_vector = tf.einsum("bc,co->bo", controller_output, self.output_weights)
+        output_vector = controller_output @ self.output_weights
         output = output_vector + memory_output
 
         state = [controller_state, memory_state]
@@ -106,6 +111,7 @@ class DNC(Controller):
         def summary_convert(summary, title):
             tf.summary.image(title, tf.expand_dims(tf.transpose(summary, [1, 2, 0]), axis=3),
                              max_outputs=Controller.max_outputs)
+
         # TODO please tell me there's a smarter way to this whole method
         n = self.mem_hp.mem_size
         r = self.mem_hp.num_read_heads
@@ -139,5 +145,6 @@ class DNC(Controller):
                          "Memory_output"
                          ]
         for i, summ_name in enumerate(summary_names):
+            # don't want to visualise memory and link matrices since they're too big and impractical to analyze
             if i not in [4, 5, 19]:
                 summary_convert(summaries[i], summ_name)

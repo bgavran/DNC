@@ -10,16 +10,13 @@ from tasks import Task
 class bAbITask(Task):
     base = os.path.join(project_path.base, "src", "task_implementations", "bAbI")
     output_symbol = "-"
+    pad_symbol = "*"
     newstory_delimiter = " NEWSTORY "
     processed_append = "-processed.p"
 
-    def __init__(self, tasks_dir, batch_size):
-        # works only with all examples in the batch being the same size! so that's why the batch is 1
-        # also a bunch of other code is configured that it only works with batch_size == 1
-        assert batch_size == 1
+    def __init__(self, tasks_dir):
         self.tasks_dir = os.path.join(bAbITask.base, tasks_dir)
         self.processed_dir = self.tasks_dir + bAbITask.processed_append
-        self.batch_size = batch_size
         self.files_path = []
 
         for f in os.listdir(self.tasks_dir):
@@ -37,9 +34,6 @@ class bAbITask(Task):
         self.train_list = natsorted([k for k, v in all_input_stories.items() if k[-9:] == "train.txt"])
         self.test_list = natsorted([k for k, v in all_input_stories.items() if k[-8:] == "test.txt"])
 
-        def flatten(forest):
-            return [leaf for tree in forest for leaf in tree]
-
         self.vector_size = len(self.word_to_ind)
         self.n_tasks = 20
 
@@ -51,14 +45,27 @@ class bAbITask(Task):
 
         assert len(self.x_train_stories.keys()) == len(self.y_train_stories.keys())
 
-        self.x_shape = [self.batch_size, self.vector_size, None]
-        self.y_shape = [self.batch_size, self.vector_size, None]
-        self.mask = [self.batch_size, None]
+        # shape [batch_size, length, vector_size]
+        self.x_shape = [None, None, self.vector_size]
+        self.y_shape = [None, None, self.vector_size]
+        self.mask = [None, None, 1]
 
         self.mean_test_errors = []
 
     def display_output(self, prediction, data_batch, mask):
-        text = self.indices_to_words([np.argmax(i) for i in data_batch[0][0].T])
+        """
+
+        :param prediction:
+        :param data_batch:
+        :param mask:
+        :return:
+        """
+        # taking just the first story in the batch
+        prediction = prediction[:1, :, :]
+        mask = mask[:1, :, :]
+        data_batch = data_batch[:, :1, :, :]
+
+        text = self.indices_to_words([np.argmax(i) for i in data_batch[0][0]])
 
         correct_indices = bAbITask.tensor_to_indices(data_batch[1], mask)
         out_indices = bAbITask.tensor_to_indices(prediction, mask)
@@ -83,13 +90,13 @@ class bAbITask(Task):
     def tensor_to_indices(data_tensor, mask):
         """
         
-        :param data_tensor: input/output tensor of shape [batch_size, vector_size, n_steps], in which the first 
+        :param data_tensor: input/output tensor of shape [batch_size, n_steps, vector_size], in which the first
         dimension should actually be 1 since the code doesn't work otherwise
         :param mask: tensor the same shape of data_tensor, used to mask unimportant output steps
         :return: list of one_hot indices for the max values of data_tensor, after masking
         """
-        locations = np.unique(np.nonzero(data_tensor * mask)[2])
-        indices = np.argmax(data_tensor[0, :, locations], axis=1)
+        locations = np.unique(np.nonzero(data_tensor * mask)[1])
+        indices = np.argmax(data_tensor[0, locations, :], axis=1)
         return indices
 
     @staticmethod
@@ -97,31 +104,45 @@ class bAbITask(Task):
         return np.exp(x) / np.sum(np.exp(x))
 
     @staticmethod
-    def to_onehot(x, n_elements):
+    def to_onehot(x, depth):
         """
         
         :param x: 
-        :param n_elements: 
+        :param depth:
         :return: 
         """
-        return np.transpose([np.eye(n_elements)[indices] for indices in x], [0, 2, 1])
+        return np.array([np.eye(depth)[int(indices)] for indices in x])
 
-    def generate_data(self, cost=None, train=True):
-        # task_ind = np.random.randint(0, self.n_tasks)
-        task_ind = 0
+    def generate_data(self, cost=None, train=True, batch_size=16):
+        task_indices = np.random.randint(0, self.n_tasks, batch_size)
+        # task_ind = 0
         if train:
-            task = self.train_list[task_ind]
-            x_task_stories = self.x_train_stories[task]
-            y_task_stories = self.y_train_stories[task]
+            task_names = [self.train_list[ind] for ind in task_indices]
+            x_task_names_stories = [self.x_train_stories[task_name] for task_name in task_names]
+            y_task_names_stories = [self.y_train_stories[task_name] for task_name in task_names]
         else:
-            task = self.test_list[task_ind]
-            x_task_stories = self.x_test_stories[task]
-            y_task_stories = self.y_test_stories[task]
-        story_ind = np.random.randint(0, len(x_task_stories))
-        x = bAbITask.to_onehot([x_task_stories[story_ind]], len(self.word_to_ind))
-        y = bAbITask.to_onehot([y_task_stories[story_ind]], len(self.word_to_ind))
+            task_names = [self.test_list[ind] for ind in task_indices]
+            x_task_names_stories = [self.x_test_stories[task_name] for task_name in task_names]
+            y_task_names_stories = [self.y_test_stories[task_name] for task_name in task_names]
+        x = []
+        y = []
+        for x_task_stories, y_task_stories in zip(x_task_names_stories, y_task_names_stories):
+            story_ind = np.random.randint(0, len(x_task_stories))
+            x.append(bAbITask.to_onehot(x_task_stories[story_ind], self.vector_size))
+            y.append(bAbITask.to_onehot(y_task_stories[story_ind], self.vector_size))
 
-        return [x, y], x.shape[2], x[:, 0, :]
+        lengths = [story.shape[0] for story in x]
+        max_length = np.max(lengths)
+
+        # padding the stories to the max length
+        for i, story in enumerate(x):
+            padding = bAbITask.to_onehot(np.ones(max_length - story.shape[0]), self.vector_size)
+            if len(padding) > 0:
+                x[i] = np.vstack((x[i], padding))
+                y[i] = np.vstack((y[i], padding))
+        x = np.array(x)
+        y = np.array(y)
+        return np.array([x, y]), lengths, x[:, :, :1]
 
     def test(self, sess, outputs_tf, pl):
         from time import time
@@ -131,16 +152,16 @@ class bAbITask(Task):
         num_tasks = len(self.x_test_stories)
         task_errors = []
         for ind, (inp, output) in enumerate(zip(self.x_test_stories.items(), self.y_test_stories.items())):
-            if inp[0] != self.test_list[0]:
-                continue
+            # if inp[0] != self.test_list[0]:
+            #     continue
             correct_questions = 0
             total_questions = 0
             num_stories = len(inp[1])
             for inp_story, out_story in zip(inp[1][:num_stories], output[1][:num_stories]):
-                x = bAbITask.to_onehot(np.expand_dims(inp_story, axis=0), self.vector_size)
-                y = bAbITask.to_onehot(np.expand_dims(out_story, axis=0), self.vector_size)
-                seqlen = x.shape[2]
-                m = x[:, 0, :]
+                x = np.expand_dims(bAbITask.to_onehot(inp_story, self.vector_size), axis=0)
+                y = np.expand_dims(bAbITask.to_onehot(out_story, self.vector_size), axis=0)
+                seqlen = [x.shape[1]]
+                m = np.expand_dims(np.expand_dims(x[0, :, 0], axis=0), axis=2)
                 outputs = sess.run(outputs_tf, feed_dict={pl[0]: x, pl[1]: y, pl[2]: seqlen, pl[3]: m})
 
                 outputs_list = bAbITask.tensor_to_indices(outputs, m)
@@ -154,7 +175,7 @@ class bAbITask(Task):
                 and count the adjacent words as one question only.
                 Sanity check is that total number of questions turns out to be 1000 in all tasks :)
                 """
-                answers = (out_story * m)[0]
+                answers = out_story * m[0, :, 0]
                 locations = np.argwhere(answers > 0)[:, 0]
                 i = 0
                 while i < len(locations):
@@ -188,13 +209,14 @@ class bAbITask(Task):
         :param mask: 
         :return: 
         """
-        softmax_cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits=x, labels=y, dim=1)
-        masked = softmax_cross_entropy * mask
+        softmax_cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits=x, labels=y, dim=2)
+        masked = softmax_cross_entropy * mask[:, :, 0]
         tf.summary.image("0Masked_SCE", tf.reshape(masked, [1, 1, -1, 1]))
         return tf.reduce_mean(masked)
 
     def preprocess_files(self):
-        word_to_ind, all_input_stories, all_output_stories = {bAbITask.output_symbol: 0}, dict(), dict()
+        word_to_ind = {bAbITask.output_symbol: 0, bAbITask.pad_symbol: 1}
+        all_input_stories, all_output_stories = dict(), dict()
         for file_path in self.files_path:
             print(file_path)
             file = open(file_path).read().lower()

@@ -30,6 +30,7 @@ class DNCTest(tf.test.TestCase):
         forward_sum = np.expand_dims(r_read_modes_correct[:, :, 2], axis=1) * forwardw
         wcw_correct = backward_sum + content_sum + forward_sum
         with self.test_session():
+            tf.reset_default_graph()
             tf.global_variables_initializer().run()
             r_read_modes_tf = tf.constant(r_read_modes)
             backwardw = tf.constant(backwardw)
@@ -50,6 +51,7 @@ class DNCTest(tf.test.TestCase):
             self.assertAllClose(np.sum(wcw_calculated, axis=1), np.ones((b, r)))
 
     def test_link_matrix(self):
+        # some dtypes are fucked up and because of that the test fails
         b, n = 2, 5
         write_weighting = np.random.rand(b, n)
         precedence_weighting = np.random.rand(b, n)  # precedence weighting from previous time step

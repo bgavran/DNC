@@ -6,18 +6,18 @@ from tasks import Task
 class CopyTask(Task):
     epsilon = 1e-2
 
-    def __init__(self, vector_size, batch_size, min_seq, train_max_seq, n_copies):
+    def __init__(self, vector_size, min_seq, train_max_seq, n_copies):
         self.vector_size = vector_size
-        self.batch_size = batch_size
         self.min_seq = min_seq
         self.train_max_seq = train_max_seq
         self.n_copies = n_copies
 
         self.max_seq_curriculum = self.min_seq + 1
+        self.max_copies = 5
 
-        self.x_shape = [self.batch_size, self.vector_size, None]
-        self.y_shape = [self.batch_size, self.vector_size, None]
-        self.mask = [self.batch_size, self.vector_size, None]
+        self.x_shape = [None, None, self.vector_size]
+        self.y_shape = [None, None, self.vector_size]
+        self.mask = [None, None, self.vector_size]
 
         # Used for curriculum training
         self.state = 0
@@ -51,22 +51,23 @@ class CopyTask(Task):
         if self.check_lesson_learned():
             self.next_lesson()
 
-    def cost(self, x, y, mask=None):
-        sigmoid_cross_entropy = tf.nn.sigmoid_cross_entropy_with_logits(logits=x, labels=y)
+    def cost(self, outputs, y, mask=None):
+        sigmoid_cross_entropy = tf.nn.sigmoid_cross_entropy_with_logits(logits=outputs, labels=y)
         # mse = tf.squared_difference(x, y)
         return tf.reduce_mean(sigmoid_cross_entropy)
 
-    def generate_data(self, cost, train=True):
+    def generate_data(self, cost, train=True, batch_size=16):
         if train:
             # Update curriculum training state
             self.update_state(cost)
 
             self.max_seq_curriculum = self.train_max_seq
-            data_batch = CopyTask.generate_n_copies(self.batch_size, self.vector_size, self.min_seq,
+            # self.n_copies = self.max_copies
+            data_batch = CopyTask.generate_n_copies(batch_size, self.vector_size, self.min_seq,
                                                     self.max_seq_curriculum,
                                                     self.n_copies)
         else:
-            data_batch = CopyTask.generate_n_copies(self.batch_size, self.vector_size, self.train_max_seq,
+            data_batch = CopyTask.generate_n_copies(batch_size, self.vector_size, self.train_max_seq,
                                                     self.train_max_seq,
                                                     self.n_copies)
         return data_batch
@@ -82,9 +83,10 @@ class CopyTask(Task):
         copies_list = [
             CopyTask.generate_copy_pair(batch_size, inp_vector_size, min_seq, max_seq)
             for _ in range(n_copies)]
-        output = np.concatenate([i[0] for i in copies_list], axis=3)
+        output = np.concatenate([i[0] for i in copies_list], axis=2)
         total_length = np.sum([i[1] for i in copies_list])
-        return output, total_length, np.ones((batch_size, inp_vector_size, total_length))
+        mask = np.ones((batch_size, total_length, inp_vector_size))
+        return output, [total_length]*batch_size, mask
 
     @staticmethod
     def generate_copy_pair(batch_size, vector_size, min_s, max_s):
@@ -99,17 +101,17 @@ class CopyTask(Task):
         sequence_length = np.random.randint(min_s, max_s + 1)
         total_length = 2 * sequence_length + 2
 
-        shape = (batch_size, vector_size, total_length)
+        shape = (batch_size, total_length, vector_size)
         inp_sequence = np.zeros(shape, dtype=np.float32)
         out_sequence = np.zeros(shape, dtype=np.float32)
 
         for i in range(batch_size):
-            ones = np.random.binomial(1, 0.5, (1, vector_size - 1, sequence_length))
+            ones = np.random.binomial(1, 0.5, (1, sequence_length, vector_size - 1))
 
-            inp_sequence[i, :-1, :sequence_length] = ones
-            out_sequence[i, :-1, sequence_length + 1:2 * sequence_length + 1] = ones
+            inp_sequence[i, :sequence_length, :-1] = ones
+            out_sequence[i, sequence_length + 1:2 * sequence_length + 1, :-1] = ones
 
-            inp_sequence[i, -1, sequence_length] = 1  # adding the marker, so the network knows when to start copying
+            inp_sequence[i, sequence_length, -1] = 1  # adding the marker, so the network knows when to start copying
 
         return np.array([inp_sequence, out_sequence]), total_length
 
@@ -117,9 +119,9 @@ class CopyTask(Task):
 if __name__ == "__main__":
     b = 5
     v = 3
-    total = 10
+    total = 12
     min_s = 1
     max_s = int((total - 2) / 2)
-    n_copies = 1
+    n_copies = 2
     val = CopyTask.generate_n_copies(b, v, min_s, max_s, n_copies)
     print(val)
