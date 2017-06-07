@@ -95,6 +95,7 @@ class bAbITask(Task):
         :param mask: tensor the same shape of data_tensor, used to mask unimportant output steps
         :return: list of one_hot indices for the max values of data_tensor, after masking
         """
+        assert len(data_tensor.shape) == 3 and data_tensor.shape[0] == mask.shape[0]
         locations = np.unique(np.nonzero(data_tensor * mask)[1])
         indices = np.argmax(data_tensor[0, locations, :], axis=1)
         return indices
@@ -131,20 +132,30 @@ class bAbITask(Task):
             x.append(bAbITask.to_onehot(x_task_stories[story_ind], self.vector_size))
             y.append(bAbITask.to_onehot(y_task_stories[story_ind], self.vector_size))
 
-        lengths = [story.shape[0] for story in x]
+        x, y, lengths = self.pad_stories(x, y)
+        return np.array([x, y]), lengths, x[:, :, :1]
+
+    def pad_stories(self, x, y):
+        """
+
+        :param x:
+        :param y:
+        :return:
+        """
+        lengths = [len(story) for story in x]
         max_length = np.max(lengths)
 
         # padding the stories to the max length
         for i, story in enumerate(x):
-            padding = bAbITask.to_onehot(np.ones(max_length - story.shape[0]), self.vector_size)
+            padding = bAbITask.to_onehot(np.ones(max_length - len(story)), self.vector_size)
             if len(padding) > 0:
                 x[i] = np.vstack((x[i], padding))
                 y[i] = np.vstack((y[i], padding))
         x = np.array(x)
         y = np.array(y)
-        return np.array([x, y]), lengths, x[:, :, :1]
+        return x, y, lengths
 
-    def test(self, sess, outputs_tf, pl):
+    def test(self, sess, outputs_tf, pl, batch_size):
         from time import time
         t = time()
         print("Testing...")
@@ -157,16 +168,22 @@ class bAbITask(Task):
             correct_questions = 0
             total_questions = 0
             num_stories = len(inp[1])
-            for inp_story, out_story in zip(inp[1][:num_stories], output[1][:num_stories]):
-                x = np.expand_dims(bAbITask.to_onehot(inp_story, self.vector_size), axis=0)
-                y = np.expand_dims(bAbITask.to_onehot(out_story, self.vector_size), axis=0)
-                seqlen = [x.shape[1]]
-                m = np.expand_dims(np.expand_dims(x[0, :, 0], axis=0), axis=2)
-                outputs = sess.run(outputs_tf, feed_dict={pl[0]: x, pl[1]: y, pl[2]: seqlen, pl[3]: m})
+            # num_stories = 30
 
-                outputs_list = bAbITask.tensor_to_indices(outputs, m)
-                correct_list = bAbITask.tensor_to_indices(y, m)
-
+            """
+            Processing each story with other batch - 1 stories. stupid hack because I can't have variable batch 
+            size because I'm using tf.unstack and for some reason it doesn't work.
+            """
+            x = [bAbITask.to_onehot(i, self.vector_size) for i in inp[1][:batch_size]]
+            y = [bAbITask.to_onehot(i, self.vector_size) for i in output[1][:batch_size]]
+            for index in range(num_stories):
+                x = list(x)
+                y = list(y)
+                x[0] = bAbITask.to_onehot(inp[1][index], self.vector_size)
+                y[0] = bAbITask.to_onehot(output[1][index], self.vector_size)
+                x, y, lengths = self.pad_stories(x, y)
+                m = x[:, :, :1]
+                outputs = sess.run(outputs_tf, feed_dict={pl[0]: x, pl[1]: y, pl[2]: lengths, pl[3]: m})
                 """
                 Each story (one whole sequence) has several questions and each of those questions might have several
                 words as an answer.
@@ -175,7 +192,10 @@ class bAbITask(Task):
                 and count the adjacent words as one question only.
                 Sanity check is that total number of questions turns out to be 1000 in all tasks :)
                 """
-                answers = out_story * m[0, :, 0]
+
+                outputs_list = bAbITask.tensor_to_indices(outputs[:1], m[:1])
+                correct_list = bAbITask.tensor_to_indices(y[:1], m[:1])
+                answers = y[0] * m[0, :, :1]
                 locations = np.argwhere(answers > 0)[:, 0]
                 i = 0
                 while i < len(locations):

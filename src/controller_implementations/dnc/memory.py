@@ -16,7 +16,7 @@ class Memory:
     epsilon = 1e-6
     max_outputs = 2
 
-    def __init__(self, controller_output_size, out_vector_size, mem_hp, initializer=tf.random_normal,
+    def __init__(self, batch_size, controller_output_size, out_vector_size, mem_hp, initializer=tf.random_normal,
                  initial_stddev=0.1):
         """
         
@@ -27,6 +27,7 @@ class Memory:
         :param mem_hp: hyperparameters for memory, object with attributes word_size, mem_size, num_read_heads 
         :param initial_stddev: 
         """
+        self.batch_size = batch_size
         self.controller_output_size = controller_output_size
         self.out_vector_size = out_vector_size
 
@@ -164,16 +165,15 @@ class Memory:
         """
         usage_vector = Memory.epsilon + (1 - Memory.epsilon) * usage_vector
 
-        # We're sorting the "1 - self.usage_vector" because top_k returns highest values and we need the lowest
-        lowest_usage, inverse_indices = tf.nn.top_k(1 - usage_vector, k=self.memory_size)
-        sorted_usage = 1 - lowest_usage
+        # We're sorting the "-self.usage_vector" because top_k returns highest values and we need the lowest
+        highest_usage, inverse_indices = tf.nn.top_k(-usage_vector, k=self.memory_size)
+        lowest_usage = -highest_usage
 
-        # lowest_usage is equal to the paper's (1 - usage[sorted[j]])
-        allocation_scrambled = lowest_usage * tf.cumprod(sorted_usage, axis=1, exclusive=True)
+        allocation_scrambled = (1 - lowest_usage) * tf.cumprod(lowest_usage, axis=1, exclusive=True)
 
         # allocation is not in the correct order. alloation[i] contains the sorted[i] value
         # reversing the already inversed indices for each batch
-        indices = tf.stack([tf.invert_permutation(ind) for ind in tf.unstack(inverse_indices)])
+        indices = tf.stack([tf.invert_permutation(batch_indices) for batch_indices in tf.unstack(inverse_indices)])
         allocation = tf.stack([tf.gather(mem, ind)
                                for mem, ind in
                                zip(tf.unstack(allocation_scrambled), tf.unstack(indices))])
@@ -191,7 +191,6 @@ class Memory:
         :param write_weighting: from current time step, shape [batch_size, memory_size]
         :return: updated link matrix
         """
-        batch_size = tf.shape(link_matrix_old)[0]
         expanded = tf.expand_dims(write_weighting, axis=2)
 
         # vectorizing the paper's original implementation
@@ -201,7 +200,7 @@ class Memory:
 
         # in einsum, m and n are the same dimension because tensorflow doesn't support duplicated subscripts. Why?
         lm = (1 - w - w_transp) * link_matrix_old + tf.einsum("bn,bm->bmn", precedence_weighting_old, write_weighting)
-        lm *= (1 - tf.eye(self.memory_size, batch_shape=[batch_size]))  # making sure self links are off
+        lm *= (1 - tf.eye(self.memory_size, batch_shape=[self.batch_size]))  # making sure self links are off
         return tf.identity(lm, name="Link_matrix")
 
     @staticmethod
@@ -225,5 +224,5 @@ class Memory:
         return 1 + tf.nn.softplus(x)
 
     def reshape_and_softmax(self, r_read_modes):
-        r_read_modes = tf.reshape(r_read_modes, [-1, self.num_read_heads, 3])
+        r_read_modes = tf.reshape(r_read_modes, [self.batch_size, self.num_read_heads, 3])
         return tf.nn.softmax(r_read_modes, dim=2)

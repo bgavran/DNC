@@ -98,8 +98,8 @@ class Controller:
                           " Test cost == %.9f Time == %.2fs" % (cost_value, time() - t))
                     t = time()
 
-                    if step % 2000 == 0:  # and step > 0:
-                        task.test(sess, outputs, [x, y, sequence_lengths, mask])
+                    if step % 2000 == 0 and step > 0:
+                        task.test(sess, outputs, [x, y, sequence_lengths, mask], hp.batch_size)
                         saver.save(sess, project_path.model_path)
                         print("Model saved!")
 

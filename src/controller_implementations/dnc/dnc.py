@@ -18,7 +18,7 @@ class DNC(Controller):
 
         self.mem_hp = mem_hp
 
-        self.memory = Memory(self.controller_output_size, self.out_vector_size, self.mem_hp,
+        self.memory = Memory(self.batch_size, self.controller_output_size, self.out_vector_size, self.mem_hp,
                              initializer=initializer, initial_stddev=initial_stddev)
 
         self.output_weights = tf.Variable(
@@ -36,8 +36,8 @@ class DNC(Controller):
         :return: output of the same shape as x and summaries which are to be passed to notify() method
         """
         # dynamic shapes
-        # batch_size = self.batch_size
-        batch_size = tf.shape(x)[0]
+        batch_size = self.batch_size
+        # batch_size = tf.shape(x)[0]
         seq_len = tf.shape(x)[1]
 
         with tf.variable_scope("DNC"):
