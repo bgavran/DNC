@@ -224,8 +224,8 @@ class bAbITask(Task):
     def cost(self, x, y, mask=None):
         """
         
-        :param x: tensor of shape [batch_size, vector_size, time_steps]
-        :param y: tensor of shape [batch_size, vector_size, time_steps]
+        :param x: tensor of shape [batch_size, time_steps, vector_size]
+        :param y: tensor of shape [batch_size, time_steps, vector_size]
         :param mask: 
         :return: 
         """

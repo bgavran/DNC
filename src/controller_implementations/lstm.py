@@ -42,6 +42,7 @@ class LSTM(Controller):
                                             swap_memory=True)
         # output is of shape [batch_size, max_time, output_size]
         if self.out_layer_exists:
+            # TODO optimize this einsum
             outputs = tf.einsum("btm,mo->bto", outputs, self.weights) + self.biases
 
         # TODO this returns just the final state and not all of them?
