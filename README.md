@@ -6,7 +6,7 @@ Differentiable Neural Computer (DNC) is the recent creation from Google DeepMind
 
 It's a recurrent neural network which includes a large number of preset operations that model various memory storage and management mechanisms.
 
-In a way it is modular; DNC embeds another neural network inside it named controller.
+In a way it is modular; DNC embeds another neural network inside it reffered to as the "controller".
 Controller can anything that's differentiable: feedforward network, vanilla RNN, LSTM etc. 
 In theory it is even possible to use DNC as a controller.
 In practice we lack good tools for doing that (currently, TensorFlow is limited in this regard).
@@ -22,17 +22,30 @@ TensorFlow 1.2.rc0 and Python 3.6 were used in the implementation.
 Copy tasks are a sort of sanity check.
 They're fast to run and easy to visualize.
 The network is presented with a sequence of vectors and tasked to recall them entirely from memory, in the same order.
-During the recall phase, no inputs are presented to the network in order to ensure that the network has actually stored all the vectors in memory.
+During the recall phase, no inputs are presented to the network in order to ensure that the network has actually stored all the vectors in memory (unlike in various char-rnn networks).
 ![](./assets/rcopy_input.png)
 ![](./assets/rcopy_output.png)
 
 The sequences show above are sample input and output sequences from the repeat copy task. 
+X axis represents time steps while Y axis represents elements of the vectors.
+
 With repeat copy task it is possible to test DNC's dynamic memory allocation capabilities.
 
 **Idea:** Make the number of memory slots lower than the total number of things DNC needs to remember.
 
+Then the DNC needs to learn to reuse memory locations. By visualizing the write weightings and read weightings, it is possible to note several things:
+* At each step, the writes are focused on a single location
+* The focus changes with each step
+* The focus on the write weightings corresponds to the focus on the read weightings
+* The focus can never change to an already written location, unless that location has been read from after that write
+
 ![](./assets/write_weighting.png)
 ![](./assets/read_weighting.png)
+
+It is further possible to analyze the internal state of DNC by plotting memory usage weightings. 
+Note that the usage drops to zero after the network reads from that location.
+Also note that in this specific example the network erroneously *doesn't* update the usage of the 6th location from top; resulting in network not using that memory location for the rest of the sequence. Why does it happen? I have no idea.
+
 ![](./assets/usage_vectors.png)
 
 
@@ -74,7 +87,7 @@ However, operations that are being computer *in* the memory module are not.
 
 ![](./assets/DNC_final.png)
 
-The image represents *one* time step of DNC. Top arrow shows the general data flow.
+The image represents *one* time step of DNC. Top arrow shows the general data flow. The dotted box represents the memory module.
 
 There are many low-level, simple, differentiable memory operations in the memory module: cosine similarity, softmax, various compositions of multiplication and addition etc.
 
@@ -88,7 +101,7 @@ The rest of the memory is fixed and, in a way, not subject to catastrophic forge
 
 This is a sales pitch for one operation this implementation relied heavily on: [Einstein summation convention](https://en.wikipedia.org/wiki/Einstein_notation).
 
-It's a generalization of many various vector, matrix, and tensor operations. Dot product, matrix product, cross product, transpositions, summing across any axes; all those operations are generalized into einsum operation.
+It's a generalization of many various vector, matrix, and tensor operations. Dot product, matrix product, cross product, transpositions, summing across any axes; all those operations can be represented with the einsum operation.
 
 I've found it incredibly useful not to have to reshape and transpose the tensors before using them.
 There is a [great tutorial](https://obilaniu6266h16.wordpress.com/2016/02/04/einstein-summation-in-numpy/) about it.
