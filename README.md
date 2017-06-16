@@ -23,6 +23,7 @@ Copy tasks are a sort of sanity check.
 They're fast to run and easy to visualize.
 The network is presented with a sequence of vectors and tasked to recall them entirely from memory, in the same order.
 During the recall phase, no inputs are presented to the network in order to ensure that the network has actually stored all the vectors in memory (unlike in various char-rnn networks).
+
 ![](./assets/rcopy_input.png)
 ![](./assets/rcopy_output.png)
 
@@ -44,38 +45,40 @@ Then the DNC needs to learn to reuse memory locations. By visualizing the write 
 
 It is further possible to analyze the internal state of DNC by plotting memory usage weightings. 
 Note that the usage drops to zero after the network reads from that location.
-Also note that in this specific example the network erroneously *doesn't* update the usage of the 6th location from top; resulting in network not using that memory location for the rest of the sequence. Why does it happen? I have no idea.
 
 ![](./assets/usage_vectors.png)
 
+Also note that in this specific example the network erroneously *doesn't* update the usage of the 6th location from top; resulting in network not using that memory location for the rest of the sequence. 
 
-Sometimes get NaNs?
-Seems to depend on the random initialization. Using random normal, but orthogonal and xavier don't seem to help much.
 
 ### bAbI synthetic question answering dataset
 
-| Task | Error % | DeepMind's error % |
-| -----|---------|------------------- |
-| 1. 1 supporting fact |         | 9.0 &plusmn; 12.6                     |
-| 2. 2 supporting facts |         | ...                   |
-| 3. 3 supporting facts |         |                    |
-| 4. 2 argument rels. |         |                    |
-| 5. 3 argument rels. |         |                    |
-| 6. yes/no questions |         |                    |
-| 7. counting |         |                    |
-| 8. lists/sets |         |                    |
-| 9. simple negation |         |                    |
-| 10. indefinite knowl. |         |                    |
-| 11. basic coreference |         |                    |
-| 12. conjuction |         |                    |
-| 13. compound coref. |         |                    |
-| 14. time reasoning |         |                    |
-| 15. basic deduction |         |                    |
-| 16. basic induction |         |                    |
-| 17. positional reas. |         |                    |
-| 18. size reasoning |         |                    |
-| 19. path finding |         |                    |
-| 20. agent motiv. |         |                    |
+Error percentages of my DNC, baseline LSTM compared with DeepMind's results:
+
+| Task | DNC | DeepMind's DNC | LSTM 256 | LSTM 512 | DeepMind LSTM 256 |
+| -----|---------|------------------- |---|---|---|
+| 1. 1 supporting fact |         | 9.0 &plusmn; 12.6                     | | | |
+| 2. 2 supporting facts |         | 32.0 &plusmn; 20.5                   | | | |
+| 3. 3 supporting facts |         | 39.6 &plusmn; 16.4                   | | | |
+| 4. 2 argument rels. |         |  0.4 &plusmn; 0.7                  | | | |
+| 5. 3 argument rels. |         | 1.5 &plusmn; 1.0                    | | | |
+| 6. yes/no questions |         | 6.9 &plusmn; 7.5                    | | | |
+| 7. counting |         | 9.8 &plusmn; 7.0                    | | | |
+| 8. lists/sets |         | 5.5 &plusmn; 5.9                    | | | |
+| 9. simple negation |         | 7.7 &plusmn; 8.3                    | | | |
+| 10. indefinite knowl. |         | 9.6 &plusmn; 11.4                    | | | |
+| 11. basic coreference |         | 3.3 &plusmn; 5.7                    | | | |
+| 12. conjuction |         | 5.0 &plusmn; 6.3                    | | | |
+| 13. compound coref. |         | 3.1 &plusmn; 3.6                    | | | |
+| 14. time reasoning |         | 11.0 &plusmn; 7.5                    | | | |
+| 15. basic deduction |         | 27.2 &plusmn; 20.1                    | | | |
+| 16. basic induction |         | 53.6 &plusmn; 1.9                    | | | |
+| 17. positional reas. |         | 32.4 &plusmn; 8.0                    | | | |
+| 18. size reasoning |         | 4.2 &plusmn; 1.8                    | | | |
+| 19. path finding |         | 64.6 &plusmn; 37.4                    | | | |
+| 20. agent motiv. |         | 0.0 &plusmn; 0.1                    | | | |
+| **Mean**        |      | 16.7 &plusmn; 7.6 |  | | |
+
 
 
 ### Understanding memory operations
@@ -95,6 +98,35 @@ Those low level operations are composed in various ways which represent *somethi
 
 The attention mechanisms are parametrized by the three learnable weight matrices, whose corresponding MatMul operation is marked with the cross circle symbol.
 The rest of the memory is fixed and, in a way, not subject to catastrophic forgetting.
+
+### Things I don't understand 
+
+##### DNC sometimes doesn't work
+In certain scenarios, performance seems to be much more dependent on weight initializations than LSTM or similar recurrent architectures.
+In other words, sometimes the loss doesn't converge. Sometimes the loss doesn't seem like it's converging and then suddenly it drops to zero.
+
+It seems to happen only on copy and repeat copy task when the network capacity is really low (low memory size/word size/controller capacity).
+
+This implementation uses tf.random\_normal initialization with stddev = 0.1.
+Xavier and orthogonal initializations didn't seem to make a difference.
+
+##### Sometimes there's NaN's
+
+In the same scenarios the network tends to get NaN's in the computational graph. I've noticed it tends to happen after it gets on a completely wrong track and then is unable to solve it. 
+Curriculum learning seems to help diminish it, but it still sometimes happen.
+
+##### Gradient clipping seems to be needed
+
+Without clipping, exploding gradients happen periodically, loss increases and network unlearns some of the things.
+In bAbI task, the network immediatelly learns which type of words should the answer contain. 
+Without clipping, sometimes it unlearned such a basic thing and it had the funny side effect of completely missing the point:
+
+Input:
+
+> wolves are afraid of cats . mice are afraid of wolves . cats are afraid of sheep . sheep are afraid of cats . gertrude is a mouse . jessica is a mouse . emily is a sheep. winona is a wolf . what is emily afraid of ? - what is gertrude afraid of ? - what is winona afraid of ? - what is jessica afraid of ?
+
+Output: 
+> cat wolf football wolf
 
 ### A word on tensor contraction operations
 

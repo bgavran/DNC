@@ -2,7 +2,8 @@ from controller import *
 
 
 class LSTM(Controller):
-    def __init__(self, inp_vector_size, memory_size, n_layers, out_vector_size=None, initializer=tf.random_normal):
+    def __init__(self, inp_vector_size, memory_size, n_layers, out_vector_size=None, initializer=tf.random_normal,
+                 initial_stddev=None):
         self.inp_vector_size = inp_vector_size
         self.memory_size = memory_size
         self.out_vector_size = self.memory_size
@@ -15,7 +16,7 @@ class LSTM(Controller):
             # Extra layer of neural network
             # The output is a vector of dimension memory_size, but we want it to be output_size
             # so we multiply it by some W
-            self.weights = tf.Variable(initializer([self.memory_size, self.out_vector_size], stddev=0.1),
+            self.weights = tf.Variable(initializer([self.memory_size, self.out_vector_size], stddev=initial_stddev),
                                        name="output_weights")
             self.biases = tf.Variable(tf.zeros([self.out_vector_size]), name="output_biases")
 
