@@ -1,6 +1,6 @@
 # DNC
 
-<img src="./assets/dnc_nature_architecture.jpg" alt="DNC architecture" width="200"/>
+<img src="./assets/dnc_nature_architecture.jpg" alt="DNC architecture" width="600"/>
 
 This is my attempt at implementing Differentiable Neural Computer.
 
