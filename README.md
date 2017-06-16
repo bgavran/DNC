@@ -19,8 +19,18 @@ TensorFlow 1.2.rc0 and Python 3.6 were used in the implementation.
 
 ### Copy and repeat copy tasks
 
+Copy tasks are a sort of sanity check.
+They're fast to run and easy to visualize.
+The network is presented with a sequence of vectors and tasked to recall them entirely from memory, in the same order.
+During the recall phase, no inputs are presented to the network in order to ensure that the network has actually stored all the vectors in memory.
 ![](./assets/rcopy_input.png)
 ![](./assets/rcopy_output.png)
+
+The sequences show above are sample input and output sequences from the repeat copy task. 
+With repeat copy task it is possible to test DNC's dynamic memory allocation capabilities.
+
+**Idea:** Make the number of memory slots lower than the total number of things DNC needs to remember.
+
 ![](./assets/write_weighting.png)
 ![](./assets/read_weighting.png)
 ![](./assets/usage_vectors.png)
