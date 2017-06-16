@@ -32,7 +32,7 @@ class DNC(Controller):
         change from step to step so it messes up the beauty of the code a little bit.
 
         :param x: input data of shape [batch_size, input_size, sequence_length]
-        :param sequence_length: total length of the whole sequence
+        :param sequence_length:
         :return: output of the same shape as x and summaries which are to be passed to notify() method
         """
         # TODO is it possible to extend tensorflow's RNN and then use tf.nn.dynamic_rnn here?
