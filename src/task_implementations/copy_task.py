@@ -51,12 +51,12 @@ class CopyTask(Task):
         if self.check_lesson_learned():
             self.next_lesson()
 
-    def cost(self, outputs, y, mask=None):
-        sigmoid_cross_entropy = tf.nn.sigmoid_cross_entropy_with_logits(logits=outputs, labels=y)
-        # mse = tf.squared_difference(x, y)
+    def cost(self, outputs, correct_output, mask=None):
+        sigmoid_cross_entropy = tf.nn.sigmoid_cross_entropy_with_logits(logits=outputs,
+                                                                        labels=correct_output)
         return tf.reduce_mean(sigmoid_cross_entropy)
 
-    def generate_data(self, cost, train=True, batch_size=16):
+    def generate_data(self, batch_size=16, train=True, cost=9999):
         if train:
             # Update curriculum training state
             self.update_state(cost)
@@ -86,7 +86,7 @@ class CopyTask(Task):
         output = np.concatenate([i[0] for i in copies_list], axis=2)
         total_length = np.sum([i[1] for i in copies_list])
         mask = np.ones((batch_size, total_length, inp_vector_size))
-        return output, [total_length]*batch_size, mask
+        return output, [total_length] * batch_size, mask
 
     @staticmethod
     def generate_copy_pair(batch_size, vector_size, min_s, max_s):

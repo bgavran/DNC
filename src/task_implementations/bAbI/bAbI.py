@@ -15,6 +15,12 @@ class bAbITask(Task):
     processed_append = "-processed.p"
 
     def __init__(self, tasks_dir):
+        """
+        Init tries to read from pickle file, if it doesn't exist it creates it.
+        Creates separate dictionaries of train and test sets, data and labels
+
+        :param tasks_dir: relative directory of bAbI tasks
+        """
         self.tasks_dir = os.path.join(bAbITask.base, tasks_dir)
         self.processed_dir = self.tasks_dir + bAbITask.processed_append
         self.files_path = []
@@ -54,6 +60,9 @@ class bAbITask(Task):
 
     def display_output(self, prediction, data_batch, mask):
         """
+        For a batch of stories and the corresponding network output, it prints the first story and its output.
+        It prints out the story words (with asterisks for padding if there was padding), the network output converted
+        to words and the correct output converted to words.
 
         :param prediction:
         :param data_batch:
@@ -89,6 +98,7 @@ class bAbITask(Task):
     @staticmethod
     def tensor_to_indices(data_tensor, mask):
         """
+        Converts the one hot tensor to indices
         
         :param data_tensor: input/output tensor of shape [batch_size, n_steps, vector_size], in which the first
         dimension should actually be 1 since the code doesn't work otherwise
@@ -114,7 +124,18 @@ class bAbITask(Task):
         """
         return np.array([np.eye(depth)[int(indices)] for indices in x])
 
-    def generate_data(self, cost=None, train=True, batch_size=16):
+    def generate_data(self, batch_size=16, train=True, cost=None):
+        """
+        Main method for generating train/test data.
+        Generates batch_size random indices, which correspond to some stories (1-20) and then takes a random story
+        for each of the generated task indices.
+        It converts the stories to one hot and pads them.
+
+        :param cost: used in copy task for curriculum learning, but not here
+        :param train: sampling from train or test data
+        :param batch_size:
+        :return: data_batch, lenghts of the each sampled story and corresponding masks
+        """
         task_indices = np.random.randint(0, self.n_tasks, batch_size)
         # task_ind = 0
         if train:
@@ -137,6 +158,7 @@ class bAbITask(Task):
 
     def pad_stories(self, x, y):
         """
+        Pads the stories in a batch to the size of the longest one
 
         :param x:
         :param y:
@@ -155,7 +177,16 @@ class bAbITask(Task):
         y = np.array(y)
         return x, y, lengths
 
-    def test(self, sess, outputs_tf, pl, batch_size):
+    def test(self, sess, outputs_tf, fd, batch_size):
+        """
+        Evaluates the performance of the network on the whole test set.
+
+        :param sess: tensorflow session to be used
+        :param outputs_tf: object that represents callable tensorflow outputs
+        :param fd: list of feed_dict variables [x, y, lenghts, mask]
+        :param batch_size:
+        :return:
+        """
         from time import time
         t = time()
         print("Testing...")
@@ -171,7 +202,7 @@ class bAbITask(Task):
             # num_stories = 30
 
             """
-            Processing each story with other batch - 1 stories. stupid hack because I can't have variable batch 
+            Processing each story with other batch - 1 stories. Stupid hack because I can't have variable batch 
             size because I'm using tf.unstack and for some reason it doesn't work.
             """
             x = [bAbITask.to_onehot(i, self.vector_size) for i in inp[1][:batch_size]]
@@ -183,7 +214,7 @@ class bAbITask(Task):
                 y[0] = bAbITask.to_onehot(output[1][index], self.vector_size)
                 x, y, lengths = self.pad_stories(x, y)
                 m = x[:, :, :1]
-                outputs = sess.run(outputs_tf, feed_dict={pl[0]: x, pl[1]: y, pl[2]: lengths, pl[3]: m})
+                outputs = sess.run(outputs_tf, feed_dict={fd[0]: x, fd[1]: y, fd[2]: lengths, fd[3]: m})
                 """
                 Each story (one whole sequence) has several questions and each of those questions might have several
                 words as an answer.
@@ -212,7 +243,7 @@ class bAbITask(Task):
             task_name = inp[0].split("/")[-1]
             task_error = 1 - correct_questions / total_questions
             print(ind, task_name, " Total_correct:", correct_questions, " total questions:", total_questions,
-                  " task error:", task_error)
+                  " task error:", task_error * 100, "%")
             num_passed_tasks += task_error <= 0.05
             task_errors.append(task_error)
         mean_error = np.mean(task_errors)
@@ -221,15 +252,20 @@ class bAbITask(Task):
         print("ALL ERRORS: ", self.mean_test_errors)
         print("Time == ", time() - t)
 
-    def cost(self, x, y, mask=None):
+    def cost(self, network_output, correct_output, mask=None):
         """
-        
-        :param x: tensor of shape [batch_size, time_steps, vector_size]
-        :param y: tensor of shape [batch_size, time_steps, vector_size]
+        Mean of the batch cross entropy cost on the masked softmax outputs.
+        Mask makes all the outputs of the network which are not marked with the "-" in inputs completely irrelevant.
+
+
+        :param network_output: tensor of shape [batch_size, time_steps, vector_size]
+        :param correct_output: tensor of shape [batch_size, time_steps, vector_size]
         :param mask: 
         :return: 
         """
-        softmax_cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits=x, labels=y, dim=2)
+        softmax_cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits=network_output,
+                                                                        labels=correct_output,
+                                                                        dim=2)
         masked = softmax_cross_entropy * mask[:, :, 0]
         tf.summary.image("0Masked_SCE", tf.reshape(masked, [1, 1, -1, 1]))
         return tf.reduce_mean(masked)

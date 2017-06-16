@@ -6,6 +6,8 @@ from tensorflow.python.client import timeline
 class Controller:
     """
     Controller: a neural network that optionally uses memory or other controllers to produce output.
+
+    All neural networks should inherit from this class.
     FF network is a controller, a LSTM network is a controller, but DNC is also a controller (which uses another
     controller inside it)
     The only problem is that this is theory, and the way tf.while_loop is implemented prevents easy nesting of 
@@ -15,7 +17,13 @@ class Controller:
     max_outputs = 1
     clip_value = 10
 
-    def run_session(self, task, hp, project_path, restore_path=None, optimizer=tf.train.AdamOptimizer()):
+    def run_session(self,
+                    task,
+                    hp,
+                    project_path,
+                    restore_path=None,
+                    optimizer=tf.train.RMSPropOptimizer(learning_rate=1e-4, momentum=0.9)):
+
         x = tf.placeholder(tf.float32, task.x_shape, name="X")
         y = tf.placeholder(tf.float32, task.y_shape, name="Y")
 
@@ -25,9 +33,9 @@ class Controller:
         outputs, summaries = self(x, sequence_lengths)
         assert tf.shape(outputs).shape == tf.shape(y).shape
 
+        # TODO this always needs to be changed depending on the task because of the way tf implements losses
         summary_outputs = tf.nn.sigmoid(outputs)
         # summary_outputs = tf.nn.softmax(outputs, dim=1)
-        # summary_outputs_masked = tf.einsum("bht,bt->bht", summary_outputs, mask)
 
         tf.summary.image("0_Input", tf.expand_dims(tf.transpose(x, [0, 2, 1]), axis=3),
                          max_outputs=Controller.max_outputs)
@@ -35,8 +43,6 @@ class Controller:
                          max_outputs=Controller.max_outputs)
         tf.summary.image("0_Y", tf.expand_dims(tf.transpose(y * mask, [0, 2, 1]), axis=3),
                          max_outputs=Controller.max_outputs)
-        # tf.summary.image("0OutputMasked", tf.expand_dims(summary_outputs_masked, axis=3),
-        #                  max_outputs=Controller.max_outputs)
 
         cost = task.cost(outputs, y, mask)
         tf.summary.scalar("Cost", cost)
@@ -61,7 +67,6 @@ class Controller:
         print("This model has", n_vars, "parameters!")
 
         saver = tf.train.Saver()
-
         with tf.Session() as sess:
             if restore_path is not None:
                 saver.restore(sess, restore_path)
@@ -78,7 +83,7 @@ class Controller:
             print("Starting...")
             for step in range(hp.steps):
                 # Generates new curriculum training data based on current cost
-                data_batch, seqlen, m = task.generate_data(cost_value, batch_size=hp.batch_size)
+                data_batch, seqlen, m = task.generate_data(cost=cost_value, batch_size=hp.batch_size, train=True)
                 _, cost_value = sess.run([optimizer, cost],
                                          feed_dict={x: data_batch[0], y: data_batch[1], sequence_lengths: seqlen,
                                                     mask: m})

@@ -35,7 +35,12 @@ class DNC(Controller):
         :param sequence_length: total length of the whole sequence
         :return: output of the same shape as x and summaries which are to be passed to notify() method
         """
-        # dynamic shapes
+        # TODO is it possible to extend tensorflow's RNN and then use tf.nn.dynamic_rnn here?
+
+        # dynamic shapes, batch size and sequence length
+        # ideally, both would be dynamic, but tf throws an error because tf.unstack() (method used in DNC memory)
+        # doesn't really work with dynamic shapes...
+
         batch_size = self.batch_size
         # batch_size = tf.shape(x)[0]
         seq_len = tf.shape(x)[1]
@@ -66,6 +71,8 @@ class DNC(Controller):
 
     def while_loop_step(self, step, x, output, state, all_outputs, all_summaries):
         """
+        Replacement for the .step() method which is only usable in the tf.while_loop.
+        Processes one time step of DNC and keeps track of all needed variables (including ones for visualization in tb)
         
         :param step: integer representing current time step
         :param output: tensor of shape [batch_size, out_vector_size]. Represents output for *just one* time step
@@ -97,6 +104,18 @@ class DNC(Controller):
         new_summaries.extend([all_summaries[-2].write(step, memory_output)])
         new_summaries.extend([all_summaries[-1].write(step, controller_state)])
         return [step + 1, x, output, state, all_outputs, new_summaries]
+
+    def step(self, x, state, step):
+        """
+        Not really used here since DNC needs to use Tensorflow's tf.while_loop which is not really compatible with
+        anything.
+
+        :param x:
+        :param state:
+        :param step:
+        :return:
+        """
+        raise NotImplementedError()
 
     def notify(self, summaries):
         """
@@ -146,5 +165,6 @@ class DNC(Controller):
                          ]
         for i, summ_name in enumerate(summary_names):
             # don't want to visualise memory and link matrices since they're too big and impractical to analyze
+            # would do it if perhaps there was a way to have a 2d matrix for each time step in tensorboard... hmm image?
             if i not in [4, 5, 19]:
                 summary_convert(summaries[i], summ_name)

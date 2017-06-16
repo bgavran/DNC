@@ -17,3 +17,13 @@ class ProjectPath:
 
 
 project_path = ProjectPath("log")
+
+
+def init_wrapper(init_fn):
+    def inner(shape, stddev):
+        if stddev is None:
+            return init_fn(shape)
+        else:
+            return init_fn(shape, stddev=stddev)
+
+    return inner
