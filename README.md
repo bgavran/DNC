@@ -1,5 +1,7 @@
 # DNC
 
+![](./assets/dnc_nature_architecture.jpg)
+
 This is my attempt at implementing Differentiable Neural Computer.
 
 Differentiable Neural Computer (DNC) is the recent creation from Google DeepMind that was published in Nature under the name [Hybrid computing using a neural network with dynamic external memory](https://www.nature.com/nature/journal/v538/n7626/pdf/nature20101.pdf).
@@ -80,13 +82,16 @@ Error percentages of my DNC, baseline LSTM compared with DeepMind's results:
 | **Mean**        |      | 16.7 &plusmn; 7.6 |  | | |
 
 
+bAbI dataset was notoriously slow to train with DNC, as the total training time was over 1 week on NVIDIA GTX 1080.
+I was not able to raise the GPU utilization to more than 60%.
+
 
 ### Understanding memory operations
 
-Inspired by this [great DNC implementation](https://github.com/Mostafa-Samir/DNC-tensorflow) and the corresponding visualization of the DNC high level [data-flow diagrams](https://github.com/Mostafa-Samir/DNC-tensorflow/blob/master/docs/data-flow.md), I decided to create my own.
-
 Interactions between the controller and memory and somewhat easy to understand.
 However, operations that are being computer *in* the memory module are not.
+
+Inspired by this [great DNC implementation](https://github.com/Mostafa-Samir/DNC-tensorflow) and the corresponding visualization of the DNC high level [data-flow diagrams](https://github.com/Mostafa-Samir/DNC-tensorflow/blob/master/docs/data-flow.md), I decided to create my own.
 
 ![](./assets/DNC_final.png)
 
@@ -102,18 +107,18 @@ The rest of the memory is fixed and, in a way, not subject to catastrophic forge
 ### Things I don't understand 
 
 ##### DNC sometimes doesn't work
-In certain scenarios, performance seems to be much more dependent on weight initializations than LSTM or similar recurrent architectures.
-In other words, sometimes the loss doesn't converge. Sometimes the loss doesn't seem like it's converging and then suddenly it drops to zero.
+In certain scenarios, DNC performance seems to be much more dependent on weight initializations than performance of LSTM or similar recurrent architectures.
+In other words, sometimes the loss doesn't converge and sometimes the loss doesn't seem like it's converging and then suddenly it drops to zero.
 
 It seems to happen only on copy and repeat copy task when the network capacity is really low (low memory size/word size/controller capacity).
 
-This implementation uses tf.random\_normal initialization with stddev = 0.1.
+This implementation uses initialization from a normal distribution with 0.1 standard deviation.
 Xavier and orthogonal initializations didn't seem to make a difference.
 
 ##### Sometimes there's NaN's
 
 In the same scenarios the network tends to get NaN's in the computational graph. I've noticed it tends to happen after it gets on a completely wrong track and then is unable to solve it. 
-Curriculum learning seems to help diminish it, but it still sometimes happen.
+Curriculum learning seems to help diminish it, but it still sometimes happens.
 
 ##### Gradient clipping seems to be needed
 
@@ -123,7 +128,7 @@ Without clipping, sometimes it unlearned such a basic thing and it had the funny
 
 Input:
 
-> wolves are afraid of cats . mice are afraid of wolves . cats are afraid of sheep . sheep are afraid of cats . gertrude is a mouse . jessica is a mouse . emily is a sheep. winona is a wolf . what is emily afraid of ? - what is gertrude afraid of ? - what is winona afraid of ? - what is jessica afraid of ?
+> wolves are afraid of cats . mice are afraid of wolves . cats are afraid of sheep . sheep are afraid of cats . gertrude is a mouse . jessica is a mouse . emily is a sheep. winona is a wolf . what is emily afraid of ? - what is gertrude afraid of ? - what is winona afraid of ? - what is jessica afraid of ? -
 
 Output: 
 > cat wolf football wolf
