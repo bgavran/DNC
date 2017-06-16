@@ -18,11 +18,11 @@ TensorFlow 1.2.rc0 and Python 3.6 were used in the implementation.
 
 ### Copy and repeat copy tasks
 
-![](./img/rcopy_intput.png)
-![](./img/rcopy_output.png)
-![](./img/write_weighting.png)
-![](./img/read_weighting.png)
-![](./img/usage_vectors.png)
+![](./assets/rcopy_intput.png)
+![](./assets/rcopy_output.png)
+![](./assets/write_weighting.png)
+![](./assets/read_weighting.png)
+![](./assets/usage_vectors.png)
 
 
 
