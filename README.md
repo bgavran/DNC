@@ -8,17 +8,18 @@ It's a recurrent neural network which includes a large number of preset operatio
 
 In a way it is modular; DNC embeds another, controller neural network inside it.
 Controller can anything that's differentiable: feedforward network, vanilla RNN, LSTM etc. 
-In theory it is possible to use DNC as a controller and, in a way, recursively nest them. 
+In theory it is even possible to use DNC as a controller.
 In practice we lack good tools for doing that (currently, TensorFlow is limited in this regard).
 
 This implementation includes three tasks from the original paper: copy task, repeat copy task and bAbI question answering task.
 
 TensorFlow 1.2.rc0 and Python 3.6 were used in the implementation.
+
 ---
 
 ### Copy and repeat copy tasks
 
-![](./assets/rcopy_intput.png)
+![](./assets/rcopy_input.png)
 ![](./assets/rcopy_output.png)
 ![](./assets/write_weighting.png)
 ![](./assets/read_weighting.png)
@@ -52,9 +53,23 @@ TensorFlow 1.2.rc0 and Python 3.6 were used in the implementation.
 | 20. agent motiv. |         |                    |
 
 
+### Understanding memory operations
 
+Inspired by this [great DNC implementation](https://github.com/Mostafa-Samir/DNC-tensorflow) and the corresponding visualization of the DNC high level [data-flow diagrams](https://github.com/Mostafa-Samir/DNC-tensorflow/blob/master/docs/data-flow.md), I decided to create my own.
 
+Interactions between the controller and memory and somewhat easy to understand.
+However, operations that are being computer *in* the memory module are much more difficult to understand.
 
+![](./assets/DNC_final.png)
+
+The image represents *one* time step of DNC. Top arrow shows the general data flow.
+
+There are many low-level, simple, differentiable memory operations in the memory module: cosine similarity, softmax, various compositions of multiplication and addition etc.
+
+Those low level operations are composed in various ways which represent *something useful*. *Something useful* here means three attention mechanisms: content-based lookup, memory allocation and temporal memory linkage.
+
+The attention mechanisms are parametrized by the learnable weight matrices, whose corresponding MatMul operation is marked with the cross circle symbol.
+The rest of the memory is fixed and, in a way, not subject to catastrophic forgetting.
 
 
 
