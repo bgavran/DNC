@@ -50,37 +50,25 @@ Note that the usage drops to zero after the network reads from that location.
 
 ![](./assets/usage.jpeg)
 
-Also note that in this specific example the network erroneously *doesn't* update the usage of the first location; resulting in network not using that memory location for the rest of the sequence. 
+Also note that in this specific example the network erroneously *doesn't* update the usage of the first and later the 8th location; resulting in network not using those memory locations for the rest of the sequence.
 
 Here are some other useful weightings that can be visualized:
 
-Read modes
+Read modes, allocation weighting and erase vector
 
 ![](./assets/read_modes.jpeg)
-
-Allocation weighting
-
 ![](./assets/allocation.jpeg)
+![](./assets/erase_vector.jpeg)
 
-Read strength
-
-![](./assets/r_read_strengths.jpeg)
-
-Write strength
+Write and read strength
 
 ![](./assets/write_strength.jpeg)
+![](./assets/r_read_strengths.jpeg)
 
 Forward and backward weightings 
 
 ![](./assets/forward_weighting.jpeg)
 ![](./assets/backward_weighting.jpeg)
-
-Erase vector
-
-![](./assets/erase_vector.jpeg)
-
-
-
 
 ## bAbI synthetic question answering dataset
 
@@ -120,7 +108,7 @@ Error percentages of my DNC, baseline LSTM compared with DeepMind's results:
 | 20. agent motiv. |    **0.0**     | **0.0 &plusmn; 0.1**                    | 1.3 | 0.8 | 1.3 &plusmn; 0.4|
 | **Mean**        |   **13.0**   | 16.7 &plusmn; 7.6 | 21.8 | 20.6 | 27.3 &plusmn; 0.8 |
 
-Although 13% error is far from DeepMind's reported 4.3% error with the same architecture, the cost was noted to be decreasing, albeit very slowly.
+Although 13% error is far from DeepMind's best reported 4.3% error with the same architecture, the cost was noted to be decreasing, albeit very slowly.
 
 Early stopping was used not as an implicit regularization method, but as a "I really can't be bothered to wait another week for the cost to converge" method of finishing the training.
 
@@ -135,13 +123,13 @@ Inspired by this [great DNC implementation](https://github.com/Mostafa-Samir/DNC
 
 ![](./assets/DNC_final.png)
 
+This image is not made to be self-sufficient for understanding the operation mechanisms of DNC, but more as a high-level guidance and as a supplement to the paper.
 The image represents *one* time step of DNC. 
 Top arrow shows the general data flow. 
 The dotted box represents the memory module. 
-The image is not made to be self-sufficient for understanding the operation mechanisms of DNC, but more as a high-level guidance and as a supplement to the paper.
 
 
-There are many low-level, simple, differentiable memory operations in the memory module: cosine similarity, softmax, various compositions of multiplication and addition etc.
+There are many low-level, simple, differentiable memory operations in the memory module (depicted as rectangles): cosine similarity, softmax, various compositions of multiplication and addition etc.
 
 Those low level operations are composed in various ways which represent *something useful*. *Something useful* here means three attention mechanisms: content-based lookup, memory allocation and temporal memory linkage.
 
@@ -167,7 +155,7 @@ Curriculum learning seems to help diminish it, but it still sometimes happens.
 ##### Gradient clipping seems to be needed
 
 Without clipping, exploding gradients happen periodically, loss increases and network unlearns some of the things.
-In bAbI task, the network immediatelly learns which type of words should the answer contain. 
+In bAbI task, the network usually immediatelly learns which type of words should the answer contain. 
 Without clipping, sometimes it unlearned such a basic thing and it had the funny side effect of completely missing the point:
 
 Input:
