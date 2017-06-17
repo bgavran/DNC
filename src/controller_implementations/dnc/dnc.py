@@ -39,7 +39,7 @@ class DNC(Controller):
 
         # dynamic shapes, batch size and sequence length
         # ideally, both would be dynamic, but tf throws an error because tf.unstack() (method used in DNC memory)
-        # doesn't really work with dynamic shapes...
+        # doesn't really work with dynamic shapes
 
         batch_size = self.batch_size
         # batch_size = tf.shape(x)[0]
