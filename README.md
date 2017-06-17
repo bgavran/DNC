@@ -12,6 +12,7 @@ It's a recurrent neural network which includes a large number of preset operatio
 
 In a way it is modular; DNC embeds another neural network inside it reffered to as the "controller".
 Controller can anything that's differentiable: feedforward network, vanilla RNN, LSTM etc. 
+Even if the controller is not a recurrent neural network, the combined system is recurrent.
 
 This implementation includes three tasks from the original paper: copy task, repeat copy task and bAbI question answering task.
 
@@ -30,50 +31,36 @@ During the recall phase, no inputs are presented to the network in order to ensu
 ![](./assets/output.jpeg)
 
 The sequences show above are sample input and output sequences from the repeat copy task. 
-X axis represents time steps while Y axis represents elements of the vectors.
+*X* axis represents time steps while *Y* axis represents elements of the vectors.
 
-With repeat copy task it is possible to test DNC's dynamic memory allocation capabilities.
-
-**Idea:** Make the number of memory slots lower than the total number of things DNC needs to remember.
-
-Then the DNC needs to learn to reuse memory locations. By visualizing the write weightings and read weightings, it is possible to note several things:
-* At each step, the writes are focused on a single location
-* The focus changes with each step
-* The focus on the write weightings corresponds to the focus on the read weightings
-* The focus can never change to an already written location, unless that location has been read from after that write
+With repeat copy task it is possible to test DNC's dynamic memory allocation capabilities, by making the number of memory slots lower than the total number of things DNC needs to remember. 
+DNC would then need to learn to reuse memory locations.
+After training DNC on this task, it is possible to visualize write and read weightings and get a glimpse of the internal mechanisms of DNC.
 
 ![](./assets/write_weightings.jpeg)
 ![](./assets/read_weightings.jpeg)
 
+The *X* axis again represents time steps while the *Y* axix represents individual memory locations.
+It is possible to note several things:
+* At each step, the writes are focused on a single location
+* The focus changes with each step
+* The focus of the write weightings corresponds to the focus of the read weightings
+* The focus can never change to an already written location unless the last operation performed on that location was a read operation
+
 It is further possible to analyze the internal state of DNC by plotting memory usage weightings. 
-Note that the usage drops to zero after the network reads from that location.
+Note that the usage of a certain location drops to zero after the network reads from that location.
 
 ![](./assets/usage.jpeg)
 
 Also note that in this specific example the network erroneously *doesn't* update the usage of the first and later the 8th location; resulting in network not using those memory locations for the rest of the sequence.
 
-Here are some other useful weightings that can be visualized:
+Additional visualizations can be found at the bottom of this file.
 
-Read modes, allocation weighting and erase vector
-
-![](./assets/read_modes.jpeg)
-![](./assets/allocation.jpeg)
-![](./assets/erase_vector.jpeg)
-
-Write and read strength
-
-![](./assets/write_strength.jpeg)
-![](./assets/r_read_strengths.jpeg)
-
-Forward and backward weightings 
-
-![](./assets/forward_weighting.jpeg)
-![](./assets/backward_weighting.jpeg)
 
 ## bAbI synthetic question answering dataset
 
-bAbI is a programatically generated dataset which tests different aspects of logical reasoning.
-There are 20 tasks that are imagined to be sort of unit tests.
+bAbI is a programatically generated dataset.
+It consists of 20 tasks that represent unit tests of different aspects of logical reasoning.
 Each task is independent of the other and tests in the simplest way possible one aspect of intended behaviour.
 
 I tested DNC and various LSTM architectures on the same dataset DeepMind used with the same hyperparameters as in the paper (with the exception of batch size).
@@ -187,4 +174,20 @@ Although it is optimized in [numpy](https://docs.scipy.org/doc/numpy-1.12.0/refe
 [This one cool trick](https://docs.scipy.org/doc/numpy-1.12.0/reference/generated/numpy.einsum.html) helps optimize it in TensorFlow.
 I've gotten about 30-40% speed increase with it on bAbI tasks on NVIDIA GTX 1080.
 
+## Additional visualizations of the repeat copy task
 
+Read modes, allocation weighting and erase vector
+
+![](./assets/read_modes.jpeg)
+![](./assets/allocation.jpeg)
+![](./assets/erase_vector.jpeg)
+
+Write and read strength
+
+![](./assets/write_strength.jpeg)
+![](./assets/r_read_strengths.jpeg)
+
+Forward and backward weightings 
+
+![](./assets/forward_weighting.jpeg)
+![](./assets/backward_weighting.jpeg)
