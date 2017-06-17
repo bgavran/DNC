@@ -11,7 +11,7 @@ Differentiable Neural Computer (DNC) is the recent creation from Google DeepMind
 It's a recurrent neural network which includes a large number of preset operations that model various memory storage and management mechanisms.
 
 In a way it is modular; DNC embeds another neural network inside it reffered to as the "controller".
-Controller can anything that's differentiable: feedforward network, vanilla RNN, LSTM etc. 
+Controller can be anything that's differentiable: feedforward network, vanilla RNN, LSTM etc. 
 Even if the controller is not a recurrent neural network, the combined system is recurrent.
 
 This implementation includes three tasks from the original paper: copy task, repeat copy task and bAbI question answering task.
@@ -33,7 +33,7 @@ During the recall phase, no inputs are presented to the network in order to ensu
 The sequences show above are sample input and output sequences from the repeat copy task. 
 *X* axis represents time steps while *Y* axis represents elements of the vectors.
 
-With repeat copy task it is possible to test DNC's dynamic memory allocation capabilities, by making the number of memory slots lower than the total number of things DNC needs to remember. 
+With repeat copy task it is possible to test DNC's dynamic memory allocation capabilities by making the number of memory slots lower than the total number of things DNC needs to remember. 
 DNC would then need to learn to reuse memory locations.
 After training DNC on this task, it is possible to visualize write and read weightings and get a glimpse of the internal mechanisms of DNC.
 
@@ -41,11 +41,12 @@ After training DNC on this task, it is possible to visualize write and read weig
 ![](./assets/read_weightings.jpeg)
 
 The *X* axis again represents time steps while the *Y* axix represents individual memory locations.
+Top image are the write weightings and bottom image are the read weightings.
 It is possible to note several things:
-* At each step, the writes are focused on a single location
+* At each step, the writes and reads are focused on a single location
 * The focus changes with each step
 * The focus of the write weightings corresponds to the focus of the read weightings
-* The focus can never change to an already written location unless the last operation performed on that location was a read operation
+* The write focus can never change to an already written location unless the last operation performed on that location was a read operation
 
 It is further possible to analyze the internal state of DNC by plotting memory usage weightings. 
 Note that the usage of a certain location drops to zero after the network reads from that location.
@@ -67,9 +68,9 @@ I tested DNC and various LSTM architectures on the same dataset DeepMind used wi
 
 Although around 4 times slower to train, DNC generally outperforms LSTM networks.
 
-I found that LSTM networks generally have better performance than DeepMind reported in the paper; I've been getting around 4-5% lower error, even with a smaller memory size.
+I found that LSTM networks generally have better performance than DeepMind reported in the paper; I've been getting around 4-5% lower error, even with a smaller memory size. I welcome any pull requests or issues explaining why.
 
-Error percentages of my DNC, baseline LSTM compared with DeepMind's results:
+Error percentages of my DNC, baseline LSTM compared with DeepMind's mean results:
 
 | Task | DNC | DeepMind's DNC | LSTM 256 | LSTM 512 | DeepMind LSTM 512 |
 | -----|---------|------------------- |---|---|---|
@@ -95,11 +96,11 @@ Error percentages of my DNC, baseline LSTM compared with DeepMind's results:
 | 20. agent motiv. |    **0.0**     | **0.0 &plusmn; 0.1**                    | 1.3 | 0.8 | 1.3 &plusmn; 0.4|
 | **Mean**        |   **13.0**   | 16.7 &plusmn; 7.6 | 21.8 | 20.6 | 27.3 &plusmn; 0.8 |
 
-Although 13% error is far from DeepMind's best reported 4.3% error with the same architecture, the cost was noted to be decreasing, albeit very slowly.
+Although the 13% DNC error is far from DeepMind's best reported 4.3% error with the same architecture, the cost was noted to be decreasing, albeit very slowly.
 
 Early stopping was used not as an implicit regularization method, but as a "I really can't be bothered to wait another week for the cost to converge" method of finishing the training.
 
-Total training time was around 9 days on NVIDIA GTX 1080.
+Total DNC training time was around 9 days on NVIDIA GTX 1080.
 
 ## Understanding memory operations
 
@@ -114,6 +115,7 @@ This image is not made to be self-sufficient for understanding the operation mec
 The image represents *one* time step of DNC. 
 Top arrow shows the general data flow. 
 The dotted box represents the memory module. 
+Notation follows the paper as much as possible.
 
 
 There are many low-level, simple, differentiable memory operations in the memory module (depicted as rectangles): cosine similarity, softmax, various compositions of multiplication and addition etc.
@@ -125,21 +127,43 @@ The rest of the memory is fixed and, in a way, not subject to catastrophic forge
 
 ## Things I don't understand 
 
-##### DNC sometimes doesn't work
-In certain scenarios, DNC performance seems to be much more dependent on weight initializations than performance of LSTM or similar recurrent architectures.
-In other words, sometimes the loss doesn't converge and sometimes the loss doesn't seem like it's converging and then suddenly it drops to zero.
+#### DNC sometimes doesn't work
+In certain scenarios, DNC performance seems to be much more dependent on weight initialization than performance of LSTM or similar recurrent architectures.
+In other words, sometimes the loss doesn't converge and in some cases the loss, although it doesn't seem like it's converging, sometimes suddenly drops to zero.
 
 It seems to have a higher percentage of happening only on copy and repeat copy task when the network capacity is really low (low memory size/word size/controller capacity) or when the sequences are longer.
 
 This implementation uses initialization from a normal distribution with 0.1 standard deviation.
 Xavier and orthogonal initializations didn't seem to make a difference.
 
-##### Sometimes there's NaN's
+#### Sometimes there's NaN's
 
-In the same scenarios the network tends to get NaN's in the computational graph. I've noticed it tends to happen after it gets on a completely wrong track and then is unable to solve it. 
+In the same scenarios the network tends to get NaN's in the computational graph. I've noticed it tends to happen after DNC gets on a completely wrong track and then gets unable to solve it. 
 Curriculum learning seems to help diminish it, but it still sometimes happens.
 
-##### Gradient clipping seems to be needed
+Which is an interesting thing in itself and brings me to another point.
+
+#### Understanding curriculum learning
+
+Although LSTM networks can eventually solve the repeat copy task *without* curriculum learning, I've found that DNC (with a feedforward controller) cannot.
+
+By presenting the difficult repeat 5 copies task to DNC in the beginning, sometimes it gets on the completely wrong track.
+Sometimes it finds a certain local optimum where it tries to find a solution to the 2nd or 3rd copy sequence before it even learned to write to contiguous blocks in memory.
+
+But if the four other sequences are hidden and I let it only focus on one copy, it learns how to do it well and really quickly generalizes to the other ones, that I progresivelly introduce.
+This is curriculum learning and, although the paper doesn't provide any clear description of the lesson difficulty progression, I find this approach reasonable and effective.
+
+It also kind of makes sense: why try to learn a repetition of a task before you've even learned how to perform that task once?
+But there's the other side of the argument: we'd ideally like if a machine could learn what that composition is without explicitly being guided.
+
+My general take from this little experiment is: 
+All information processing systems, including neural networks, have limited processing power. 
+That processing power can be used more effectively by implicitly inserting domain knowledge about the task:
+we can force the network to allocate its processing power to a certain subset of input data by showing it only easier instances first.
+
+There are a lot of interesting thoughts to be made here.
+
+#### Gradient clipping seems to be needed
 
 Without clipping, exploding gradients happen periodically, loss increases and network unlearns some of the things.
 In bAbI task, the network usually immediatelly learns which type of words should the answer contain. 
@@ -156,7 +180,8 @@ Output:
 
 This is more of a fun question. 
 What would the advantages be of having a DNC as the controller of another DNC?
-In theory, it would allow various types of memory that stores information on different levels of abstraction and that is being updated on different time scales. The same way computers have RAM and hard drive which are being updated on various time scales (RAM is constantly getting overwritten, while hard drive has updates that are more sparse).
+In theory, it would allow various types of memory that store information on different levels of abstraction and that are being updated on different time scales. 
+The same way computers have RAM and hard drive which are being updated on various time scales (RAM is constantly getting overwritten, while hard drive has updates that are more sparse).
 
 In practice we lack good tools for doing that (currently, TensorFlow is limited in this regard). Also it would probably be incredibly slow.
 
@@ -191,3 +216,10 @@ Forward and backward weightings
 
 ![](./assets/forward_weighting.jpeg)
 ![](./assets/backward_weighting.jpeg)
+
+## Disclaimer
+
+Many things posted here are my thoughts and ideas. 
+Although I tried to put arguments behind the claims, I could very well be wrong. 
+I posted the ideas as assertions rather than as questions because I rely on the power of [Cunnigham's Law](https://meta.wikimedia.org/wiki/Cunningham%27s_Law) as a method for faster convergence to correct answers.
+

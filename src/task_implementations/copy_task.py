@@ -75,7 +75,7 @@ class CopyTask(Task):
     def display_output(self, prediction, data_batch, mask):
         pass
 
-    def test(self, sess, output, pl):
+    def test(self, sess, output, pl, batch_size):
         pass
 
     @staticmethod
