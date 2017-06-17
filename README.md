@@ -26,8 +26,8 @@ They're fast to run and easy to visualize.
 The network is presented with a sequence of vectors and tasked to recall them entirely from memory, in the same order.
 During the recall phase, no inputs are presented to the network in order to ensure that the network has actually stored all the vectors in memory (unlike in various char-rnn networks).
 
-![](./assets/input.png)
-![](./assets/output.png)
+![](./assets/input.jpeg)
+![](./assets/output.jpeg)
 
 The sequences show above are sample input and output sequences from the repeat copy task. 
 X axis represents time steps while Y axis represents elements of the vectors.
@@ -54,22 +54,28 @@ Also note that in this specific example the network erroneously *doesn't* update
 
 Here are some other useful weightings that can be visualized:
 Read modes
+
 ![](./assets/read_modes.jpeg)
 
 Allocation weighting
+
 ![](./assets/allocation.jpeg)
 
 Read strength
+
 ![](./assets/r_read_strengths.jpeg)
 
 Write strength
+
 ![](./assets/write_strength.jpeg
 
 Forward and backward weightings 
+
 ![](./assets/forward_weighting.jpeg
 ![](./assets/backard_weighting.jpegA
 
 Erase vector
+
 ![](./assets/erase_vector.jpeg)
 
 
