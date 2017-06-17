@@ -148,20 +148,21 @@ Which is an interesting thing in itself and brings me to another point.
 Although LSTM networks can eventually solve the repeat copy task *without* curriculum learning, I've found that DNC (with a feedforward controller) cannot.
 
 By presenting the difficult repeat 5 copies task to DNC in the beginning, sometimes it gets on the completely wrong track.
-Sometimes it finds a certain local optimum where it tries to find a solution to the 2nd or 3rd copy sequence before it even learned to write to contiguous blocks in memory.
+Every so often it finds a certain local optimum where it tries to find a solution to the 2nd or 3rd copy sequence before it even learns to write to contiguous blocks in memory.
 
 But if the four other sequences are hidden and I let it only focus on one copy, it learns how to do it well and really quickly generalizes to the other ones, that I progresivelly introduce.
-This is curriculum learning and, although the paper doesn't provide any clear description of the lesson difficulty progression, I find this approach reasonable and effective.
+This is curriculum learning and although the paper doesn't provide any clear description of the lesson difficulty progression, I find this approach reasonable and effective.
 
 It also kind of makes sense: why try to learn a repetition of a task before you've even learned how to perform that task once?
-But there's the other side of the argument: we'd ideally like if a machine could learn what that composition is without explicitly being guided.
+But there's also other side of the argument: we'd ideally like if a machine could learn what that composition is without explicitly being guided.
 
 My general take from this little experiment is: 
+
 All information processing systems, including neural networks, have limited processing power. 
 That processing power can be used more effectively by implicitly inserting domain knowledge about the task:
 we can force the network to allocate its processing power to a certain subset of input data by showing it only easier instances first.
 
-There are a lot of interesting thoughts to be made here.
+I think this is just the tip of the iceberg and that there are a lot of interesting thoughts to be made here.
 
 #### Gradient clipping seems to be needed
 
