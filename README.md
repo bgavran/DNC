@@ -42,8 +42,8 @@ Then the DNC needs to learn to reuse memory locations. By visualizing the write 
 * The focus on the write weightings corresponds to the focus on the read weightings
 * The focus can never change to an already written location, unless that location has been read from after that write
 
-![](./assets/write_weighting.jpeg)
-![](./assets/read_weighting.jpeg)
+![](./assets/write_weightings.jpeg)
+![](./assets/read_weightings.jpeg)
 
 It is further possible to analyze the internal state of DNC by plotting memory usage weightings. 
 Note that the usage drops to zero after the network reads from that location.
@@ -53,6 +53,7 @@ Note that the usage drops to zero after the network reads from that location.
 Also note that in this specific example the network erroneously *doesn't* update the usage of the first location; resulting in network not using that memory location for the rest of the sequence. 
 
 Here are some other useful weightings that can be visualized:
+
 Read modes
 
 ![](./assets/read_modes.jpeg)
@@ -67,12 +68,12 @@ Read strength
 
 Write strength
 
-![](./assets/write_strength.jpeg
+![](./assets/write_strength.jpeg)
 
 Forward and backward weightings 
 
-![](./assets/forward_weighting.jpeg
-![](./assets/backard_weighting.jpegA
+![](./assets/forward_weighting.jpeg)
+![](./assets/backard_weighting.jpeg)
 
 Erase vector
 
@@ -88,27 +89,27 @@ Error percentages of my DNC, baseline LSTM compared with DeepMind's results:
 
 | Task | DNC | DeepMind's DNC | LSTM 256 | LSTM 512 | DeepMind LSTM 256 |
 | -----|---------|------------------- |---|---|---|
-| 1. 1 supporting fact |         | 9.0 &plusmn; 12.6                     | 6.4  | | 28.4 &plusmn; 1.5 |
-| 2. 2 supporting facts |         | 32.0 &plusmn; 20.5                   | 49.5 | | 56.0 &plusmn; 1.5 |
-| 3. 3 supporting facts |         | 39.6 &plusmn; 16.4                   | 48.4 | |  51.3 &plusmn; 1.4 |
-| 4. 2 argument rels. |         |  0.4 &plusmn; 0.7                  | 0.7 | | 0.8 &plusmn; 0.5 |
-| 5. 3 argument rels. |         | 1.5 &plusmn; 1.0                    | 2.6 | | 3.2 &plusmn; 0.5 |
-| 6. yes/no questions |         | 6.9 &plusmn; 7.5                    | 8.9 | | 15.2 &plusmn; 1.5 |
-| 7. counting |         | 9.8 &plusmn; 7.0                    | 10.9 | | 16.4 &plusmn; 1.4 |
-| 8. lists/sets |         | 5.5 &plusmn; 5.9                    | 12.6 | | 17.7 &plusmn; 1.2 |
-| 9. simple negation |         | 7.7 &plusmn; 8.3                    | 8.3 | |  15.4 &plusmn; 1.5|
-| 10. indefinite knowl. |         | 9.6 &plusmn; 11.4                    | 24.8 | | 28.7 &plusmn; 1.7|
-| 11. basic coreference |         | 3.3 &plusmn; 5.7                    | 1.0 | | 12.2 &plusmn; 3.5|
-| 12. conjuction |         | 5.0 &plusmn; 6.3                    | 1.6 | | 5.4 &plusmn; 0.6|
-| 13. compound coref. |         | 3.1 &plusmn; 3.6                    | 0.2 | | 7.2 &plusmn; 2.3|
-| 14. time reasoning |         | 11.0 &plusmn; 7.5                    | 51.3 | | 55.9 &plusmn; 1.2|
-| 15. basic deduction |         | 27.2 &plusmn; 20.1                    | 41.3 | | 47.0 &plusmn; 1.7|
-| 16. basic induction |         | 53.6 &plusmn; 1.9                    | 50.5  | | 53.3 &plusmn; 1.3|
-| 17. positional reas. |         | 32.4 &plusmn; 8.0                    | 20.0 | |  34.8 &plusmn; 4.1|
-| 18. size reasoning |         | 4.2 &plusmn; 1.8                    | 2.8 | | 5.0 &plusmn; 1.4|
-| 19. path finding |         | 64.6 &plusmn; 37.4                    | 91.9 | |  90.9 &plusmn; 1.1|
-| 20. agent motiv. |         | 0.0 &plusmn; 0.1                    | 1.3 | | 1.3 &plusmn; 0.4|
-| **Mean**        |      | 16.7 &plusmn; 7.6 | 21.8 | | 27.3 &plusmn; 0.8 |
+| 1. 1 supporting fact | 0.3        | 9.0 &plusmn; 12.6                     | 6.4  | | 28.4 &plusmn; 1.5 |
+| 2. 2 supporting facts |  32.5       | 32.0 &plusmn; 20.5                   | 49.5 | | 56.0 &plusmn; 1.5 |
+| 3. 3 supporting facts |  36.5        | 39.6 &plusmn; 16.4                   | 48.4 | |  51.3 &plusmn; 1.4 |
+| 4. 2 argument rels. |    0.5     |  0.4 &plusmn; 0.7                  | 0.7 | | 0.8 &plusmn; 0.5 |
+| 5. 3 argument rels. |    1.1     | 1.5 &plusmn; 1.0                    | 2.6 | | 3.2 &plusmn; 0.5 |
+| 6. yes/no questions |    0.9     | 6.9 &plusmn; 7.5                    | 8.9 | | 15.2 &plusmn; 1.5 |
+| 7. counting |  7.0       | 9.8 &plusmn; 7.0                    | 10.9 | | 16.4 &plusmn; 1.4 |
+| 8. lists/sets |    3.4     | 5.5 &plusmn; 5.9                    | 12.6 | | 17.7 &plusmn; 1.2 |
+| 9. simple negation |   0.3      | 7.7 &plusmn; 8.3                    | 8.3 | |  15.4 &plusmn; 1.5|
+| 10. indefinite knowl. |   2.1      | 9.6 &plusmn; 11.4                    | 24.8 | | 28.7 &plusmn; 1.7|
+| 11. basic coreference |   0.1      | 3.3 &plusmn; 5.7                    | 1.0 | | 12.2 &plusmn; 3.5|
+| 12. conjuction | 0.1        | 5.0 &plusmn; 6.3                    | 1.6 | | 5.4 &plusmn; 0.6|
+| 13. compound coref. |  0.0       | 3.1 &plusmn; 3.6                    | 0.2 | | 7.2 &plusmn; 2.3|
+| 14. time reasoning |     14.1    | 11.0 &plusmn; 7.5                    | 51.3 | | 55.9 &plusmn; 1.2|
+| 15. basic deduction |    0.2     | 27.2 &plusmn; 20.1                    | 41.3 | | 47.0 &plusmn; 1.7|
+| 16. basic induction |    50.7     | 53.6 &plusmn; 1.9                    | 50.5  | | 53.3 &plusmn; 1.3|
+| 17. positional reas. |   13.4      | 32.4 &plusmn; 8.0                    | 20.0 | |  34.8 &plusmn; 4.1|
+| 18. size reasoning |    2.7     | 4.2 &plusmn; 1.8                    | 2.8 | | 5.0 &plusmn; 1.4|
+| 19. path finding |     94.9    | 64.6 &plusmn; 37.4                    | 91.9 | |  90.9 &plusmn; 1.1|
+| 20. agent motiv. |    0.0     | 0.0 &plusmn; 0.1                    | 1.3 | | 1.3 &plusmn; 0.4|
+| **Mean**        |   13.0   | 16.7 &plusmn; 7.6 | 21.8 | | 27.3 &plusmn; 0.8 |
 
 
 bAbI dataset was notoriously slow to train with DNC, as the total training time was over 1 week on NVIDIA GTX 1080.
