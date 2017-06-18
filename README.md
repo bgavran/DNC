@@ -197,7 +197,7 @@ There is a [great tutorial](https://obilaniu6266h16.wordpress.com/2016/02/04/ein
 
 Although it is optimized in [numpy](https://docs.scipy.org/doc/numpy-1.12.0/reference/generated/numpy.einsum.html), TensorFlow still lacks a fast implementation.
 
-[This one cool trick](https://docs.scipy.org/doc/numpy-1.12.0/reference/generated/numpy.einsum.html) helps optimize it in TensorFlow.
+[This one cool trick](https://github.com/Bihaqo/tf_einsum_opt) helps optimize it in TensorFlow.
 I've gotten about 30-40% speed increase with it on bAbI tasks on NVIDIA GTX 1080.
 
 ## Additional visualizations of the repeat copy task
