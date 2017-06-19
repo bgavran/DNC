@@ -50,7 +50,6 @@ class DNCTest(tf.test.TestCase):
             self.assertAllClose(np.sum(wcw_calculated, axis=1), np.ones((b, r)))
 
     def test_link_matrix(self):
-        # some dtypes are fucked up and because of that the test fails
         b, n = 2, 5
         write_weighting = np.random.rand(b, n)
         precedence_weighting = np.random.rand(b, n)  # precedence weighting from previous time step
