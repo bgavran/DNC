@@ -151,7 +151,7 @@ By presenting the difficult repeat 5 copies task to DNC in the beginning, someti
 Every so often it finds a certain local optimum where it tries to find a solution to the 2nd or 3rd copy sequence before it even learns to write to contiguous blocks in memory.
 
 But if the four other sequences are hidden and I let it only focus on one copy, it learns how to do it well and really quickly generalizes to the other ones, that I progresivelly introduce.
-This is curriculum learning and although the paper doesn't provide any clear description of the lesson difficulty progression, I find this approach reasonable and effective.
+This is curriculum learning in its simplest form and although the paper doesn't provide any clear description of the lesson difficulty progression, I find this approach reasonable and effective.
 
 It also kind of makes sense: why try to learn a repetition of a task before you've even learned how to perform that task once?
 But there's also other side of the argument: we'd ideally like if a machine could learn what that composition is without explicitly being guided.
