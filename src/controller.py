@@ -51,11 +51,12 @@ class Controller:
         gradients = optimizer.compute_gradients(cost)
         from tensorflow.python.framework import ops
         for i, (gradient, variable) in enumerate(gradients):
-            clipped_gradient = tf.clip_by_value(gradient, -Controller.clip_value, Controller.clip_value)
-            gradients[i] = clipped_gradient, variable
-            tf.summary.histogram(variable.name, variable)
-            tf.summary.histogram(variable.name + "/gradients",
-                                 gradient.values if isinstance(gradient, ops.IndexedSlices) else gradient)
+            if gradient is not None:
+                clipped_gradient = tf.clip_by_value(gradient, -Controller.clip_value, Controller.clip_value)
+                gradients[i] = clipped_gradient, variable
+                tf.summary.histogram(variable.name, variable)
+                tf.summary.histogram(variable.name + "/gradients",
+                                     gradient.values if isinstance(gradient, ops.IndexedSlices) else gradient)
         optimizer = optimizer.apply_gradients(gradients)
 
         self.notify(summaries)

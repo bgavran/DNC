@@ -3,16 +3,19 @@ from controller_implementations.dnc.memory import *
 
 
 class DNC(Controller):
-    def __init__(self, batch_size, controller, out_vector_size, mem_hp, initializer=tf.random_normal,
+    def __init__(self, controller, batch_size, out_vector_size, mem_hp, initializer=tf.random_normal,
                  initial_stddev=0.1):
         """
-        
-        :param controller: FF or LSTM controller 
+
+        :param controller: FF or LSTM controller
+        :param batch_size:
         :param out_vector_size: length of the output vector
         :param mem_hp: memory hyperparameters. Not used at all here, just passed on to memory
+        :param initializer:
+        :param initial_stddev:
         """
-        self.batch_size = batch_size
         self.controller = controller
+        self.batch_size = batch_size
         self.out_vector_size = out_vector_size
         self.controller_output_size = self.controller.out_vector_size
 

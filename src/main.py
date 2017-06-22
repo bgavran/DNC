@@ -35,13 +35,14 @@ class Hp:
         num_read_heads = 1
 
 
-initializer = init_wrapper(tf.random_normal)
+weight_initializer = init_wrapper(tf.random_normal)
 
-controller = Feedforward(task.vector_size, Hp.batch_size, [256, 512])
+# controller = Feedforward(task.vector_size, Hp.batch_size, [256, 512])
 
-# controller = LSTM(task.vector_size, Hp.lstm_memory_size, Hp.n_layers, initializer=initializer,
-#                   out_vector_size=task.vector_size, initial_stddev=0.1)
-dnc = DNC(Hp.batch_size, controller, task.vector_size, Hp.Mem, initializer=initializer, initial_stddev=0.1)
+controller = LSTM(task.vector_size, Hp.lstm_memory_size, Hp.n_layers, initializer=weight_initializer,
+                  initial_stddev=0.1,
+                  out_vector_size=task.vector_size)  # out_vector_size is only needed if you're testing LSTM without DNC
+dnc = DNC(Hp.batch_size, controller, task.vector_size, Hp.Mem, initializer=weight_initializer, initial_stddev=0.1)
 
 print("Loaded controller")
 

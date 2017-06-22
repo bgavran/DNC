@@ -19,6 +19,8 @@ class ProjectPath:
 project_path = ProjectPath("log")
 
 
+# Wrapper for initializing all weights in all networks easily. Orthogonal, xavier and normal inits have different
+# interfaces and this makes it a bit simpler
 def init_wrapper(init_fn):
     def inner(shape, stddev):
         if stddev is None:
