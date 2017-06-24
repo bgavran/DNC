@@ -8,27 +8,26 @@ class Feedforward(Controller):
         self.layer_sizes = layer_sizes
         self.out_vector_size = self.layer_sizes[-1]
 
-    def initial_state(self, batch_size):
+    def initial_state(self, batch_size=None):
         return tf.constant(0)
 
     def __call__(self, x, sequence_length):
         """
-        :param x: inputs for all time steps
-        :return: list of outputs for every time step
-        """
-        outputs = []
-        for i in range(sequence_length):
-            output, _, = self.step(x[:, :, i], i)
-            outputs.append(output)
-        outputs = tf.transpose(outputs, [1, 2, 0])
+        Should get around to implementing it one day.
 
-        return outputs
+
+        :param x:
+        :param sequence_length:
+        :return:
+        """
+        raise NotImplementedError()
 
     def step(self, x, state, step):
         """
         Returns the output vector for just one time step
         
         :param x: vector representing input for one time step
+        :parma state: not used in any way whatsoever
         :param step: current time step
         :return: output of feedforward network and tf.constant(0), because it doesn't have a state, (required by 
                 tf.while_loop)
