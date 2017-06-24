@@ -20,6 +20,18 @@ TensorFlow 1.2.rc0 and Python 3.6 were used in the implementation.
 
 ---
 
+---
+
+## Basic usage instructions
+
+To start the DNC with feedforward controller on the copy task with curriculum learning just run the ``main.py`` file.
+It should work out of the box and all the memory operations will be automatically visualized in Tensorboard.
+
+Code is written in a modular way so you can also pass a different controller to the DNC initialization.
+LSTM controller is already provided and you can pass it to DNC by just uncommenting it in ``main.py``.
+
+You can also test just the LSTM network by running its .run\_session method (you also need to provide the output size when initializing)
+
 ## Copy and repeat copy tasks
 
 Copy tasks are a sort of sanity check.
