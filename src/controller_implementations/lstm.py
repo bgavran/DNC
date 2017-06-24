@@ -46,7 +46,7 @@ class LSTM(Controller):
             # TODO optimize this einsum
             outputs = tf.einsum("btm,mo->bto", outputs, self.weights) + self.biases
 
-        # TODO this returns just the final state and not all of them?
+        # TODO this returns just the final state and not all of them? (needed for visualization purposes)
         return outputs, states
 
     def step(self, x, state, step):

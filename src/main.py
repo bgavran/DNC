@@ -6,6 +6,8 @@ from task_implementations.copy_task import *
 from task_implementations.bAbI.bAbI import *
 from utils import project_path, init_wrapper
 
+weight_initializer = init_wrapper(tf.random_normal)
+
 n_blocks = 6
 vector_size = n_blocks + 1
 min_seq = 5
@@ -26,8 +28,10 @@ class Hp:
     batch_size = 4
     steps = 1000000
 
-    lstm_memory_size = 512
+    lstm_memory_size = 128
     n_layers = 1
+
+    stddev = 0.1
 
     class Mem:
         word_size = 8
@@ -35,14 +39,14 @@ class Hp:
         num_read_heads = 1
 
 
-weight_initializer = init_wrapper(tf.random_normal)
+controller = Feedforward(task.vector_size, Hp.batch_size, [256, 512])
 
-# controller = Feedforward(task.vector_size, Hp.batch_size, [256, 512])
+# controller = LSTM(task.vector_size, Hp.lstm_memory_size, Hp.n_layers, initializer=weight_initializer,
+#                   initial_stddev=Hp.stddev)
 
-controller = LSTM(task.vector_size, Hp.lstm_memory_size, Hp.n_layers, initializer=weight_initializer,
-                  initial_stddev=0.1,
-                  out_vector_size=task.vector_size)  # out_vector_size is only needed if you're testing LSTM without DNC
-dnc = DNC(Hp.batch_size, controller, task.vector_size, Hp.Mem, initializer=weight_initializer, initial_stddev=0.1)
+# out_vector_size=task.vector_size is a needed argument to LSTM if you want to test just the LSTM outside of DNC
+
+dnc = DNC(controller, Hp.batch_size, task.vector_size, Hp.Mem, initializer=weight_initializer, initial_stddev=Hp.stddev)
 
 print("Loaded controller")
 
