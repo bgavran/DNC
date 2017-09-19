@@ -1,4 +1,4 @@
-# DNC
+# Differentiable Neural Computer
 
 <p align="center">
 <img src="./assets/dnc_nature_architecture.jpg" alt="DNC architecture" width="600"/>
@@ -26,7 +26,7 @@ It should work out of the box and all the memory operations will be automaticall
 Code is written in a modular way so you can also pass a different controller to the DNC initialization.
 LSTM controller is already provided and you can pass it to DNC by just uncommenting it in ``main.py``.
 
-You can also test just the LSTM network by running its .run\_session method (you also need to provide the output size when initializing)
+You can also test *just* the LSTM network by running its .run\_session method (you also need to provide the output size when initializing)
 
 ---
 
@@ -187,14 +187,14 @@ Input:
 Output: 
 > cat wolf football wolf
 
-##### Could we nest DNC's inside one other?
+#### Could we nest DNC's inside one other?
 
 This is more of a fun question. 
 What would the advantages be of having a DNC as the controller of another DNC?
 In theory, it would allow various types of memory that store information on different levels of abstraction and that are being updated on different time scales. 
 The same way computers have RAM and hard drive which are being updated on various time scales (RAM is constantly getting overwritten, while hard drive has updates that are more sparse).
 
-In practice we lack good tools for doing that (currently, TensorFlow is limited in this regard). Also it would probably be incredibly slow.
+In practice we lack good tools for doing that (currently, TensorFlow is limited in this regard). Also, it would probably be incredibly slow.
 
 ## A word on tensor contraction operations
 
